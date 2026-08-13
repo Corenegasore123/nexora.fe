@@ -183,11 +183,23 @@ body {
   }
 
   .app-sidebar-header {
-    @apply flex h-14 items-center justify-between border-b border-white/10 px-4;
+    @apply flex h-14 min-h-14 items-center justify-between gap-2 border-b border-white/10 px-4;
+  }
+
+  .app-sidebar-brand {
+    @apply flex min-w-0 flex-1 items-center gap-2.5;
+  }
+
+  .app-sidebar-header-collapsed {
+    @apply flex w-full flex-col items-center justify-center gap-2 py-3;
   }
 
   .app-sidebar-collapsed .app-sidebar-header {
-    @apply justify-center px-2;
+    @apply h-auto min-h-[4.5rem] justify-center px-2;
+  }
+
+  .app-sidebar-icon-btn {
+    @apply inline-flex shrink-0 items-center justify-center rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white;
   }
 
   .app-sidebar-logo-mark {
@@ -208,10 +220,6 @@ body {
 
   .app-nav-link {
     @apply mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
-  }
-
-  .app-sidebar-collapsed .app-sidebar-header {
-    @apply justify-center px-2;
   }
 
   .app-sidebar-collapsed .app-nav-body {

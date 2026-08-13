@@ -67,24 +67,37 @@ export function AppSidebar({
       >
         <div className="app-sidebar-header">
           {collapsed ? (
-            <button
-              type="button"
-              onClick={() => setCollapsed(false)}
-              className="mx-auto hidden h-9 w-9 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/5 hover:text-white lg:flex"
-              aria-label="Expand sidebar"
-            >
-              <Icon name="menu" size={18} />
-            </button>
+            <div className="app-sidebar-header-collapsed">
+              <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="QuantaScope">
+                Qa
+              </Link>
+              <button
+                type="button"
+                onClick={() => setCollapsed(false)}
+                className="app-sidebar-icon-btn hidden lg:inline-flex"
+                aria-label="Expand sidebar"
+              >
+                <Icon name="menu" size={18} />
+              </button>
+            </div>
           ) : (
             <>
-              <Link href="/app" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
+              <Link href="/app" className="app-sidebar-brand" onClick={onClose}>
                 <span className="app-sidebar-logo-mark">Qa</span>
                 <span className="app-sidebar-logo-text">QuantaScope</span>
               </Link>
               <button
                 type="button"
+                onClick={onClose}
+                className="app-sidebar-icon-btn lg:hidden"
+                aria-label="Close menu"
+              >
+                <Icon name="x" size={18} />
+              </button>
+              <button
+                type="button"
                 onClick={() => setCollapsed(true)}
-                className="hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block"
+                className="app-sidebar-icon-btn hidden lg:inline-flex"
                 aria-label="Collapse sidebar"
               >
                 <Icon name="menu" size={18} />
@@ -140,14 +153,22 @@ export function AppSidebar({
   );
 }
 
-export function AppTopBar({ onMenuClick }: { onMenuClick: () => void }) {
+export function AppTopBar({
+  onMenuClick,
+  mobileOpen,
+}: {
+  onMenuClick: () => void;
+  mobileOpen: boolean;
+}) {
   const { title, subtitle } = useAppPageMeta();
 
   return (
     <header className="app-topbar backdrop-blur-sm">
-      <button type="button" onClick={onMenuClick} className="app-icon-btn shrink-0 lg:hidden" aria-label="Open menu">
-        <Icon name="menu" size={20} />
-      </button>
+      {!mobileOpen && (
+        <button type="button" onClick={onMenuClick} className="app-icon-btn shrink-0 lg:hidden" aria-label="Open menu">
+          <Icon name="menu" size={20} />
+        </button>
+      )}
       <div className="app-topbar-title-wrap">
         <h1 className="app-topbar-title">{title}</h1>
         {subtitle && <p className="app-topbar-subtitle">{subtitle}</p>}
@@ -171,7 +192,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
     <div className="app-shell-bg flex min-h-screen">
       <AppSidebar user={user} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <AppTopBar onMenuClick={() => setMobileOpen(true)} />
+        <AppTopBar onMenuClick={() => setMobileOpen(true)} mobileOpen={mobileOpen} />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
