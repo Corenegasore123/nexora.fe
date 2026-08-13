@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { apiUrl } from "@/lib/api";
+
+interface JobSummary {
+  id: string;
+  status: string;
+  createdAt: string;
+  overallConfidence: number | null;
+  image: { filename: string };
+  result: { result: number; unit: string } | null;
+}
+
+function statusClass(status: string) {
+  if (status === "COMPLETED") return "status-badge status-completed";
+  if (status === "FAILED") return "status-badge status-failed";
+  return "status-badge status-processing";
+}
+
+export default function CalculationsPage() {
+  const [jobs, setJobs] = useState<JobSummary[]>([]);
+
+  useEffect(() => {
+    fetch(apiUrl("/api/calculations"))
+      .then((r) => r.json())
+      .then(setJobs)
+      .catch(console.error);
+  }, []);
+
+  return (
+    <div className="page-shell">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="eyebrow">History</p>
+          <h1 className="page-title mt-3">Calculations</h1>
+          <p className="page-subtitle">All processed diagrams and their results.</p>
+        </div>
+        <Link href="/calculator" className="btn-secondary hidden md:inline-flex">
+          New Calculation
+        </Link>
+      </div>
+
+      <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Status</th>
+              <th>Result</th>
+              <th>Confidence</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {jobs.map((job) => (
+              <tr key={job.id}>
+                <td>
+                  <Link
+                    href={`/calculations/${job.id}`}
+                    className="font-medium text-white transition-colors hover:text-neutral-300"
+                  >
+                    {job.image.filename}
+                  </Link>
+                </td>
+                <td>
+                  <span className={statusClass(job.status)}>
+                    {job.status.replace(/_/g, " ")}
+                  </span>
+                </td>
+                <td className="font-mono text-white">
+                  {job.result ? `${job.result.result} ${job.result.unit}` : "—"}
+                </td>
+                <td>
+                  {job.overallConfidence
+                    ? `${(job.overallConfidence * 100).toFixed(0)}%`
+                    : "—"}
+                </td>
+                <td className="text-neutral-500">
+                  {new Date(job.createdAt).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+            {jobs.length === 0 && (
+              <tr>
+                <td colSpan={5} className="py-16 text-center text-neutral-500">
+                  No calculations yet.{" "}
+                  <Link href="/calculator" className="text-white underline underline-offset-4">
+                    Upload an image
+                  </Link>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
