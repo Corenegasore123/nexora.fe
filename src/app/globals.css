@@ -183,7 +183,11 @@ body {
   }
 
   .app-sidebar-header {
-    @apply relative flex h-14 items-center justify-between border-b border-white/10 px-4;
+    @apply flex h-14 items-center justify-between border-b border-white/10 px-4;
+  }
+
+  .app-sidebar-collapsed .app-sidebar-header {
+    @apply justify-center px-2;
   }
 
   .app-sidebar-logo-mark {

@@ -67,23 +67,30 @@ export function AppSidebar({
       >
         <div className="app-sidebar-header">
           {collapsed ? (
-            <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="QuantaScope">
-              Qa
-            </Link>
+            <button
+              type="button"
+              onClick={() => setCollapsed(false)}
+              className="mx-auto hidden h-9 w-9 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/5 hover:text-white lg:flex"
+              aria-label="Expand sidebar"
+            >
+              <Icon name="menu" size={18} />
+            </button>
           ) : (
-            <Link href="/app" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
-              <span className="app-sidebar-logo-mark">Qa</span>
-              <span className="app-sidebar-logo-text">QuantaScope</span>
-            </Link>
+            <>
+              <Link href="/app" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
+                <span className="app-sidebar-logo-mark">Qa</span>
+                <span className="app-sidebar-logo-text">QuantaScope</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setCollapsed(true)}
+                className="hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block"
+                aria-label="Collapse sidebar"
+              >
+                <Icon name="menu" size={18} />
+              </button>
+            </>
           )}
-          <button
-            type="button"
-            onClick={() => setCollapsed((c) => !c)}
-            className={`hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block ${collapsed ? "absolute right-1 top-3" : ""}`}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <Icon name="menu" size={18} />
-          </button>
         </div>
 
         <nav className="app-nav-body">

@@ -32,14 +32,6 @@ export class ApiError extends Error {
   }
 }
 
-async function readApi<T>(path: string, fallback: T, init?: RequestInit): Promise<T> {
-  try {
-    return await apiFetch<T>(path, init);
-  } catch {
-    return fallback;
-  }
-}
-
 export async function apiFetch<T = unknown>(
   path: string,
   init?: RequestInit
@@ -64,6 +56,14 @@ export async function apiFetch<T = unknown>(
   }
 
   return data as T;
+}
+
+async function readApi<T>(path: string, fallback: T, init?: RequestInit): Promise<T> {
+  try {
+    return await apiFetch<T>(path, init);
+  } catch {
+    return fallback;
+  }
 }
 
 export async function getMe(): Promise<AuthUser | null> {
