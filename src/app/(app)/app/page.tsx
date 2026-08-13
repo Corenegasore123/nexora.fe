@@ -38,7 +38,7 @@ export default function DashboardPage() {
     Promise.all([getDashboard(), getMe()]).then(([d, u]) => {
       setData(d);
       setUser(u);
-    }).catch(console.error);
+    });
   }, []);
 
   if (!data) {

@@ -126,7 +126,7 @@ body {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-primary px-7 py-3 text-sm font-semibold text-[var(--color-on-primary)] transition-all hover:bg-primary-hover active:bg-primary-active focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40;
+    @apply inline-flex items-center justify-center rounded-full bg-accent px-7 py-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-on-accent)] transition-all hover:bg-accent-hover active:bg-accent-active focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .btn-secondary {
@@ -142,7 +142,153 @@ body {
   }
 
   .nav-link-active {
-    @apply text-primary underline decoration-2 underline-offset-4;
+    @apply text-accent underline decoration-2 underline-offset-4;
+  }
+
+  /* App shell — matches marketing navy + amber */
+  .app-shell-bg {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, var(--color-primary-soft), transparent),
+      var(--color-background);
+  }
+
+  .app-sidebar {
+    background-color: #354554;
+    @apply flex h-screen shrink-0 flex-col overflow-hidden border-r border-white/10 text-white;
+  }
+
+  .app-sidebar-header {
+    @apply flex h-14 items-center justify-between border-b border-white/10 px-4;
+  }
+
+  .app-sidebar-logo-mark {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-[10px] font-bold text-[var(--color-on-accent)];
+  }
+
+  .app-sidebar-logo-text {
+    @apply truncate text-sm font-bold text-white;
+  }
+
+  .app-nav-section {
+    @apply mb-1 mt-3 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/40 first:mt-0;
+  }
+
+  .app-nav-body {
+    @apply flex min-h-0 flex-1 flex-col overflow-hidden px-3 py-3;
+  }
+
+  .app-nav-link {
+    @apply mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
+  }
+
+  .app-nav-link-active {
+    @apply font-medium text-accent;
+    background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  .app-sidebar-footer {
+    @apply shrink-0 border-t border-white/10 p-3;
+  }
+
+  .app-sidebar-footer-link {
+    @apply flex w-full items-center gap-3 rounded-xl px-3 py-1.5 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
+  }
+
+  .app-sidebar-user {
+    @apply truncate px-2 text-xs font-medium text-white/90;
+  }
+
+  .app-topbar {
+    @apply flex h-14 shrink-0 items-center gap-4 border-b border-border px-4 lg:px-6;
+    background-color: color-mix(in srgb, var(--color-surface) 95%, transparent);
+  }
+
+  .app-topbar-title-wrap {
+    @apply min-w-0 flex-1;
+  }
+
+  .app-topbar-title {
+    @apply truncate text-base font-bold text-foreground;
+  }
+
+  .app-topbar-subtitle {
+    @apply truncate text-xs text-foreground-muted;
+  }
+
+  .app-topbar-actions {
+    @apply flex shrink-0 items-center gap-2;
+  }
+
+  .app-icon-btn {
+    @apply rounded-lg p-2 text-foreground-muted transition-colors hover:bg-pending-bg hover:text-primary;
+  }
+
+  .app-sidebar-signout {
+    @apply mt-3 flex w-full items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold uppercase tracking-wide transition-colors;
+    border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
+    color: var(--color-accent);
+  }
+
+  .app-sidebar-signout:hover {
+    border-color: var(--color-accent);
+    background-color: color-mix(in srgb, var(--color-accent) 24%, transparent);
+  }
+
+  .app-sidebar-signout .app-sidebar-signout-icon {
+    color: var(--color-accent);
+  }
+
+  .profile-hero {
+    @apply card flex flex-col gap-6 sm:flex-row sm:items-center;
+  }
+
+  .profile-avatar {
+    @apply flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-accent text-2xl font-bold text-[var(--color-on-accent)] shadow-sm;
+  }
+
+  .profile-stat-grid {
+    @apply mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .profile-stat-card {
+    @apply card space-y-1;
+  }
+
+  .profile-stat-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .profile-stat-value {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  .settings-section {
+    @apply card space-y-4;
+  }
+
+  .settings-section-header {
+    @apply flex items-start gap-3 border-b border-border pb-4;
+  }
+
+  .settings-section-icon {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary;
+  }
+
+  .settings-row {
+    @apply flex flex-col gap-1 border-t border-border pt-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .settings-row-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .settings-row-value {
+    @apply text-sm text-foreground;
+  }
+
+  .settings-coming-soon {
+    @apply rounded-xl border border-dashed border-border bg-background px-4 py-3 text-xs text-foreground-muted;
   }
 
   .input-field {

@@ -172,7 +172,26 @@ export interface ActivityEntry {
 }
 
 export async function getDashboard(): Promise<DashboardData> {
-  return apiFetch<DashboardData>("/api/dashboard");
+  try {
+    return await apiFetch<DashboardData>("/api/dashboard");
+  } catch {
+    return {
+      stats: {
+        projects: 0,
+        calculations: 0,
+        completedAnalyses: 0,
+        pendingAnalyses: 0,
+        documents: 0,
+        revisedCalculations: 0,
+        correctedMeasurements: 0,
+        needsReview: 0,
+      },
+      recentProjects: [],
+      recentCalculations: [],
+      recentDocuments: [],
+      needsReview: [],
+    };
+  }
 }
 
 export async function getProjects(): Promise<Project[]> {
@@ -252,7 +271,11 @@ export async function removeProjectMember(projectId: string, userId: string) {
 }
 
 export async function getNotifications() {
-  return apiFetch<{ notifications: Notification[]; unreadCount: number }>("/api/notifications");
+  try {
+    return await apiFetch<{ notifications: Notification[]; unreadCount: number }>("/api/notifications");
+  } catch {
+    return { notifications: [], unreadCount: 0 };
+  }
 }
 
 export async function markNotificationRead(id: string) {

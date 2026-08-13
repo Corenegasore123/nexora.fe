@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
 import { NotificationBell } from "@/components/NotificationBell";
 import { Icon, type IconName } from "@/components/icons/Icon";
+import { AppPageProvider, useAppPageMeta } from "@/components/app/AppPageContext";
 
 type NavItem = {
   href: string;
@@ -56,58 +57,48 @@ export function AppSidebar({
       {mobileOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-foreground/20 lg:hidden"
+          className="fixed inset-0 z-40 bg-[#354554]/40 lg:hidden"
           onClick={onClose}
           aria-label="Close menu"
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-surface transition-transform lg:static lg:translate-x-0 ${
+        className={`app-sidebar fixed inset-y-0 left-0 z-50 w-64 transition-transform lg:static lg:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         } ${collapsed ? "lg:w-16" : "lg:w-64"}`}
       >
-        <div className="flex h-14 items-center justify-between border-b border-border px-4">
+        <div className="app-sidebar-header">
           {!collapsed && (
-            <Link href="/app" className="flex items-center gap-2 text-sm font-bold text-foreground" onClick={onClose}>
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-[10px] font-bold text-[var(--color-on-primary)]">
-                QS
-              </span>
-              QuantScope
+            <Link href="/app" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
+              <span className="app-sidebar-logo-mark">QS</span>
+              <span className="app-sidebar-logo-text">QuantScope</span>
             </Link>
           )}
           <button
             type="button"
             onClick={() => setCollapsed((c) => !c)}
-            className="hidden rounded-lg p-2 text-foreground-muted hover:bg-pending-bg lg:block"
+            className="hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block"
             aria-label="Toggle sidebar"
           >
             <Icon name="menu" size={18} />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
+        <nav className="app-nav-body">
           {NAV.filter((item) => !item.adminOnly || user?.role === "ADMIN").map((item) => {
             const showSection = item.section && item.section !== lastSection;
             if (item.section) lastSection = item.section;
             const active = isActive(pathname, item.href);
             return (
               <div key={item.href}>
-                {showSection && !collapsed && (
-                  <p className="mb-2 mt-4 px-2 text-[10px] font-semibold uppercase tracking-widest text-foreground-placeholder first:mt-0">
-                    {item.section}
-                  </p>
-                )}
+                {showSection && !collapsed && <p className="app-nav-section">{item.section}</p>}
                 <Link
                   href={item.href}
                   onClick={onClose}
                   title={collapsed ? item.label : undefined}
-                  className={`mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                    active
-                      ? "bg-selected font-medium text-primary"
-                      : "text-foreground-secondary hover:bg-pending-bg hover:text-foreground"
-                  }`}
+                  className={`app-nav-link ${active ? "app-nav-link-active" : ""}`}
                 >
-                  <Icon name={item.icon} size={18} className={active ? "text-primary" : "text-foreground-muted"} />
+                  <Icon name={item.icon} size={18} className={active ? "text-accent" : "text-white/50"} />
                   {!collapsed && item.label}
                 </Link>
               </div>
@@ -115,32 +106,23 @@ export function AppSidebar({
           })}
         </nav>
 
-        <div className="border-t border-border p-3">
-          {user && !collapsed && (
-            <p className="truncate px-2 text-xs font-medium text-foreground">{user.name}</p>
-          )}
-          <Link
-            href="/app/profile"
-            onClick={onClose}
-            className="mt-2 flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground-secondary hover:bg-pending-bg"
-          >
-            <Icon name="user" size={18} className="text-foreground-muted" />
+        <div className="app-sidebar-footer">
+          {user && !collapsed && <p className="app-sidebar-user">{user.name}</p>}
+          <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link mt-2">
+            <Icon name="user" size={18} className="text-white/50" />
             {!collapsed && "Profile"}
           </Link>
-          <Link
-            href="/app/settings"
-            onClick={onClose}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground-secondary hover:bg-pending-bg"
-          >
-            <Icon name="settings" size={18} className="text-foreground-muted" />
+          <Link href="/app/settings" onClick={onClose} className="app-sidebar-footer-link">
+            <Icon name="settings" size={18} className="text-white/50" />
             {!collapsed && "Settings"}
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-foreground-secondary hover:bg-pending-bg"
+            className={`app-sidebar-signout ${collapsed ? "!mt-2 !px-2" : ""}`}
+            title={collapsed ? "Sign out" : undefined}
           >
-            <Icon name="log-out" size={18} className="text-foreground-muted" />
+            <Icon name="log-out" size={18} className="app-sidebar-signout-icon shrink-0" />
             {!collapsed && "Sign out"}
           </button>
         </div>
@@ -150,25 +132,25 @@ export function AppSidebar({
 }
 
 export function AppTopBar({ onMenuClick }: { onMenuClick: () => void }) {
+  const { title, subtitle } = useAppPageMeta();
+
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 lg:px-6">
-      <button
-        type="button"
-        onClick={onMenuClick}
-        className="rounded-lg p-2 text-foreground-muted hover:bg-pending-bg lg:hidden"
-        aria-label="Open menu"
-      >
+    <header className="app-topbar backdrop-blur-sm">
+      <button type="button" onClick={onMenuClick} className="app-icon-btn shrink-0 lg:hidden" aria-label="Open menu">
         <Icon name="menu" size={20} />
       </button>
-      <div className="flex-1" />
-      <div className="flex items-center gap-2">
+      <div className="app-topbar-title-wrap">
+        <h1 className="app-topbar-title">{title}</h1>
+        {subtitle && <p className="app-topbar-subtitle">{subtitle}</p>}
+      </div>
+      <div className="app-topbar-actions">
         <NotificationBell />
       </div>
     </header>
   );
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+function AppShellInner({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -177,12 +159,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="app-shell-bg flex min-h-screen">
       <AppSidebar user={user} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <AppTopBar onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
+  );
+}
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <AppPageProvider>
+      <AppShellInner>{children}</AppShellInner>
+    </AppPageProvider>
   );
 }
