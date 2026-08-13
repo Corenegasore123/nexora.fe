@@ -291,41 +291,143 @@ body {
   }
 
   .dashboard-page {
-    @apply mx-auto w-full max-w-7xl p-6 lg:p-8;
+    @apply mx-auto w-full max-w-7xl space-y-8 p-6 lg:p-8;
   }
 
   .dashboard-hero {
-    @apply card flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between;
+    @apply relative overflow-hidden rounded-2xl border border-border p-6 md:p-8;
     background:
-      linear-gradient(135deg, color-mix(in srgb, var(--color-primary-soft) 70%, var(--color-surface)), var(--color-surface));
+      radial-gradient(ellipse 80% 80% at 100% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent),
+      linear-gradient(135deg, color-mix(in srgb, var(--color-primary-soft) 80%, var(--color-surface)), var(--color-surface));
+  }
+
+  .dashboard-hero-title {
+    @apply text-xl font-bold tracking-tight text-foreground md:text-2xl;
+  }
+
+  .dashboard-hero-text {
+    @apply mt-2 max-w-2xl text-sm leading-relaxed text-foreground-secondary;
+  }
+
+  .dashboard-hero-actions {
+    @apply mt-6 flex flex-wrap gap-3;
+  }
+
+  .dashboard-alert {
+    @apply mt-5 flex items-start gap-3 rounded-xl border border-warning-border bg-warning-bg px-4 py-3 text-sm text-warning;
   }
 
   .dashboard-stat-grid {
-    @apply mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4;
+    @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
   }
 
   .dashboard-stat-card {
-    @apply card flex items-start gap-4 transition-colors hover:border-border-strong;
+    @apply relative overflow-hidden rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all hover:border-border-strong hover:shadow-md;
+  }
+
+  .dashboard-stat-card::before {
+    content: "";
+    @apply absolute inset-x-0 top-0 h-1 bg-primary opacity-0 transition-opacity;
+  }
+
+  .dashboard-stat-card:hover::before {
+    @apply opacity-100;
+  }
+
+  .dashboard-stat-top {
+    @apply flex items-start justify-between gap-3;
   }
 
   .dashboard-stat-icon {
-    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary;
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary transition-colors;
+  }
+
+  .dashboard-stat-card:hover .dashboard-stat-icon {
+    @apply bg-primary text-[var(--color-on-primary)];
+  }
+
+  .dashboard-stat-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
   }
 
   .dashboard-stat-value {
-    @apply mt-1 text-3xl font-bold tabular-nums text-foreground;
+    @apply mt-2 text-3xl font-bold tabular-nums tracking-tight text-foreground;
+  }
+
+  .dashboard-stat-meta {
+    @apply mt-3 text-xs text-foreground-muted;
+  }
+
+  .dashboard-quick-grid {
+    @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .dashboard-quick-link {
+    @apply flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5 text-sm font-medium text-foreground-secondary transition-all hover:border-primary hover:bg-primary-soft hover:text-primary;
+  }
+
+  .dashboard-quick-icon {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pending-bg text-foreground-muted transition-colors;
+  }
+
+  .dashboard-quick-link:hover .dashboard-quick-icon {
+    @apply bg-primary text-[var(--color-on-primary)];
   }
 
   .dashboard-section {
-    @apply mt-10;
+    @apply space-y-4;
   }
 
   .dashboard-section-header {
-    @apply mb-4 flex items-center justify-between gap-4;
+    @apply flex items-end justify-between gap-4 border-b border-border pb-3;
+  }
+
+  .dashboard-section-title {
+    @apply text-sm font-bold uppercase tracking-widest text-foreground;
+  }
+
+  .dashboard-section-desc {
+    @apply mt-1 text-xs text-foreground-muted;
+  }
+
+  .dashboard-view-link {
+    @apply inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
   }
 
   .dashboard-panel {
     @apply overflow-hidden rounded-2xl border border-border bg-surface shadow-sm;
+  }
+
+  .dashboard-empty {
+    @apply rounded-2xl border border-dashed border-border bg-surface px-6 py-12;
+  }
+
+  .dashboard-file-cell {
+    @apply flex items-center gap-3;
+  }
+
+  .dashboard-file-icon {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pending-bg text-foreground-muted;
+  }
+
+  .dashboard-processing-card {
+    @apply rounded-xl border border-border bg-background p-4;
+  }
+
+  .dashboard-review-card {
+    @apply flex items-center justify-between gap-4 rounded-xl border border-warning-border bg-warning-bg/40 p-4 transition-colors hover:bg-warning-bg/70;
+  }
+
+  .dashboard-layout-grid {
+    @apply grid gap-6 xl:grid-cols-3;
+  }
+
+  .dashboard-layout-main {
+    @apply space-y-6 xl:col-span-2;
+  }
+
+  .dashboard-layout-side {
+    @apply space-y-6;
   }
 
   .app-icon-btn {
