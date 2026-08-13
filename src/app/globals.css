@@ -287,152 +287,228 @@ body {
   }
 
   .app-topbar-actions {
-    @apply flex shrink-0 items-center gap-3;
+    @apply flex shrink-0 items-center gap-2 sm:gap-3;
   }
 
-  .dashboard-page {
-    @apply mx-auto w-full max-w-7xl space-y-8 p-6 lg:p-8;
+  .dashboard-shell {
+    @apply mx-auto w-full max-w-7xl space-y-6 p-6 lg:p-8;
   }
 
-  .dashboard-hero {
-    @apply relative overflow-hidden rounded-2xl border border-border p-6 md:p-8;
-    background:
-      radial-gradient(ellipse 80% 80% at 100% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent),
-      linear-gradient(135deg, color-mix(in srgb, var(--color-primary-soft) 80%, var(--color-surface)), var(--color-surface));
+  .dashboard-notice {
+    @apply flex flex-wrap items-center gap-3 rounded-xl border border-warning-border bg-warning-bg px-4 py-3 text-sm text-warning;
   }
 
-  .dashboard-hero-title {
-    @apply text-xl font-bold tracking-tight text-foreground md:text-2xl;
+  .dashboard-notice-link {
+    @apply ml-auto text-xs font-semibold uppercase tracking-wide text-warning underline-offset-4 hover:underline;
   }
 
-  .dashboard-hero-text {
-    @apply mt-2 max-w-2xl text-sm leading-relaxed text-foreground-secondary;
+  .dashboard-metrics {
+    @apply flex flex-col overflow-hidden rounded-2xl border border-border bg-surface sm:flex-row;
   }
 
-  .dashboard-hero-actions {
-    @apply mt-6 flex flex-wrap gap-3;
+  .dashboard-metric {
+    @apply flex flex-1 flex-col border-b border-border px-6 py-5 transition-colors hover:bg-background sm:border-b-0 sm:border-r sm:last:border-r-0;
   }
 
-  .dashboard-alert {
-    @apply mt-5 flex items-start gap-3 rounded-xl border border-warning-border bg-warning-bg px-4 py-3 text-sm text-warning;
-  }
-
-  .dashboard-stat-grid {
-    @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
-  }
-
-  .dashboard-stat-card {
-    @apply relative overflow-hidden rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all hover:border-border-strong hover:shadow-md;
-  }
-
-  .dashboard-stat-card::before {
-    content: "";
-    @apply absolute inset-x-0 top-0 h-1 bg-primary opacity-0 transition-opacity;
-  }
-
-  .dashboard-stat-card:hover::before {
-    @apply opacity-100;
-  }
-
-  .dashboard-stat-top {
-    @apply flex items-start justify-between gap-3;
-  }
-
-  .dashboard-stat-icon {
-    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary transition-colors;
-  }
-
-  .dashboard-stat-card:hover .dashboard-stat-icon {
-    @apply bg-primary text-[var(--color-on-primary)];
-  }
-
-  .dashboard-stat-label {
+  .dashboard-metric-label {
     @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
   }
 
-  .dashboard-stat-value {
-    @apply mt-2 text-3xl font-bold tabular-nums tracking-tight text-foreground;
+  .dashboard-metric-value {
+    @apply mt-2 text-3xl font-semibold tabular-nums tracking-tight text-foreground;
   }
 
-  .dashboard-stat-meta {
-    @apply mt-3 text-xs text-foreground-muted;
+  .dashboard-actions {
+    @apply grid border-t border-border sm:grid-cols-2 lg:grid-cols-3;
   }
 
-  .dashboard-quick-grid {
-    @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-4;
+  .dashboard-action {
+    @apply flex items-center gap-3 border-b border-r border-border px-5 py-4 text-sm font-medium text-foreground-secondary transition-colors hover:bg-background hover:text-foreground;
   }
 
-  .dashboard-quick-link {
-    @apply flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5 text-sm font-medium text-foreground-secondary transition-all hover:border-primary hover:bg-primary-soft hover:text-primary;
+  .dashboard-action-icon {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pending-bg text-foreground-muted transition-colors;
   }
 
-  .dashboard-quick-icon {
-    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pending-bg text-foreground-muted transition-colors;
+  .dashboard-action:hover .dashboard-action-icon {
+    @apply bg-primary-soft text-primary;
   }
 
-  .dashboard-quick-link:hover .dashboard-quick-icon {
-    @apply bg-primary text-[var(--color-on-primary)];
+  .dashboard-action-primary {
+    @apply text-foreground;
   }
 
-  .dashboard-section {
-    @apply space-y-4;
+  .dashboard-action-primary .dashboard-action-icon {
+    @apply bg-primary-soft text-primary;
   }
 
-  .dashboard-section-header {
-    @apply flex items-end justify-between gap-4 border-b border-border pb-3;
+  .dashboard-charts {
+    @apply grid gap-6 lg:grid-cols-2;
   }
 
-  .dashboard-section-title {
-    @apply text-sm font-bold uppercase tracking-widest text-foreground;
+  .dashboard-chart-card {
+    @apply rounded-2xl border border-border bg-surface px-6 py-5;
   }
 
-  .dashboard-section-desc {
+  .dashboard-chart-title {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .dashboard-chart-desc {
     @apply mt-1 text-xs text-foreground-muted;
   }
 
-  .dashboard-view-link {
-    @apply inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
+  .dashboard-chart-body {
+    @apply mt-5;
   }
 
-  .dashboard-panel {
-    @apply overflow-hidden rounded-2xl border border-border bg-surface shadow-sm;
+  .dashboard-chart-svg {
+    @apply h-auto w-full max-w-full;
+  }
+
+  .dashboard-chart-bar {
+    fill: var(--color-primary);
+    opacity: 0.85;
+  }
+
+  .dashboard-chart-labels {
+    @apply mt-3 grid grid-cols-7 gap-1 text-center text-[10px] font-medium uppercase tracking-wide text-foreground-muted;
+  }
+
+  .dashboard-chart-caption {
+    @apply mt-3 text-xs text-foreground-muted;
+  }
+
+  .dashboard-chart-donut-wrap {
+    @apply flex flex-col gap-5 sm:flex-row sm:items-center;
+  }
+
+  .dashboard-donut {
+    @apply relative mx-auto h-[120px] w-[120px] shrink-0 sm:mx-0;
+  }
+
+  .dashboard-donut-center {
+    @apply absolute inset-0 flex flex-col items-center justify-center;
+  }
+
+  .dashboard-donut-value {
+    @apply text-xl font-semibold tabular-nums text-foreground;
+  }
+
+  .dashboard-donut-label {
+    @apply text-[10px] font-medium uppercase tracking-wider text-foreground-muted;
+  }
+
+  .dashboard-chart-legend {
+    @apply flex flex-1 flex-col gap-2.5;
+  }
+
+  .dashboard-chart-legend li {
+    @apply flex items-center gap-2 text-sm;
+  }
+
+  .dashboard-legend-dot {
+    @apply h-2.5 w-2.5 shrink-0 rounded-full;
+  }
+
+  .dashboard-legend-label {
+    @apply flex-1 text-foreground-secondary;
+  }
+
+  .dashboard-legend-value {
+    @apply font-medium tabular-nums text-foreground;
+  }
+
+  .projects-filter-bar {
+    @apply flex flex-wrap gap-2 border-b border-border px-6 py-4;
+  }
+
+  .projects-filter-tab {
+    @apply inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground-secondary transition-colors hover:border-border-strong hover:text-foreground;
+  }
+
+  .projects-filter-tab-active {
+    @apply border-primary bg-primary-soft text-primary;
+  }
+
+  .projects-filter-count {
+    @apply rounded-md bg-surface px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-foreground-muted;
+  }
+
+  .projects-filter-tab-active .projects-filter-count {
+    @apply bg-surface text-primary;
+  }
+
+  .projects-toolbar {
+    @apply flex flex-col gap-3 border-b border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .projects-search {
+    @apply block min-w-0 flex-1 sm:max-w-md;
+  }
+
+  .projects-search-input {
+    @apply w-full;
+  }
+
+  .projects-view-toggle {
+    @apply inline-flex shrink-0 rounded-lg border border-border bg-background p-1;
+  }
+
+  .projects-view-btn {
+    @apply rounded-md px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground;
+  }
+
+  .projects-view-btn-active {
+    @apply bg-surface text-primary shadow-sm;
+  }
+
+  .projects-grid {
+    @apply grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .projects-grid-card {
+    @apply block rounded-xl border border-border bg-background p-5 transition-colors hover:border-border-strong hover:bg-surface;
+  }
+
+  .dashboard-section {
+    @apply card space-y-0 p-0;
+  }
+
+  .dashboard-section-header {
+    @apply flex items-start gap-3 border-b border-border px-6 py-5;
+  }
+
+  .dashboard-section-link {
+    @apply shrink-0 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
+  }
+
+  .dashboard-table-wrap {
+    @apply overflow-x-auto;
+  }
+
+  .dashboard-table-wrap .data-table thead {
+    @apply bg-transparent;
+  }
+
+  .dashboard-row-link {
+    @apply font-medium text-foreground transition-colors hover:text-primary;
   }
 
   .dashboard-empty {
-    @apply rounded-2xl border border-dashed border-border bg-surface px-6 py-12;
+    @apply px-6 py-8;
   }
 
-  .dashboard-file-cell {
-    @apply flex items-center gap-3;
+  .dashboard-empty-text {
+    @apply px-6 py-5 text-sm text-foreground-muted;
   }
 
-  .dashboard-file-icon {
-    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pending-bg text-foreground-muted;
+  .dashboard-queue {
+    @apply divide-y divide-border px-6 py-2;
   }
 
-  .dashboard-processing-card {
-    @apply rounded-xl border border-border bg-background p-4;
-  }
-
-  .dashboard-review-card {
-    @apply flex items-center justify-between gap-4 rounded-xl border border-warning-border p-4 transition-colors;
-    background-color: color-mix(in srgb, var(--color-warning-bg) 40%, transparent);
-  }
-
-  .dashboard-review-card:hover {
-    background-color: color-mix(in srgb, var(--color-warning-bg) 70%, transparent);
-  }
-
-  .dashboard-layout-grid {
-    @apply grid gap-6 xl:grid-cols-3;
-  }
-
-  .dashboard-layout-main {
-    @apply space-y-6 xl:col-span-2;
-  }
-
-  .dashboard-layout-side {
-    @apply space-y-6;
+  .dashboard-queue-item {
+    @apply py-4 first:pt-3 last:pb-3;
   }
 
   .app-icon-btn {

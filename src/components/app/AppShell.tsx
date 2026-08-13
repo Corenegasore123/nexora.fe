@@ -160,7 +160,7 @@ export function AppTopBar({
   onMenuClick: () => void;
   mobileOpen: boolean;
 }) {
-  const { title, subtitle } = useAppPageMeta();
+  const { title, subtitle, actions } = useAppPageMeta();
 
   return (
     <header className="app-topbar backdrop-blur-sm">
@@ -174,6 +174,7 @@ export function AppTopBar({
         {subtitle && <p className="app-topbar-subtitle">{subtitle}</p>}
       </div>
       <div className="app-topbar-actions">
+        {actions}
         <NotificationBell />
       </div>
     </header>

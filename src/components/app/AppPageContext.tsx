@@ -1,11 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 export type AppPageMeta = {
   title: string;
   subtitle?: string;
+  actions?: ReactNode;
 };
 
 function resolvePageMeta(pathname: string): AppPageMeta {
@@ -45,9 +46,12 @@ export function AppPageProvider({ children }: { children: ReactNode }) {
 
   const meta = override ?? resolvePageMeta(pathname);
 
-  return (
-    <AppPageContext.Provider value={{ meta, setMeta: setOverride }}>{children}</AppPageContext.Provider>
+  const value = useMemo(
+    () => ({ meta, setMeta: setOverride }),
+    [meta.title, meta.subtitle, meta.actions]
   );
+
+  return <AppPageContext.Provider value={value}>{children}</AppPageContext.Provider>;
 }
 
 export function useAppPageMeta() {
@@ -56,11 +60,12 @@ export function useAppPageMeta() {
   return ctx.meta;
 }
 
-export function useSetAppPageMeta(meta: AppPageMeta) {
-  const ctx = useContext(AppPageContext);
+export function useSetAppPageMeta({ title, subtitle }: { title: string; subtitle?: string }) {
+  const setMeta = useContext(AppPageContext)?.setMeta;
+
   useEffect(() => {
-    if (!ctx) return;
-    ctx.setMeta(meta);
-    return () => ctx.setMeta(null);
-  }, [ctx, meta.title, meta.subtitle]);
+    if (!setMeta) return;
+    setMeta({ title, subtitle });
+    return () => setMeta(null);
+  }, [setMeta, title, subtitle]);
 }
