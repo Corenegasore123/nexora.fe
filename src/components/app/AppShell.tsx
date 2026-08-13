@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
 import { NotificationBell } from "@/components/NotificationBell";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Icon, type IconName } from "@/components/icons/Icon";
 
 type NavItem = {
@@ -163,7 +162,6 @@ export function AppTopBar({ onMenuClick }: { onMenuClick: () => void }) {
       </button>
       <div className="flex-1" />
       <div className="flex items-center gap-2">
-        <ThemeToggle />
         <NotificationBell />
       </div>
     </header>

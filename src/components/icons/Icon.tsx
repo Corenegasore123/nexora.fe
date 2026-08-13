@@ -39,7 +39,9 @@ export type IconName =
   | "chevron-down"
   | "eye"
   | "eye-off"
-  | "home";
+  | "home"
+  | "plus"
+  | "minus";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -309,6 +311,13 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <polyline points="9 22 9 12 15 12 15 22" />
     </>
   ),
+  plus: (
+    <>
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </>
+  ),
+  minus: <path d="M5 12h14" />,
 };
 
 export function Icon({ name, size = 20, className = "", ...props }: IconProps) {

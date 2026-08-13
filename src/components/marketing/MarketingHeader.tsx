@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { href: "/how-it-works", label: "How It Works" },
@@ -18,7 +17,7 @@ export function MarketingHeader() {
     <header className="fixed inset-x-0 top-0 z-50 px-4 py-4">
       <div className="marketing-nav-shell justify-between gap-6">
         <Link href="/" className="flex shrink-0 items-center gap-3 text-sm font-bold tracking-tight text-white">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-xs font-bold text-[var(--color-on-primary)]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-xs font-bold text-[var(--color-on-accent)]">
             QS
           </span>
           <span className="hidden sm:inline">QuantScope</span>
@@ -29,8 +28,8 @@ export function MarketingHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-xs font-medium uppercase tracking-wider transition-colors hover:text-[#72D28E] ${
-                pathname === item.href ? "text-[#72D28E]" : "text-white/70"
+              className={`text-xs font-medium uppercase tracking-wider transition-colors hover:text-accent ${
+                pathname === item.href ? "text-accent" : "text-white/75"
               }`}
             >
               {item.label}
@@ -39,7 +38,6 @@ export function MarketingHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <ThemeToggle variant="header" />
           <Link href="/sign-in" className="btn-marketing-signin">
             Sign In
           </Link>

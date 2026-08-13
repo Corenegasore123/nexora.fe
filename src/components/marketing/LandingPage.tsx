@@ -45,24 +45,23 @@ const USE_CASES: { label: string; icon: IconName }[] = [
 export function LandingPage() {
   return (
     <>
-      {/* Cinematic hero */}
-      <section className="marketing-hero marketing-hero-grid relative min-h-[92vh]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1D232A] via-[#141a20] to-[#0f1419]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1D232A] via-transparent to-transparent" />
+      {/* Hero */}
+      <section className="marketing-hero marketing-hero-grid relative min-h-[88vh]">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-soft/60 via-background to-accent-soft/40" />
 
-        <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-6 pb-16 pt-36 md:min-h-[92vh] md:pb-20 md:pt-40">
+        <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-6 pb-16 pt-36 md:min-h-[88vh] md:pb-20 md:pt-40">
           <div className="grid items-end gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-white/80 backdrop-blur-sm">
-                <Icon name="sparkles" size={14} className="text-primary" />
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-primary">
+                <Icon name="sparkles" size={14} />
                 Intelligent Quantity Platform
               </span>
-              <h1 className="mt-6 text-4xl font-bold uppercase leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl">
+              <h1 className="mt-6 text-4xl font-bold uppercase leading-[1.05] tracking-tight text-foreground md:text-6xl lg:text-7xl">
                 From Diagram
                 <br />
                 to Quantity.
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-foreground-secondary md:text-lg">
                 QuantScope transforms technical diagrams into structured measurements and verified
                 calculations using OCR, computer vision, and deterministic logic — never
                 LLM-invented numbers.
@@ -78,18 +77,18 @@ export function LandingPage() {
               </div>
             </div>
             <div className="hidden lg:block">
-              <ProductFlowVisual variant="dark" />
+              <ProductFlowVisual variant="light" />
             </div>
           </div>
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.label} className="glass-stat">
-                <div className="flex items-center gap-2 text-white/50">
+                <div className="flex items-center gap-2 text-foreground-muted">
                   <Icon name={s.icon} size={16} className="text-primary" />
                   <span className="text-[10px] font-semibold uppercase tracking-widest">{s.label}</span>
                 </div>
-                <p className="mt-2 text-3xl font-bold tabular-nums text-white">{s.value}</p>
+                <p className="mt-2 text-3xl font-bold tabular-nums text-foreground">{s.value}</p>
               </div>
             ))}
           </div>
@@ -117,24 +116,24 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Platform spotlight — split dark section */}
-      <section className="bg-[#1D232A] py-24 text-[#F2FFF5]">
+      {/* Platform spotlight */}
+      <section className="bg-[#354554] py-24 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-primary">Analysis Workspace</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent">Analysis Workspace</p>
             <h2 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">
               Measurement extraction.
               <br />
               Verified calculation.
             </h2>
-            <p className="mt-4 text-white/65">
+            <p className="mt-4 text-white/70">
               Upload technical drawings, review detected measurements with confidence scores, and
               run deterministic earthwork and quantity formulas with a complete audit trail.
             </p>
             <ul className="mt-8 space-y-4">
               {PLATFORM_FEATURES.map((item) => (
-                <li key={item} className="flex items-start gap-3 text-sm text-white/80">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
+                <li key={item} className="flex items-start gap-3 text-sm text-white/85">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
                     <Icon name="check" size={12} />
                   </span>
                   {item}
@@ -148,10 +147,10 @@ export function LandingPage() {
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-3xl border border-white/10 shadow-modal">
-              <div className="aspect-[4/3] bg-gradient-to-br from-[#1e293b] via-ink to-[#0a1628] p-6">
+              <div className="aspect-[4/3] bg-gradient-to-br from-[#2a3844] via-[#354554] to-[#2a3844] p-6">
                 <ProductFlowVisual variant="dark" compact />
               </div>
-              <div className="border-t border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+              <div className="border-t border-white/10 bg-white/5 p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50">Sample output</p>
                 <p className="mt-1 text-lg font-bold text-white">Cut volume: 142.5 m³</p>
                 <p className="text-sm text-white/60">Chapter 3 earthwork · Full audit trail attached</p>
@@ -183,7 +182,7 @@ export function LandingPage() {
               ))}
             </ul>
           </div>
-          <div className="relative rounded-3xl border border-border bg-surface p-8 shadow-elevated dark:bg-gradient-to-br dark:from-primary-soft/50 dark:to-surface">
+          <div className="relative rounded-3xl border border-border bg-gradient-to-br from-primary-soft/40 to-surface p-8 shadow-elevated">
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: "Projects", value: "12", icon: "folder" as IconName },
@@ -191,7 +190,7 @@ export function LandingPage() {
                 { label: "Reports", value: "31", icon: "file-text" as IconName },
                 { label: "Accuracy", value: "99%", icon: "target" as IconName },
               ].map((m) => (
-                <div key={m.label} className="rounded-2xl border border-border bg-background p-4 dark:bg-surface">
+                <div key={m.label} className="rounded-2xl border border-border bg-surface p-4">
                   <Icon name={m.icon} size={18} className="text-primary" />
                   <p className="mt-3 text-2xl font-bold text-foreground">{m.value}</p>
                   <p className="text-xs text-foreground-muted">{m.label}</p>
@@ -237,7 +236,7 @@ export function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="border-t border-border bg-primary-soft/30 py-24 dark:bg-primary-soft/20">
+      <section className="border-t border-border bg-accent-soft/40 py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-3xl font-bold text-foreground md:text-4xl">
             Turn your technical diagrams into verified quantities.

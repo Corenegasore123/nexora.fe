@@ -31,6 +31,12 @@ const config: Config = {
           active: "var(--color-primary-active)",
           soft: "var(--color-primary-soft)",
         },
+        accent: {
+          DEFAULT: "var(--color-accent)",
+          hover: "var(--color-accent-hover)",
+          active: "var(--color-accent-active)",
+          soft: "var(--color-accent-soft)",
+        },
         selected: "var(--color-selected)",
         success: {
           DEFAULT: "var(--color-success)",
@@ -81,8 +87,8 @@ const config: Config = {
           8: "var(--chart-8)",
         },
         ink: {
-          DEFAULT: "#1D232A",
-          deep: "#141a20",
+          DEFAULT: "#354554",
+          deep: "#2a3844",
         },
       },
       ringColor: {

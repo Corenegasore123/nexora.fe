@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { ProductFlowVisual } from "@/components/marketing/ProductFlowVisual";
+import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 
 const STEPS = [
   {
@@ -153,13 +154,8 @@ export default function HowItWorksPage() {
 
       <section className="mx-auto max-w-3xl px-6 py-20">
         <h2 className="page-title text-center">Frequently asked questions</h2>
-        <div className="mt-10 space-y-4">
-          {FAQ.map((item) => (
-            <div key={item.q} className="card">
-              <h3 className="font-semibold text-foreground">{item.q}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{item.a}</p>
-            </div>
-          ))}
+        <div className="mt-10">
+          <FaqAccordion items={FAQ} />
         </div>
         <div className="mt-12 text-center">
           <Link href="/sign-up" className="btn-primary inline-flex gap-2">

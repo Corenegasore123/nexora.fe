@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, ReactNode, useState } from "react";
 import { Icon } from "@/components/icons/Icon";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function AuthCard({
   title,
@@ -20,7 +19,6 @@ export function AuthCard({
   return (
     <div className="auth-card animate-fade-in">
       <div className="auth-card-toolbar">
-        <ThemeToggle />
         <Link href="/" className="auth-close-btn" aria-label="Back to home">
           <Icon name="x" size={18} />
         </Link>

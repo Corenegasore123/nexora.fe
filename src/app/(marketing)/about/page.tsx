@@ -80,7 +80,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-primary-soft/30 px-6 py-20 dark:bg-primary-soft/10">
+      <section className="border-y border-border bg-primary-soft/30 px-6 py-20">
         <div className="mx-auto max-w-4xl">
           <h2 className="page-title text-center">Platform at a glance</h2>
           <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
