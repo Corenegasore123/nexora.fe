@@ -415,7 +415,12 @@ body {
   }
 
   .dashboard-review-card {
-    @apply flex items-center justify-between gap-4 rounded-xl border border-warning-border bg-warning-bg/40 p-4 transition-colors hover:bg-warning-bg/70;
+    @apply flex items-center justify-between gap-4 rounded-xl border border-warning-border p-4 transition-colors;
+    background-color: color-mix(in srgb, var(--color-warning-bg) 40%, transparent);
+  }
+
+  .dashboard-review-card:hover {
+    background-color: color-mix(in srgb, var(--color-warning-bg) 70%, transparent);
   }
 
   .dashboard-layout-grid {
