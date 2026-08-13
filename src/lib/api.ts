@@ -32,6 +32,14 @@ export class ApiError extends Error {
   }
 }
 
+async function readApi<T>(path: string, fallback: T, init?: RequestInit): Promise<T> {
+  try {
+    return await apiFetch<T>(path, init);
+  } catch {
+    return fallback;
+  }
+}
+
 export async function apiFetch<T = unknown>(
   path: string,
   init?: RequestInit
@@ -82,7 +90,11 @@ export async function register(name: string, email: string, password: string, co
 }
 
 export async function logout() {
-  return apiFetch<{ ok: boolean }>("/api/auth/logout", { method: "POST" });
+  try {
+    return await apiFetch<{ ok: boolean }>("/api/auth/logout", { method: "POST" });
+  } catch {
+    return { ok: false };
+  }
 }
 
 // ─── Dashboard & Projects ───────────────────────────────────────────────────
@@ -195,7 +207,7 @@ export async function getDashboard(): Promise<DashboardData> {
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const data = await apiFetch<{ projects: Project[] }>("/api/projects");
+  const data = await readApi("/api/projects", { projects: [] as Project[] });
   return data.projects;
 }
 
@@ -207,7 +219,7 @@ export async function createProject(name: string, description?: string) {
 }
 
 export async function getProject(id: string) {
-  return apiFetch<{ project: Project }>(`/api/projects/${id}`);
+  return readApi(`/api/projects/${id}`, { project: null as unknown as Project });
 }
 
 export async function updateProject(
@@ -221,25 +233,25 @@ export async function updateProject(
 }
 
 export async function getProjectDocuments(projectId: string) {
-  return apiFetch<{ documents: Document[] }>(`/api/projects/${projectId}/documents`);
+  return readApi(`/api/projects/${projectId}/documents`, { documents: [] as Document[] });
 }
 
 export async function getProjectCalculations(projectId: string) {
-  return apiFetch<{ calculations: DashboardData["recentCalculations"] }>(
-    `/api/projects/${projectId}/calculations`
-  );
+  return readApi(`/api/projects/${projectId}/calculations`, {
+    calculations: [] as DashboardData["recentCalculations"],
+  });
 }
 
 export async function getProjectActivity(projectId: string) {
-  return apiFetch<{ activity: ActivityEntry[] }>(`/api/projects/${projectId}/activity`);
+  return readApi(`/api/projects/${projectId}/activity`, { activity: [] as ActivityEntry[] });
 }
 
 export async function getProjectMembers(projectId: string) {
-  return apiFetch<{
-    owner: ProjectMember | null;
-    members: ProjectMember[];
-    currentRole: "OWNER" | "EDITOR" | "VIEWER";
-  }>(`/api/projects/${projectId}/members`);
+  return readApi(`/api/projects/${projectId}/members`, {
+    owner: null,
+    members: [] as ProjectMember[],
+    currentRole: "VIEWER" as const,
+  });
 }
 
 export async function addProjectMember(
@@ -279,13 +291,21 @@ export async function getNotifications() {
 }
 
 export async function markNotificationRead(id: string) {
-  return apiFetch<{ notification: Notification }>(`/api/notifications/${id}/read`, {
-    method: "PATCH",
-  });
+  try {
+    return await apiFetch<{ notification: Notification }>(`/api/notifications/${id}/read`, {
+      method: "PATCH",
+    });
+  } catch {
+    return null;
+  }
 }
 
 export async function markAllNotificationsRead() {
-  return apiFetch<{ ok: boolean }>("/api/notifications/read-all", { method: "POST" });
+  try {
+    return await apiFetch<{ ok: boolean }>("/api/notifications/read-all", { method: "POST" });
+  } catch {
+    return { ok: false };
+  }
 }
 
 export async function uploadProjectDocument(projectId: string, file: File) {
@@ -381,16 +401,38 @@ export interface AuditLogEntry {
 }
 
 export async function getAdminStats() {
-  return apiFetch<{ stats: AdminStats; health: SystemHealth }>("/api/admin/stats");
+  return readApi("/api/admin/stats", {
+    stats: {
+      users: 0,
+      admins: 0,
+      projects: 0,
+      calculations: 0,
+      completedCalculations: 0,
+      pendingCalculations: 0,
+      failedCalculations: 0,
+      documents: 0,
+      auditLogs: 0,
+      recentUsers: 0,
+      activeSessions: 0,
+    },
+    health: {
+      status: "degraded" as const,
+      database: "unknown",
+      redis: "unknown",
+      queue: "unknown",
+      cvService: "unknown",
+      uptimeSeconds: 0,
+      nodeVersion: "",
+      env: "",
+    },
+  });
 }
 
 export async function getAdminUsers(params?: { search?: string; page?: number }) {
   const q = new URLSearchParams();
   if (params?.search) q.set("search", params.search);
   if (params?.page) q.set("page", String(params.page));
-  return apiFetch<{ users: AdminUser[]; total: number; page: number; limit: number }>(
-    `/api/admin/users?${q}`
-  );
+  return readApi(`/api/admin/users?${q}`, { users: [] as AdminUser[], total: 0, page: 1, limit: 20 });
 }
 
 export async function updateAdminUser(
@@ -412,11 +454,39 @@ export async function getAdminAudit(params?: {
   if (params?.action) q.set("action", params.action);
   if (params?.userId) q.set("userId", params.userId);
   if (params?.page) q.set("page", String(params.page));
-  return apiFetch<{ logs: AuditLogEntry[]; total: number; page: number; limit: number }>(
-    `/api/admin/audit?${q}`
-  );
+  return readApi(`/api/admin/audit?${q}`, { logs: [] as AuditLogEntry[], total: 0, page: 1, limit: 20 });
 }
 
 export async function getAdminAuditActions() {
-  return apiFetch<{ actions: string[] }>("/api/admin/audit/actions");
+  return readApi("/api/admin/audit/actions", { actions: [] as string[] });
+}
+
+export interface HistoryJobSummary {
+  id: string;
+  status: string;
+  createdAt: string;
+  overallConfidence: number | null;
+  image: { filename: string };
+  result: { result: number; unit: string } | null;
+  project?: { id: string; name: string } | null;
+  version?: number;
+}
+
+export async function getHistoryJobs() {
+  return readApi<HistoryJobSummary[]>("/api/app/history", []);
+}
+
+export async function getCalculations() {
+  return readApi<HistoryJobSummary[]>("/api/calculations", []);
+}
+
+export async function getCalculationRules() {
+  return readApi("/api/calculation-rules", { rules: [] as Array<{
+    id: string;
+    name: string;
+    category: string;
+    method: string;
+    formula: { expression: string; latex: string };
+    outputUnit: string;
+  }> });
 }

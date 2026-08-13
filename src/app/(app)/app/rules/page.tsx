@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiUrl } from "@/lib/api";
+import { getCalculationRules } from "@/lib/api";
 
 interface Rule {
   id: string;
@@ -22,10 +22,7 @@ export default function RulesPage() {
   const [rules, setRules] = useState<Rule[]>([]);
 
   useEffect(() => {
-    fetch(apiUrl("/api/calculation-rules"))
-      .then((r) => r.json())
-      .then((data) => setRules(data.rules))
-      .catch(console.error);
+    getCalculationRules().then((data) => setRules(data.rules));
   }, []);
 
   const grouped = rules.reduce<Record<string, Rule[]>>((acc, rule) => {

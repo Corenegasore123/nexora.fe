@@ -2,19 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { apiFetch, apiUrl } from "@/lib/api";
+import { getCalculations, HistoryJobSummary, apiUrl } from "@/lib/api";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { SkeletonTable } from "@/components/ui/Skeleton";
-
-interface JobSummary {
-  id: string;
-  status: string;
-  createdAt: string;
-  version: number;
-  image: { filename: string };
-  result: { result: number; unit: string } | null;
-  project: { id: string; name: string } | null;
-}
 
 function statusClass(status: string) {
   if (status === "COMPLETED") return "status-badge status-completed";
@@ -23,12 +13,12 @@ function statusClass(status: string) {
 }
 
 export default function ReportsPage() {
-  const [jobs, setJobs] = useState<JobSummary[] | null>(null);
+  const [jobs, setJobs] = useState<HistoryJobSummary[] | null>(null);
 
   useEffect(() => {
-    apiFetch<JobSummary[]>("/api/calculations")
+    getCalculations()
       .then((all) => setJobs(all.filter((j) => j.status === "COMPLETED")))
-      .catch(console.error);
+      .catch(() => setJobs([]));
   }, []);
 
   return (

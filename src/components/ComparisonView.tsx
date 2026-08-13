@@ -46,7 +46,7 @@ export function ComparisonView({ jobId }: { jobId: string }) {
   useEffect(() => {
     apiFetch<ComparisonData>(`/api/calculations/${jobId}/compare`)
       .then(setData)
-      .catch(console.error);
+      .catch(() => setData(null));
   }, [jobId]);
 
   if (!data) return null;

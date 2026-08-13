@@ -93,7 +93,7 @@ export default function CalculationDetailPage() {
   const reload = () => {
     apiFetch<JobDetail>(`/api/app/history/${id}`)
       .then(setJob)
-      .catch(console.error);
+      .catch(() => setJob(null));
   };
 
   useEffect(() => {

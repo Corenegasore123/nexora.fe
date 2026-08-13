@@ -2,16 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { apiUrl, apiFetch } from "@/lib/api";
-
-interface JobSummary {
-  id: string;
-  status: string;
-  createdAt: string;
-  overallConfidence: number | null;
-  image: { filename: string };
-  result: { result: number; unit: string } | null;
-}
+import { getHistoryJobs, HistoryJobSummary } from "@/lib/api";
 
 function statusClass(status: string) {
   if (status === "COMPLETED") return "status-badge status-completed";
@@ -20,12 +11,10 @@ function statusClass(status: string) {
 }
 
 export default function CalculationsPage() {
-  const [jobs, setJobs] = useState<JobSummary[]>([]);
+  const [jobs, setJobs] = useState<HistoryJobSummary[]>([]);
 
   useEffect(() => {
-    apiFetch<JobSummary[]>("/api/app/history")
-      .then(setJobs)
-      .catch(console.error);
+    getHistoryJobs().then(setJobs);
   }, []);
 
   return (

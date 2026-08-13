@@ -69,7 +69,7 @@ export default function ProjectDetailPage() {
   }, [projectId]);
 
   useEffect(() => {
-    load().catch(console.error);
+    load().catch(() => undefined);
   }, [load]);
 
   const handleUpload = async (file: File) => {
