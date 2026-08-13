@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { apiUrl } from "@/lib/api";
+import { useCallback, useEffect, useRef, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { apiFetch, getProjects, Project } from "@/lib/api";
 
 const STATUS_LABELS: Record<string, string> = {
   UPLOADING: "Uploading…",
@@ -25,15 +26,31 @@ const PIPELINE_STEPS = [
   "COMPLETED",
 ];
 
-export default function CalculatorPage() {
+function CalculatorContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialProject = searchParams.get("project");
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [projectId, setProjectId] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+
+  useEffect(() => {
+    getProjects().then((list) => {
+      setProjects(list);
+      if (initialProject && list.some((p) => p.id === initialProject)) {
+        setProjectId(initialProject);
+      } else if (list.length > 0) {
+        setProjectId(list[0].id);
+      }
+    });
+  }, [initialProject]);
 
   const onFileSelect = useCallback((selected: File) => {
     setFile(selected);
@@ -57,18 +74,25 @@ export default function CalculatorPage() {
 
   const pollJob = async (jobId: string) => {
     const interval = setInterval(async () => {
-      const res = await fetch(apiUrl(`/api/calculations/${jobId}`));
-      const job = await res.json();
-      setStatus(job.status);
+      try {
+        const job = await apiFetch<{ status: string; errorMessage?: string }>(
+          `/api/calculations/${jobId}`
+        );
+        setStatus(job.status);
 
-      if (job.status === "COMPLETED") {
+        if (job.status === "COMPLETED") {
+          clearInterval(interval);
+          setLoading(false);
+          router.push(`/calculations/${jobId}`);
+        } else if (job.status === "FAILED") {
+          clearInterval(interval);
+          setLoading(false);
+          setError(job.errorMessage ?? "Processing failed");
+        }
+      } catch {
         clearInterval(interval);
         setLoading(false);
-        router.push(`/calculations/${jobId}`);
-      } else if (job.status === "FAILED") {
-        clearInterval(interval);
-        setLoading(false);
-        setError(job.errorMessage ?? "Processing failed");
+        setError("Lost connection while processing");
       }
     }, 1500);
   };
@@ -81,11 +105,14 @@ export default function CalculatorPage() {
 
     const formData = new FormData();
     formData.append("file", file);
+    if (projectId) formData.append("projectId", projectId);
 
     try {
-      const res = await fetch(apiUrl("/api/calculations"), { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Upload failed");
+      const data = await apiFetch<{ jobId: string; status: string }>("/api/calculations", {
+        method: "POST",
+        body: formData,
+        headers: {},
+      });
       setStatus(data.status);
       pollJob(data.jobId);
     } catch (err) {
@@ -104,6 +131,33 @@ export default function CalculatorPage() {
         <p className="page-subtitle">
           Drop a building diagram with dimension labels. The system handles the rest.
         </p>
+        {projects.length > 0 && (
+          <div className="mt-6 max-w-sm">
+            <label htmlFor="project" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+              Project
+            </label>
+            <select
+              id="project"
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              className="input-field w-full"
+            >
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {projects.length === 0 && (
+          <p className="mt-4 text-sm text-neutral-500">
+            <Link href="/projects/new" className="text-white underline underline-offset-4">
+              Create a project
+            </Link>{" "}
+            to organize uploads.
+          </p>
+        )}
       </div>
 
       <div
@@ -183,5 +237,13 @@ export default function CalculatorPage() {
         {loading ? "Processing…" : "Calculate"}
       </button>
     </div>
+  );
+}
+
+export default function CalculatorPage() {
+  return (
+    <Suspense>
+      <CalculatorContent />
+    </Suspense>
   );
 }

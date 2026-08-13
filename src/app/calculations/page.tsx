@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, apiFetch } from "@/lib/api";
 
 interface JobSummary {
   id: string;
@@ -23,8 +23,7 @@ export default function CalculationsPage() {
   const [jobs, setJobs] = useState<JobSummary[]>([]);
 
   useEffect(() => {
-    fetch(apiUrl("/api/calculations"))
-      .then((r) => r.json())
+    apiFetch<JobSummary[]>("/api/calculations")
       .then(setJobs)
       .catch(console.error);
   }, []);

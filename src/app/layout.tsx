@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Montserrat, JetBrains_Mono } from "next/font/google";
+import { AppHeader } from "@/components/AppHeader";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -21,31 +21,11 @@ export const metadata: Metadata = {
     "Upload building diagrams for automatic measurement extraction and auditable quantity calculations",
 };
 
-const NAV = [
-  { href: "/calculator", label: "Calculator" },
-  { href: "/calculations", label: "History" },
-  { href: "/rules", label: "Rules" },
-  { href: "/settings", label: "Settings" },
-];
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-screen bg-black font-sans text-white antialiased">
-        <header className="sticky top-0 z-50 border-b border-border bg-black/80 backdrop-blur-md">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-            <Link href="/" className="text-lg font-bold tracking-tight text-white">
-              QuantScope
-            </Link>
-            <nav className="flex items-center gap-8">
-              {NAV.map((item) => (
-                <Link key={item.href} href={item.href} className="nav-link">
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </header>
+        <AppHeader />
         <main className="animate-fade-in">{children}</main>
         <footer className="mt-auto border-t border-border py-8">
           <div className="mx-auto max-w-6xl px-6">

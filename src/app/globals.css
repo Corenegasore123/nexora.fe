@@ -64,6 +64,10 @@ body {
     @apply text-white;
   }
 
+  .input-field {
+    @apply rounded-xl border border-border bg-surface px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-border-strong focus:bg-surface-raised;
+  }
+
   .data-table {
     @apply w-full text-sm;
   }

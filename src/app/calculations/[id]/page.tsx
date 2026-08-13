@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ImageAnnotation } from "@/components/ImageAnnotation";
 import { classifyConfidence } from "@/lib/confidence";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, apiFetch } from "@/lib/api";
 
 interface JobDetail {
   id: string;
@@ -59,8 +59,7 @@ export default function CalculationDetailPage() {
   const [job, setJob] = useState<JobDetail | null>(null);
 
   useEffect(() => {
-    fetch(apiUrl(`/api/calculations/${id}`))
-      .then((r) => r.json())
+    apiFetch<JobDetail>(`/api/calculations/${id}`)
       .then(setJob)
       .catch(console.error);
   }, [id]);
