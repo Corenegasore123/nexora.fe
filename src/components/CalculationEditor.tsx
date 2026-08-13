@@ -91,7 +91,7 @@ export function CalculationEditor({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase tracking-wider text-neutral-500">
+        <p className="text-xs uppercase tracking-wider text-foreground-muted">
           Version {version}
         </p>
         <button
@@ -105,7 +105,7 @@ export function CalculationEditor({
 
       {showScenario && (
         <div className="card space-y-3">
-          <p className="text-sm text-neutral-400">
+          <p className="text-sm text-foreground-secondary">
             Create a copy with modified inputs to compare results.
           </p>
           <input
@@ -126,7 +126,7 @@ export function CalculationEditor({
       )}
 
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div className="alert-error text-sm">
           {error}
         </div>
       )}
@@ -134,7 +134,7 @@ export function CalculationEditor({
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {variables.map((v) => (
           <div key={v.name} className="card-raised">
-            <p className="text-xs uppercase tracking-wider text-neutral-500">
+            <p className="text-xs uppercase tracking-wider text-foreground-muted">
               {v.name.replace(/_/g, " ")}
             </p>
             {editing === v.name ? (
@@ -164,7 +164,7 @@ export function CalculationEditor({
               </div>
             ) : (
               <>
-                <p className="mt-2 text-xl font-semibold text-white">
+                <p className="mt-2 text-xl font-semibold text-foreground">
                   {v.value} {v.unit}
                 </p>
                 <button
@@ -173,7 +173,7 @@ export function CalculationEditor({
                     setEditing(v.name);
                     setEditValue(String(v.value));
                   }}
-                  className="mt-2 text-xs text-neutral-500 hover:text-white"
+                  className="mt-2 text-xs text-foreground-muted hover:text-primary"
                 >
                   Correct & recalculate
                 </button>
@@ -190,14 +190,14 @@ export function CalculationEditor({
             {revisions.map((r) => (
               <div key={r.id} className="card-raised flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white">
+                  <p className="text-sm text-foreground">
                     v{r.version} — {r.label ?? `Version ${r.version}`}
                   </p>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-xs text-foreground-muted">
                     {new Date(r.createdAt).toLocaleString()}
                   </p>
                 </div>
-                <p className="font-mono text-white">
+                <p className="font-mono text-foreground">
                   {r.result} {r.unit}
                 </p>
               </div>
@@ -216,8 +216,8 @@ export function CalculationEditor({
                 href={`/calculations/${s.id}`}
                 className="card-raised flex items-center justify-between hover:border-border-strong"
               >
-                <p className="text-sm text-white">{s.scenarioName ?? "Scenario"}</p>
-                <p className="font-mono text-white">
+                <p className="text-sm text-foreground">{s.scenarioName ?? "Scenario"}</p>
+                <p className="font-mono text-foreground">
                   {s.result ? `${s.result.result} ${s.result.unit}` : "—"}
                 </p>
               </a>

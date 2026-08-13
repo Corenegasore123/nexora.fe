@@ -9,7 +9,7 @@ export default function NewProjectPage() {
       <p className="page-subtitle">Create a workspace for documents and calculations.</p>
       <NewProjectForm />
       <p className="mt-8">
-        <Link href="/projects" className="text-sm text-neutral-500 hover:text-white">
+        <Link href="/projects" className="text-sm text-foreground-muted hover:text-primary">
           ← Back to projects
         </Link>
       </p>

@@ -20,12 +20,12 @@ export default function HomePage() {
     <div className="page-shell">
       <div className="max-w-3xl">
         <p className="eyebrow">Intelligent Quantity Platform</p>
-        <h1 className="mt-4 text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl md:leading-[1.08]">
+        <h1 className="page-title mt-4 md:text-5xl md:leading-[1.08]">
           From Diagram
           <br />
           to Quantity.
         </h1>
-        <p className="mt-6 text-lg font-light leading-relaxed text-neutral-400">
+        <p className="page-subtitle mt-6 text-lg">
           Upload a building diagram. QuantScope extracts measurements via OCR and computer
           vision, maps them to variables, and performs deterministic quantity calculations
           with a full auditable breakdown.
@@ -44,8 +44,8 @@ export default function HomePage() {
         {STEPS.map((item, i) => (
           <div key={item.title} className="card-raised">
             <p className="eyebrow">Step {String(i + 1).padStart(2, "0")}</p>
-            <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
-            <p className="mt-2 text-sm font-light leading-relaxed text-neutral-400">
+            <h3 className="mt-3 text-lg font-semibold text-foreground">{item.title}</h3>
+            <p className="mt-2 text-sm font-light leading-relaxed text-foreground-secondary">
               {item.desc}
             </p>
           </div>
@@ -61,8 +61,8 @@ export default function HomePage() {
             "Full audit trail from measurement to final result",
             "Confidence scoring on every extracted value",
           ].map((item) => (
-            <li key={item} className="flex items-start gap-3 text-sm font-light text-neutral-300">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-strong text-xs text-white">
+            <li key={item} className="flex items-start gap-3 text-sm font-light text-foreground-secondary">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-strong text-xs text-primary">
                 ✓
               </span>
               {item}

@@ -70,7 +70,7 @@ export function ProjectTeam({
       {canManage && (
         <form onSubmit={handleInvite} className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <label htmlFor="invite-email" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="invite-email" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Invite by email
             </label>
             <input
@@ -83,7 +83,7 @@ export function ProjectTeam({
             />
           </div>
           <div>
-            <label htmlFor="invite-role" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="invite-role" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Role
             </label>
             <select
@@ -103,7 +103,7 @@ export function ProjectTeam({
       )}
 
       {error && (
-        <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div className="mt-4 alert-error text-sm">
           {error}
         </div>
       )}
@@ -121,7 +121,7 @@ export function ProjectTeam({
           <tbody>
             {owner && (
               <tr>
-                <td className="font-medium text-white">{owner.name}</td>
+                <td className="font-medium text-foreground">{owner.name}</td>
                 <td>{owner.email}</td>
                 <td>
                   <span className="status-badge status-completed">Owner</span>
@@ -131,7 +131,7 @@ export function ProjectTeam({
             )}
             {members.map((m) => (
               <tr key={m.userId}>
-                <td className="font-medium text-white">{m.name}</td>
+                <td className="font-medium text-foreground">{m.name}</td>
                 <td>{m.email}</td>
                 <td>
                   {canManage ? (
@@ -146,7 +146,7 @@ export function ProjectTeam({
                       <option value="EDITOR">Editor</option>
                     </select>
                   ) : (
-                    <span className="text-neutral-400">{m.role}</span>
+                    <span className="text-foreground-secondary">{m.role}</span>
                   )}
                 </td>
                 {canManage && (
@@ -154,7 +154,7 @@ export function ProjectTeam({
                     <button
                       type="button"
                       onClick={() => handleRemove(m.userId)}
-                      className="text-xs text-neutral-500 hover:text-red-400"
+                      className="text-xs text-foreground-muted hover:text-error"
                     >
                       Remove
                     </button>
@@ -164,7 +164,7 @@ export function ProjectTeam({
             ))}
             {!owner && members.length === 0 && (
               <tr>
-                <td colSpan={canManage ? 4 : 3} className="py-8 text-center text-neutral-500">
+                <td colSpan={canManage ? 4 : 3} className="py-8 text-center text-foreground-muted">
                   No team members yet.
                 </td>
               </tr>
@@ -173,7 +173,7 @@ export function ProjectTeam({
         </table>
       </div>
 
-      <p className="mt-4 text-xs text-neutral-600">
+      <p className="mt-4 text-xs text-foreground-placeholder">
         Editors can upload documents and correct calculations. Viewers have read-only access.
       </p>
     </div>

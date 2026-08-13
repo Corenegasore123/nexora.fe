@@ -132,7 +132,7 @@ export default function MobileUploadPage() {
   return (
     <div className="page-shell min-h-[calc(100vh-5rem)] pb-12">
       <div className="mx-auto max-w-md">
-        <Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white">
+        <Link href="/dashboard" className="text-xs text-foreground-muted hover:text-primary">
           ← Dashboard
         </Link>
         <p className="eyebrow mt-6">Quick Upload</p>
@@ -157,8 +157,8 @@ export default function MobileUploadPage() {
         )}
 
         {projects.length === 0 && (
-          <p className="mt-6 text-sm text-neutral-500">
-            <Link href="/projects/new" className="text-white underline underline-offset-4">
+          <p className="mt-6 text-sm text-foreground-muted">
+            <Link href="/projects/new" className="text-foreground underline underline-offset-4">
               Create a project
             </Link>{" "}
             first to organize uploads.
@@ -204,20 +204,20 @@ export default function MobileUploadPage() {
           <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-surface p-3">
             <img src={preview} alt="Preview" className="w-full rounded-xl object-contain" />
             {file && (
-              <p className="mt-3 truncate text-center text-xs text-neutral-500">{file.name}</p>
+              <p className="mt-3 truncate text-center text-xs text-foreground-muted">{file.name}</p>
             )}
           </div>
         )}
 
         {file && !preview && (
-          <p className="mt-8 text-center text-sm text-neutral-400">{file.name}</p>
+          <p className="mt-8 text-center text-sm text-foreground-secondary">{file.name}</p>
         )}
 
         {status && loading && (
           <div className="mt-8 card">
             <div className="flex items-center gap-3">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              <span className="text-sm font-medium text-white">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <span className="text-sm font-medium text-foreground">
                 {STATUS_LABELS[status] ?? status}
               </span>
             </div>
@@ -225,7 +225,7 @@ export default function MobileUploadPage() {
         )}
 
         {error && (
-          <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-300">
+          <div className="mt-6 alert-error text-sm">
             {error}
           </div>
         )}
@@ -236,9 +236,9 @@ export default function MobileUploadPage() {
           </button>
         )}
 
-        <p className="mt-8 text-center text-xs text-neutral-600">
+        <p className="mt-8 text-center text-xs text-foreground-placeholder">
           Need drag-and-drop?{" "}
-          <Link href="/calculator" className="text-neutral-400 underline underline-offset-4">
+          <Link href="/calculator" className="inline-link text-xs">
             Full calculator
           </Link>
         </p>

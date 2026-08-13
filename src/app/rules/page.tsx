@@ -52,13 +52,13 @@ export default function RulesPage() {
                 <div key={rule.id} className="card-raised">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="font-mono text-xs text-neutral-600">{rule.id}</p>
-                      <h3 className="mt-1 font-semibold text-white">{rule.name}</h3>
+                      <p className="font-mono text-xs text-foreground-placeholder">{rule.id}</p>
+                      <h3 className="mt-1 font-semibold text-foreground">{rule.name}</h3>
                     </div>
                     <span className="status-badge shrink-0">{rule.method.replace(/_/g, " ")}</span>
                   </div>
-                  <p className="mt-3 font-mono text-sm text-neutral-300">{rule.formula.expression}</p>
-                  <p className="mt-2 text-xs text-neutral-600">Output: {rule.outputUnit}</p>
+                  <p className="mt-3 font-mono text-sm text-foreground-secondary">{rule.formula.expression}</p>
+                  <p className="mt-2 text-xs text-foreground-placeholder">Output: {rule.outputUnit}</p>
                 </div>
               ))}
             </div>

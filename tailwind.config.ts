@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -9,15 +10,87 @@ const config: Config = {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       colors: {
+        background: "var(--color-background)",
         surface: {
-          DEFAULT: "#111111",
-          raised: "#1a1a1a",
-          hover: "#222222",
+          DEFAULT: "var(--color-surface)",
+          elevated: "var(--color-surface-elevated)",
+        },
+        foreground: {
+          DEFAULT: "var(--color-foreground)",
+          secondary: "var(--color-foreground-secondary)",
+          muted: "var(--color-foreground-muted)",
+          placeholder: "var(--color-foreground-placeholder)",
         },
         border: {
-          DEFAULT: "rgba(255, 255, 255, 0.08)",
-          strong: "rgba(255, 255, 255, 0.16)",
+          DEFAULT: "var(--color-border)",
+          strong: "var(--color-border-strong)",
         },
+        primary: {
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary-hover)",
+          active: "var(--color-primary-active)",
+          soft: "var(--color-primary-soft)",
+        },
+        selected: "var(--color-selected)",
+        success: {
+          DEFAULT: "var(--color-success)",
+          bg: "var(--color-success-bg)",
+          border: "var(--color-success-border)",
+        },
+        warning: {
+          DEFAULT: "var(--color-warning)",
+          bg: "var(--color-warning-bg)",
+          border: "var(--color-warning-border)",
+        },
+        error: {
+          DEFAULT: "var(--color-error)",
+          bg: "var(--color-error-bg)",
+          border: "var(--color-error-border)",
+        },
+        info: {
+          DEFAULT: "var(--color-info)",
+          bg: "var(--color-info-bg)",
+          border: "var(--color-info-border)",
+        },
+        processing: {
+          DEFAULT: "var(--color-processing)",
+          bg: "var(--color-processing-bg)",
+          border: "var(--color-processing-border)",
+        },
+        pending: {
+          DEFAULT: "var(--color-pending)",
+          bg: "var(--color-pending-bg)",
+          border: "var(--color-pending-border)",
+        },
+        confidence: {
+          high: "var(--color-confidence-high)",
+          medium: "var(--color-confidence-medium)",
+          low: "var(--color-confidence-low)",
+        },
+        "ai-processing": "var(--color-ai-processing)",
+        "ai-warning": "var(--color-ai-warning)",
+        "user-correction": "var(--color-user-correction)",
+        chart: {
+          1: "var(--chart-1)",
+          2: "var(--chart-2)",
+          3: "var(--chart-3)",
+          4: "var(--chart-4)",
+          5: "var(--chart-5)",
+          6: "var(--chart-6)",
+          7: "var(--chart-7)",
+          8: "var(--chart-8)",
+        },
+        ink: {
+          DEFAULT: "#111827",
+          deep: "#0A0F1C",
+        },
+      },
+      ringColor: {
+        DEFAULT: "var(--color-focus-ring)",
+      },
+      boxShadow: {
+        elevated: "0 8px 24px rgba(17, 24, 39, 0.12)",
+        modal: "0 24px 48px rgba(17, 24, 39, 0.20)",
       },
       letterSpacing: {
         widest: "0.2em",

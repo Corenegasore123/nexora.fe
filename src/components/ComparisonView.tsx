@@ -34,6 +34,12 @@ function typeBadge(type: ComparisonRow["type"]) {
   return "status-badge";
 }
 
+function deltaClass(delta: number | null) {
+  if (delta === null || delta === 0) return "text-foreground-muted";
+  if (delta > 0) return "text-warning";
+  return "text-success";
+}
+
 export function ComparisonView({ jobId }: { jobId: string }) {
   const [data, setData] = useState<ComparisonData | null>(null);
 
@@ -54,7 +60,7 @@ export function ComparisonView({ jobId }: { jobId: string }) {
         <h2 className="section-label">Comparison</h2>
         <a
           href={apiUrl(`/api/calculations/${jobId}/compare?format=csv`)}
-          className="text-xs text-neutral-500 hover:text-white"
+          className="text-xs text-foreground-muted hover:text-primary"
         >
           Export CSV
         </a>
@@ -73,19 +79,19 @@ export function ComparisonView({ jobId }: { jobId: string }) {
           <tbody>
             {rows.map((row) => (
               <tr key={`${row.type}-${row.id}`}>
-                <td className="font-medium text-white">
+                <td className="font-medium text-foreground">
                   {row.label}
                   {row.version !== undefined && row.type !== "baseline" && (
-                    <span className="ml-2 text-xs text-neutral-500">v{row.version}</span>
+                    <span className="ml-2 text-xs text-foreground-muted">v{row.version}</span>
                   )}
                 </td>
                 <td>
                   <span className={typeBadge(row.type)}>{row.type}</span>
                 </td>
-                <td className="font-mono text-white">
+                <td className="font-mono text-foreground">
                   {row.result !== null ? `${row.result} ${row.unit ?? ""}` : "—"}
                 </td>
-                <td className={row.delta && row.delta > 0 ? "text-amber-400" : row.delta && row.delta < 0 ? "text-emerald-400" : "text-neutral-500"}>
+                <td className={deltaClass(row.delta)}>
                   {row.type === "baseline"
                     ? "—"
                     : formatDelta(row.delta, row.unit, row.deltaPercent)}
@@ -94,7 +100,7 @@ export function ComparisonView({ jobId }: { jobId: string }) {
                   {row.type !== "baseline" && (
                     <Link
                       href={`/calculations/${row.id}`}
-                      className="text-xs text-neutral-500 hover:text-white"
+                      className="text-xs text-foreground-muted hover:text-primary"
                     >
                       Open
                     </Link>

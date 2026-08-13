@@ -39,9 +39,9 @@ export default function SettingsPage() {
       <div className="mt-10 space-y-3">
         {settings.map((s) => (
           <div key={s.key} className="card-raised">
-            <p className="font-mono text-sm font-medium text-white">{s.key}</p>
-            <p className="mt-1 text-sm font-light text-neutral-400">{s.desc}</p>
-            <p className="mt-3 font-mono text-xs text-neutral-500">{s.value}</p>
+            <p className="font-mono text-sm font-medium text-foreground">{s.key}</p>
+            <p className="mt-1 text-sm font-light text-foreground-secondary">{s.desc}</p>
+            <p className="mt-3 font-mono text-xs text-foreground-muted">{s.value}</p>
           </div>
         ))}
       </div>

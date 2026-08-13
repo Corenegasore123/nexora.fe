@@ -58,7 +58,7 @@ export default function CalculationsPage() {
                 <td>
                   <Link
                     href={`/calculations/${job.id}`}
-                    className="font-medium text-white transition-colors hover:text-neutral-300"
+                    className="font-medium text-foreground transition-colors hover:text-primary"
                   >
                     {job.image.filename}
                   </Link>
@@ -68,7 +68,7 @@ export default function CalculationsPage() {
                     {job.status.replace(/_/g, " ")}
                   </span>
                 </td>
-                <td className="font-mono text-white">
+                <td className="font-mono text-foreground">
                   {job.result ? `${job.result.result} ${job.result.unit}` : "—"}
                 </td>
                 <td>
@@ -76,16 +76,16 @@ export default function CalculationsPage() {
                     ? `${(job.overallConfidence * 100).toFixed(0)}%`
                     : "—"}
                 </td>
-                <td className="text-neutral-500">
+                <td className="text-foreground-muted">
                   {new Date(job.createdAt).toLocaleString()}
                 </td>
               </tr>
             ))}
             {jobs.length === 0 && (
               <tr>
-                <td colSpan={5} className="py-16 text-center text-neutral-500">
+                <td colSpan={5} className="py-16 text-center text-foreground-muted">
                   No calculations yet.{" "}
-                  <Link href="/calculator" className="text-white underline underline-offset-4">
+                  <Link href="/calculator" className="text-foreground underline underline-offset-4">
                     Upload an image
                   </Link>
                 </td>

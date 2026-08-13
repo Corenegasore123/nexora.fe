@@ -28,14 +28,14 @@ export function ReportExportMenu({ jobId, filename }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-40 mt-2 w-72 rounded-2xl border border-border bg-surface-raised p-4 shadow-xl">
-          <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">Template</p>
+        <div className="absolute right-0 top-full z-40 mt-2 w-72 rounded-2xl border border-border bg-surface-elevated p-4 shadow-xl">
+          <p className="text-xs font-medium uppercase tracking-wider text-foreground-muted">Template</p>
           <div className="mt-2 space-y-2">
             {TEMPLATES.map((t) => (
               <label
                 key={t.id}
                 className={`flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors ${
-                  template === t.id ? "border-white/30 bg-white/[0.04]" : "border-border hover:border-border-strong"
+                  template === t.id ? "border-primary bg-selected" : "border-border hover:border-border-strong"
                 }`}
               >
                 <input
@@ -47,14 +47,14 @@ export function ReportExportMenu({ jobId, filename }: Props) {
                   className="mt-1"
                 />
                 <div>
-                  <p className="text-sm font-medium text-white">{t.label}</p>
-                  <p className="text-xs text-neutral-500">{t.desc}</p>
+                  <p className="text-sm font-medium text-foreground">{t.label}</p>
+                  <p className="text-xs text-foreground-muted">{t.desc}</p>
                 </div>
               </label>
             ))}
           </div>
 
-          <p className="mt-4 text-xs font-medium uppercase tracking-wider text-neutral-500">Format</p>
+          <p className="mt-4 text-xs font-medium uppercase tracking-wider text-foreground-muted">Format</p>
           <div className="mt-2 flex gap-2">
             {FORMATS.map((fmt) => (
               <a
@@ -72,7 +72,7 @@ export function ReportExportMenu({ jobId, filename }: Props) {
           <a
             href={apiUrl(`/api/calculations/${jobId}/compare?format=csv`)}
             download={`comparison-${jobId}.csv`}
-            className="mt-3 block text-center text-xs text-neutral-500 hover:text-white"
+            className="mt-3 block text-center text-xs text-foreground-muted hover:text-primary"
             onClick={() => setOpen(false)}
           >
             Export comparison CSV

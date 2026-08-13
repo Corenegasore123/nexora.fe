@@ -21,7 +21,7 @@ function StatCard({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="card">
       <p className="eyebrow">{label}</p>
-      <p className="mt-2 text-2xl font-bold text-white">{value}</p>
+      <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
     </div>
   );
 }
@@ -99,7 +99,7 @@ export default function AdminPage() {
   if (authorized === null) {
     return (
       <div className="page-shell">
-        <p className="text-neutral-500">Loading…</p>
+        <p className="text-foreground-muted">Loading…</p>
       </div>
     );
   }
@@ -121,7 +121,7 @@ export default function AdminPage() {
       </div>
 
       {error && (
-        <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div className="mt-6 alert-error text-sm">
           {error}
         </div>
       )}
@@ -134,8 +134,8 @@ export default function AdminPage() {
             onClick={() => setTab(t.id)}
             className={`px-4 py-3 text-xs font-medium uppercase tracking-wider transition-colors ${
               tab === t.id
-                ? "border-b-2 border-white text-white"
-                : "text-neutral-500 hover:text-white"
+                ? "border-b-2 border-primary text-foreground"
+                : "text-foreground-muted hover:text-primary"
             }`}
           >
             {t.label}
@@ -153,7 +153,7 @@ export default function AdminPage() {
               <StatCard label="Redis" value={health.redis} />
               <StatCard label="CV Service" value={health.cvService} />
             </div>
-            <p className="mt-4 text-xs text-neutral-600">
+            <p className="mt-4 text-xs text-foreground-placeholder">
               Uptime {formatUptime(health.uptimeSeconds)} · {health.nodeVersion} · {health.env}
             </p>
           </section>
@@ -190,7 +190,7 @@ export default function AdminPage() {
               Search
             </button>
           </div>
-          <p className="mb-4 text-xs text-neutral-500">{userTotal} users total</p>
+          <p className="mb-4 text-xs text-foreground-muted">{userTotal} users total</p>
           <div className="overflow-hidden rounded-2xl border border-border bg-surface">
             <table className="data-table">
               <thead>
@@ -206,7 +206,7 @@ export default function AdminPage() {
               <tbody>
                 {users.map((u) => (
                   <tr key={u.id}>
-                    <td className="font-medium text-white">{u.name}</td>
+                    <td className="font-medium text-foreground">{u.name}</td>
                     <td>{u.email}</td>
                     <td>
                       <select
@@ -222,7 +222,7 @@ export default function AdminPage() {
                     </td>
                     <td>{u._count?.projects ?? 0}</td>
                     <td>{u._count?.calculationJobs ?? 0}</td>
-                    <td className="text-neutral-500">
+                    <td className="text-foreground-muted">
                       {new Date(u.createdAt).toLocaleDateString()}
                     </td>
                   </tr>
@@ -252,31 +252,31 @@ export default function AdminPage() {
               Filter
             </button>
           </div>
-          <p className="mb-4 text-xs text-neutral-500">{auditTotal} entries</p>
+          <p className="mb-4 text-xs text-foreground-muted">{auditTotal} entries</p>
           <div className="space-y-2">
             {auditLogs.map((log) => (
               <div key={log.id} className="card flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-sm text-white">
+                  <p className="text-sm text-foreground">
                     {log.user?.name ?? "System"} —{" "}
-                    <span className="font-mono text-neutral-300">{log.action}</span>
+                    <span className="font-mono text-foreground-secondary">{log.action}</span>
                   </p>
                   {log.resource && (
-                    <p className="mt-1 text-xs text-neutral-500">{log.resource}</p>
+                    <p className="mt-1 text-xs text-foreground-muted">{log.resource}</p>
                   )}
                   {log.metadata && Object.keys(log.metadata).length > 0 && (
-                    <p className="mt-1 font-mono text-[10px] text-neutral-600">
+                    <p className="mt-1 font-mono text-[10px] text-foreground-placeholder">
                       {JSON.stringify(log.metadata)}
                     </p>
                   )}
                 </div>
-                <time className="shrink-0 text-xs text-neutral-500">
+                <time className="shrink-0 text-xs text-foreground-muted">
                   {new Date(log.createdAt).toLocaleString()}
                 </time>
               </div>
             ))}
             {auditLogs.length === 0 && (
-              <p className="text-sm text-neutral-500">No audit entries found.</p>
+              <p className="text-sm text-foreground-muted">No audit entries found.</p>
             )}
           </div>
         </div>

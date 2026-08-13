@@ -37,7 +37,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="mt-10 space-y-5">
           <div>
-            <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Name
             </label>
             <input
@@ -51,7 +51,7 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Email
             </label>
             <input
@@ -65,7 +65,7 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Password
             </label>
             <input
@@ -80,7 +80,7 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="confirmPassword" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Confirm password
             </label>
             <input
@@ -96,7 +96,7 @@ export default function RegisterPage() {
           </div>
 
           {error && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="alert-error text-sm">
               {error}
             </div>
           )}
@@ -106,9 +106,9 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-neutral-500">
+        <p className="mt-8 text-center text-sm text-foreground-muted">
           Already have an account?{" "}
-          <Link href="/login" className="text-white underline underline-offset-4">
+          <Link href="/login" className="text-foreground underline underline-offset-4">
             Sign in
           </Link>
         </p>

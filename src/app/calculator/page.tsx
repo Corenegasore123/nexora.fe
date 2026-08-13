@@ -171,7 +171,7 @@ function CalculatorContent() {
         </p>
         {projects.length > 0 && (
           <div className="mt-6 max-w-sm">
-            <label htmlFor="project" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+            <label htmlFor="project" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
               Project
             </label>
             <select
@@ -189,8 +189,8 @@ function CalculatorContent() {
           </div>
         )}
         {projects.length === 0 && (
-          <p className="mt-4 text-sm text-neutral-500">
-            <Link href="/projects/new" className="text-white underline underline-offset-4">
+          <p className="mt-4 text-sm text-foreground-muted">
+            <Link href="/projects/new" className="text-foreground underline underline-offset-4">
               Create a project
             </Link>{" "}
             to organize uploads.
@@ -201,8 +201,8 @@ function CalculatorContent() {
       <div
         className={`mt-10 flex min-h-[280px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 transition-all ${
           dragOver
-            ? "border-white bg-white/[0.04]"
-            : "border-border bg-surface hover:border-border-strong hover:bg-surface-raised"
+            ? "border-primary bg-selected"
+            : "border-border bg-surface hover:border-border-strong hover:bg-surface-elevated"
         }`}
         onDrop={handleDrop}
         onDragOver={(e) => {
@@ -227,24 +227,24 @@ function CalculatorContent() {
         ) : (
           <div className="text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-border-strong">
-              <svg className="h-6 w-6 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6 text-foreground-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-sm font-medium text-white">Drop image here or click to browse</p>
-            <p className="mt-1 text-xs text-neutral-500">JPG, PNG, WEBP, PDF · Max 20 MB</p>
+            <p className="text-sm font-medium text-foreground">Drop image here or click to browse</p>
+            <p className="mt-1 text-xs text-foreground-muted">JPG, PNG, WEBP, PDF · Max 20 MB</p>
           </div>
         )}
         {file && (
-          <p className="mt-4 text-xs uppercase tracking-wider text-neutral-500">{file.name}</p>
+          <p className="mt-4 text-xs uppercase tracking-wider text-foreground-muted">{file.name}</p>
         )}
       </div>
 
       {status && loading && (
         <div className="mt-6 card">
           <div className="flex items-center gap-3">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            <span className="text-sm font-medium text-white">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            <span className="text-sm font-medium text-foreground">
               {STATUS_LABELS[status] ?? status}
             </span>
           </div>
@@ -253,7 +253,7 @@ function CalculatorContent() {
               <div
                 key={step}
                 className={`h-1 flex-1 rounded-full transition-colors ${
-                  i <= currentStepIndex ? "bg-white" : "bg-white/10"
+                  i <= currentStepIndex ? "bg-primary" : "bg-border"
                 }`}
               />
             ))}
@@ -262,7 +262,7 @@ function CalculatorContent() {
       )}
 
       {error && (
-        <div className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-300">
+        <div className="mt-6 alert-error text-sm">
           {error}
         </div>
       )}

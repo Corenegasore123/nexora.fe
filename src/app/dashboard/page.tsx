@@ -11,14 +11,14 @@ function StatCard({
 }: {
   label: string;
   value: number;
-  highlight?: "amber" | "emerald";
+  highlight?: "warning" | "success";
 }) {
   const color =
-    highlight === "amber"
-      ? "text-amber-400"
-      : highlight === "emerald"
-        ? "text-emerald-400"
-        : "text-white";
+    highlight === "warning"
+      ? "text-warning"
+      : highlight === "success"
+        ? "text-success"
+        : "text-foreground";
   return (
     <div className="card">
       <p className="eyebrow">{label}</p>
@@ -43,7 +43,7 @@ export default function DashboardPage() {
   if (!data) {
     return (
       <div className="page-shell">
-        <p className="text-neutral-500">Loading dashboard…</p>
+        <p className="text-foreground-muted">Loading dashboard…</p>
       </div>
     );
   }
@@ -78,12 +78,12 @@ export default function DashboardPage() {
         <StatCard
           label="Needs Review"
           value={data.stats.needsReview}
-          highlight={data.stats.needsReview > 0 ? "amber" : undefined}
+          highlight={data.stats.needsReview > 0 ? "warning" : undefined}
         />
         <StatCard
           label="Revised"
           value={data.stats.revisedCalculations}
-          highlight={data.stats.revisedCalculations > 0 ? "emerald" : undefined}
+          highlight={data.stats.revisedCalculations > 0 ? "success" : undefined}
         />
         <StatCard label="Corrections" value={data.stats.correctedMeasurements} />
       </div>
@@ -99,10 +99,10 @@ export default function DashboardPage() {
                 className="card-raised flex items-center justify-between gap-4"
               >
                 <div>
-                  <p className="font-medium text-white">{job.image.filename}</p>
-                  <p className="mt-1 text-xs text-amber-400">Low-confidence measurements detected</p>
+                  <p className="font-medium text-foreground">{job.image.filename}</p>
+                  <p className="mt-1 text-xs text-warning">Low-confidence measurements detected</p>
                 </div>
-                <span className="font-mono text-sm text-white">
+                <span className="font-mono text-sm text-foreground">
                   {job.result ? `${job.result.result} ${job.result.unit}` : "—"}
                 </span>
               </Link>
@@ -114,34 +114,34 @@ export default function DashboardPage() {
       <div className="mt-12 grid gap-8 lg:grid-cols-2">
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Recent Projects
             </h2>
-            <Link href="/projects" className="text-xs text-neutral-500 hover:text-white">
+            <Link href="/projects" className="text-xs text-foreground-muted hover:text-foreground">
               View all
             </Link>
           </div>
           <div className="space-y-3">
             {data.recentProjects.map((p) => (
               <Link key={p.id} href={`/projects/${p.id}`} className="card-raised block">
-                <p className="font-medium text-white">{p.name}</p>
-                <p className="mt-1 text-xs text-neutral-500">
+                <p className="font-medium text-foreground">{p.name}</p>
+                <p className="mt-1 text-xs text-foreground-muted">
                   {p._count?.calculationJobs ?? 0} calculations · {p._count?.images ?? 0} documents
                 </p>
               </Link>
             ))}
             {data.recentProjects.length === 0 && (
-              <p className="text-sm text-neutral-500">No projects yet.</p>
+              <p className="text-sm text-foreground-muted">No projects yet.</p>
             )}
           </div>
         </section>
 
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Recent Documents
             </h2>
-            <Link href="/upload" className="text-xs text-neutral-500 hover:text-white md:hidden">
+            <Link href="/upload" className="text-xs text-foreground-muted hover:text-foreground md:hidden">
               Upload
             </Link>
           </div>
@@ -149,8 +149,8 @@ export default function DashboardPage() {
             {data.recentDocuments.map((doc) => (
               <div key={doc.id} className="card-raised flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="truncate font-medium text-white">{doc.filename}</p>
-                  <p className="mt-1 text-xs text-neutral-500">
+                  <p className="truncate font-medium text-foreground">{doc.filename}</p>
+                  <p className="mt-1 text-xs text-foreground-muted">
                     {doc.project?.name ?? "Unassigned"} · {doc.status.replace(/_/g, " ")}
                   </p>
                 </div>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
               </div>
             ))}
             {data.recentDocuments.length === 0 && (
-              <p className="text-sm text-neutral-500">No documents yet.</p>
+              <p className="text-sm text-foreground-muted">No documents yet.</p>
             )}
           </div>
         </section>
@@ -173,10 +173,10 @@ export default function DashboardPage() {
 
       <section className="mt-12">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-white">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">
             Recent Analyses
           </h2>
-          <Link href="/calculations" className="text-xs text-neutral-500 hover:text-white">
+          <Link href="/calculations" className="text-xs text-foreground-muted hover:text-foreground">
             View all
           </Link>
         </div>
@@ -196,15 +196,15 @@ export default function DashboardPage() {
                   <td>
                     <Link
                       href={`/calculations/${job.id}`}
-                      className="font-medium text-white hover:text-neutral-300"
+                      className="font-medium text-foreground hover:text-foreground"
                     >
                       {job.image.filename}
                     </Link>
                     {job.result?.validation?.status === "needs_review" && (
-                      <span className="ml-2 text-[10px] text-amber-400">review</span>
+                      <span className="ml-2 text-[10px] text-warning">review</span>
                     )}
                   </td>
-                  <td className="hidden sm:table-cell text-neutral-500">
+                  <td className="hidden sm:table-cell text-foreground-muted">
                     {job.project?.name ?? "—"}
                   </td>
                   <td>
@@ -212,16 +212,16 @@ export default function DashboardPage() {
                       {job.status.replace(/_/g, " ")}
                     </span>
                   </td>
-                  <td className="font-mono text-white">
+                  <td className="font-mono text-foreground">
                     {job.result ? `${job.result.result} ${job.result.unit}` : "—"}
                   </td>
                 </tr>
               ))}
               {data.recentCalculations.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-neutral-500">
+                  <td colSpan={4} className="py-8 text-center text-foreground-muted">
                     No analyses yet.{" "}
-                    <Link href="/upload" className="text-white underline underline-offset-4">
+                    <Link href="/upload" className="text-foreground underline underline-offset-4">
                       Upload a diagram
                     </Link>
                   </td>

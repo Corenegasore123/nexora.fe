@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, JetBrains_Mono } from "next/font/google";
 import { AppHeader } from "@/components/AppHeader";
+import { ThemeScript } from "@/components/ThemeScript";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -23,13 +24,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-black font-sans text-white antialiased">
+    <html lang="en" className={`${montserrat.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <AppHeader />
         <main className="animate-fade-in">{children}</main>
-        <footer className="mt-auto border-t border-border py-8">
+        <footer className="mt-auto border-t border-border bg-surface py-8">
           <div className="mx-auto max-w-6xl px-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-600">
+            <p className="text-xs uppercase tracking-widest text-foreground-placeholder">
               QuantScope · Deterministic Calculations · v1.0.0
             </p>
           </div>

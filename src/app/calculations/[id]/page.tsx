@@ -80,9 +80,9 @@ interface JobDetail {
 }
 
 function confidenceBadge(cls: string) {
-  if (cls === "accepted") return "text-emerald-400";
-  if (cls === "flagged") return "text-amber-400";
-  return "text-red-400";
+  if (cls === "accepted") return "confidence-high";
+  if (cls === "flagged") return "confidence-medium";
+  return "confidence-low";
 }
 
 export default function CalculationDetailPage() {
@@ -103,7 +103,7 @@ export default function CalculationDetailPage() {
   if (!job) {
     return (
       <div className="page-shell">
-        <p className="text-neutral-500">Loading…</p>
+        <p className="text-foreground-muted">Loading…</p>
       </div>
     );
   }
@@ -112,8 +112,8 @@ export default function CalculationDetailPage() {
     return (
       <div className="page-shell">
         <p className="eyebrow">Error</p>
-        <h1 className="page-title mt-3 text-red-400">Calculation Failed</h1>
-        <p className="mt-4 text-neutral-400">{job.errorMessage}</p>
+        <h1 className="page-title mt-3 text-error">Calculation Failed</h1>
+        <p className="mt-4 text-foreground-secondary">{job.errorMessage}</p>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function CalculationDetailPage() {
         <div>
           <p className="eyebrow">Result</p>
           <h1 className="page-title mt-3">{job.image.filename}</h1>
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-foreground-muted">
             {job.scenarioName ? `${job.scenarioName} · ` : ""}
             {job.workItem?.replace(/_/g, " ")} · {job.method?.replace(/_/g, " ")} · v
             {job.version}
@@ -132,7 +132,7 @@ export default function CalculationDetailPage() {
           {job.parentJob && (
             <a
               href={`/calculations/${job.parentJob.id}`}
-              className="mt-1 inline-block text-xs text-neutral-500 hover:text-white"
+              className="mt-1 inline-block text-xs text-foreground-muted hover:text-foreground"
             >
               ← Original calculation
             </a>
@@ -142,14 +142,14 @@ export default function CalculationDetailPage() {
       </div>
 
       {job.result?.validation?.status === "needs_review" && (
-        <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4">
-          <p className="text-sm font-medium text-amber-200">Review recommended</p>
-          <p className="mt-1 text-sm text-amber-200/80">
+        <div className="alert-warning mt-8">
+          <p className="text-sm font-medium">Review recommended</p>
+          <p className="mt-1 text-sm opacity-90">
             Some measurements have low confidence. Verify values before using this result
             professionally.
           </p>
           {job.result.validation.warnings && job.result.validation.warnings.length > 0 && (
-            <ul className="mt-3 space-y-1 text-xs text-amber-200/70">
+            <ul className="mt-3 space-y-1 text-xs opacity-80">
               {job.result.validation.warnings.map((w) => (
                 <li key={w}>• {w}</li>
               ))}
@@ -159,7 +159,7 @@ export default function CalculationDetailPage() {
       )}
 
       {job.result?.validation?.provenance && (
-        <div className="mt-6 text-xs text-neutral-600">
+        <div className="mt-6 text-xs text-foreground-placeholder">
           OCR: {job.result.validation.provenance.provider} · Pipeline{" "}
           {job.result.validation.provenance.pipelineVersion}
           {job.result.validation.provenance.fallbackUsed && " · Aggressive preprocessing used"}
@@ -181,17 +181,17 @@ export default function CalculationDetailPage() {
         <section>
           <h2 className="section-label">Final Result</h2>
           {job.result && (
-            <div className="mt-4 rounded-2xl border border-border-strong bg-surface-raised p-8">
-              <p className="text-5xl font-bold tracking-tight text-white">
+            <div className="mt-4 rounded-2xl border border-border-strong bg-surface-elevated p-8">
+              <p className="text-5xl font-bold tracking-tight text-foreground">
                 {job.result.result}
-                <span className="ml-2 text-2xl font-light text-neutral-400">
+                <span className="ml-2 text-2xl font-light text-foreground-secondary">
                   {job.result.unit}
                 </span>
               </p>
               {job.overallConfidence && (
-                <p className="mt-4 text-sm text-neutral-500">
+                <p className="mt-4 text-sm text-foreground-muted">
                   Overall confidence{" "}
-                  <span className="font-medium text-white">
+                  <span className="font-medium text-foreground">
                     {(job.overallConfidence * 100).toFixed(0)}%
                   </span>
                 </p>
@@ -235,10 +235,10 @@ export default function CalculationDetailPage() {
                 const cls = classifyConfidence(m.confidence);
                 return (
                   <tr key={m.id}>
-                    <td className="font-mono text-white">
+                    <td className="font-mono text-foreground">
                       {m.rawText}
                       {m.userCorrected && (
-                        <span className="ml-2 text-xs text-emerald-400">corrected</span>
+                        <span className="ml-2 text-xs text-user-correction">corrected</span>
                       )}
                     </td>
                     <td>{m.value}</td>
@@ -247,7 +247,7 @@ export default function CalculationDetailPage() {
                     <td className={`capitalize ${confidenceBadge(cls)}`}>
                       {cls}
                       {job.result?.validation?.lowConfidenceIds?.includes(m.id) && (
-                        <span className="ml-2 text-amber-400" title="Low confidence">
+                        <span className="ml-2 text-warning" title="Low confidence">
                           ⚠
                         </span>
                       )}
@@ -265,14 +265,14 @@ export default function CalculationDetailPage() {
         <div className="mt-4 space-y-3">
           {job.steps.map((step) => (
             <div key={step.stepOrder} className="card-raised">
-              <p className="font-semibold text-white">
+              <p className="font-semibold text-foreground">
                 {String(step.stepOrder + 1).padStart(2, "0")}. {step.ruleName}
               </p>
-              <p className="mt-2 font-mono text-sm text-neutral-400">{step.formula}</p>
-              <p className="mt-2 text-xs text-neutral-600">
+              <p className="mt-2 font-mono text-sm text-foreground-secondary">{step.formula}</p>
+              <p className="mt-2 text-xs text-foreground-placeholder">
                 Inputs: {JSON.stringify(step.inputs)}
               </p>
-              <p className="mt-3 text-lg font-bold text-white">
+              <p className="mt-3 text-lg font-bold text-foreground">
                 = {step.result} {step.unit}
               </p>
             </div>

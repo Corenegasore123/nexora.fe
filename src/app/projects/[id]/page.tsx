@@ -94,7 +94,7 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="page-shell">
-        <p className="text-neutral-500">Loading project…</p>
+        <p className="text-foreground-muted">Loading project…</p>
       </div>
     );
   }
@@ -116,7 +116,7 @@ export default function ProjectDetailPage() {
           {project.description && (
             <p className="page-subtitle">{project.description}</p>
           )}
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-2 text-xs text-foreground-muted">
             {project.isOwner ? "You own this project" : `Shared · ${project.role}`}
             {project.owner && !project.isOwner && ` · Owner: ${project.owner.name}`}
           </p>
@@ -136,8 +136,8 @@ export default function ProjectDetailPage() {
             onClick={() => setTab(t.id)}
             className={`px-4 py-3 text-xs font-medium uppercase tracking-wider transition-colors ${
               tab === t.id
-                ? "border-b-2 border-white text-white"
-                : "text-neutral-500 hover:text-white"
+                ? "border-b-2 border-primary text-foreground"
+                : "text-foreground-muted hover:text-primary"
             }`}
           >
             {t.label}
@@ -149,17 +149,17 @@ export default function ProjectDetailPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <div className="card">
             <p className="eyebrow">Documents</p>
-            <p className="mt-2 text-2xl font-bold text-white">{project._count?.images ?? 0}</p>
+            <p className="mt-2 text-2xl font-bold text-foreground">{project._count?.images ?? 0}</p>
           </div>
           <div className="card">
             <p className="eyebrow">Calculations</p>
-            <p className="mt-2 text-2xl font-bold text-white">
+            <p className="mt-2 text-2xl font-bold text-foreground">
               {project._count?.calculationJobs ?? 0}
             </p>
           </div>
           <div className="card">
             <p className="eyebrow">Status</p>
-            <p className="mt-2 text-lg font-semibold text-white">{project.status}</p>
+            <p className="mt-2 text-lg font-semibold text-foreground">{project.status}</p>
           </div>
         </div>
       )}
@@ -186,7 +186,7 @@ export default function ProjectDetailPage() {
           </div>
           )}
           {uploadError && (
-            <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            <div className="mt-4 alert-error text-sm">
               {uploadError}
             </div>
           )}
@@ -204,12 +204,12 @@ export default function ProjectDetailPage() {
               <tbody>
                 {documents.map((doc) => (
                   <tr key={doc.id}>
-                    <td className="font-medium text-white">{doc.filename}</td>
+                    <td className="font-medium text-foreground">{doc.filename}</td>
                     <td>{formatBytes(doc.sizeBytes)}</td>
                     <td>
                       <span className={docStatusClass(doc.status)}>{doc.status}</span>
                     </td>
-                    <td className="text-neutral-500">
+                    <td className="text-foreground-muted">
                       {new Date(doc.createdAt).toLocaleString()}
                     </td>
                     <td>
@@ -217,7 +217,7 @@ export default function ProjectDetailPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(doc.id)}
-                        className="text-xs text-neutral-500 hover:text-red-400"
+                        className="text-xs text-foreground-muted hover:text-error"
                       >
                         Delete
                       </button>
@@ -227,7 +227,7 @@ export default function ProjectDetailPage() {
                 ))}
                 {documents.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-12 text-center text-neutral-500">
+                    <td colSpan={5} className="py-12 text-center text-foreground-muted">
                       No documents yet.
                     </td>
                   </tr>
@@ -278,23 +278,23 @@ export default function ProjectDetailPage() {
                   <td>
                     <Link
                       href={`/calculations/${job.id}`}
-                      className="font-medium text-white hover:text-neutral-300"
+                      className="font-medium text-foreground hover:text-primary"
                     >
                       {job.image.filename}
                     </Link>
                   </td>
                   <td>{job.status.replace(/_/g, " ")}</td>
-                  <td className="font-mono text-white">
+                  <td className="font-mono text-foreground">
                     {job.result ? `${job.result.result} ${job.result.unit}` : "—"}
                   </td>
-                  <td className="text-neutral-500">
+                  <td className="text-foreground-muted">
                     {new Date(job.createdAt).toLocaleString()}
                   </td>
                 </tr>
               ))}
               {calculations.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-neutral-500">
+                  <td colSpan={4} className="py-12 text-center text-foreground-muted">
                     No calculations in this project.
                   </td>
                 </tr>
@@ -322,18 +322,18 @@ export default function ProjectDetailPage() {
           {activity.map((entry) => (
             <div key={entry.id} className="card flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm text-white">
+                <p className="text-sm text-foreground">
                   {entry.user?.name ?? "System"} — {entry.action.replace(/\./g, " ")}
                 </p>
-                <p className="mt-1 text-xs text-neutral-500">{entry.resource}</p>
+                <p className="mt-1 text-xs text-foreground-muted">{entry.resource}</p>
               </div>
-              <time className="shrink-0 text-xs text-neutral-500">
+              <time className="shrink-0 text-xs text-foreground-muted">
                 {new Date(entry.createdAt).toLocaleString()}
               </time>
             </div>
           ))}
           {activity.length === 0 && (
-            <p className="text-sm text-neutral-500">No activity recorded yet.</p>
+            <p className="text-sm text-foreground-muted">No activity recorded yet.</p>
           )}
         </div>
       )}

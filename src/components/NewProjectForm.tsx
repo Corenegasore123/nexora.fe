@@ -28,7 +28,7 @@ export function NewProjectForm() {
   return (
     <form onSubmit={handleSubmit} className="mt-10 max-w-lg space-y-5">
       <div>
-        <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+        <label htmlFor="name" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
           Project name
         </label>
         <input
@@ -41,7 +41,7 @@ export function NewProjectForm() {
         />
       </div>
       <div>
-        <label htmlFor="desc" className="mb-2 block text-xs uppercase tracking-wider text-neutral-500">
+        <label htmlFor="desc" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
           Description (optional)
         </label>
         <textarea
@@ -53,7 +53,7 @@ export function NewProjectForm() {
         />
       </div>
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <div className="alert-error text-sm">
           {error}
         </div>
       )}

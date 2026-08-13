@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
 import { NotificationBell } from "@/components/NotificationBell";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { href: "/dashboard", label: "Dashboard" },
@@ -43,30 +44,31 @@ export function AppHeader() {
   if (isAuthPage) return null;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-black/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link href="/" className="text-lg font-bold tracking-tight text-white">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <Link href="/" className="text-lg font-bold tracking-tight text-foreground">
           QuantScope
         </Link>
-        <nav className="flex items-center gap-4 md:gap-8">
+        <nav className="flex items-center gap-4 md:gap-6">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`nav-link ${"mobileOnly" in item && item.mobileOnly ? "md:hidden" : ""} ${"desktopOnly" in item && item.desktopOnly ? "hidden md:inline" : ""}`}
+              className={`nav-link ${pathname === item.href || pathname.startsWith(`${item.href}/`) ? "nav-link-active" : ""} ${"mobileOnly" in item && item.mobileOnly ? "md:hidden" : ""} ${"desktopOnly" in item && item.desktopOnly ? "hidden md:inline" : ""}`}
             >
               {item.label}
             </Link>
           ))}
+          <ThemeToggle />
           {!loading && user && (
-            <div className="flex items-center gap-4 border-l border-border pl-6">
+            <div className="flex items-center gap-4 border-l border-border pl-4 md:pl-6">
               {user.role === "ADMIN" && (
                 <Link href="/admin" className="nav-link hidden sm:inline">
                   Admin
                 </Link>
               )}
               <NotificationBell />
-              <span className="hidden text-xs text-neutral-500 sm:inline">{user.name}</span>
+              <span className="hidden text-xs text-foreground-muted sm:inline">{user.name}</span>
               <button type="button" onClick={handleLogout} className="nav-link">
                 Log out
               </button>
