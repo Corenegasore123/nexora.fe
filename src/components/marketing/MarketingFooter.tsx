@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons/Icon";
 import { MarketingContainer } from "./MarketingContainer";
+import { ScrollReveal } from "./ScrollReveal";
 
 export function MarketingFooter() {
   return (
     <footer className="marketing-footer-wrap">
       <MarketingContainer>
-        <div className="marketing-footer-shell">
-          <div className="grid gap-10 md:grid-cols-4">
-            <div className="md:col-span-2">
+        <ScrollReveal animation="fade-up">
+          <div className="marketing-footer-shell">
+            <div className="grid gap-10 md:grid-cols-4">
+              <div className="md:col-span-2">
               <div className="flex items-center justify-center gap-2 md:justify-start">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-xs font-bold text-[var(--color-on-accent)]">
                   QS
@@ -67,7 +69,8 @@ export function MarketingFooter() {
               </ul>
             </div>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
         <p className="mt-8 text-center text-xs text-white/40">
           © {new Date().getFullYear()} QuantScope · Deterministic engineering calculations
         </p>

@@ -3,6 +3,9 @@ import { ProductFlowVisual } from "@/components/marketing/ProductFlowVisual";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
+import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
+import { Tilt3D } from "@/components/marketing/Tilt3D";
 
 const STEPS = [
   {
@@ -86,12 +89,14 @@ export default function HowItWorksPage() {
     <>
       <section className="marketing-page-hero">
         <MarketingContainer>
-          <p className="eyebrow">How It Works</p>
-          <h1 className="page-title mt-3 max-w-3xl">From upload to verified quantity</h1>
-          <p className="page-subtitle mt-4">
-            QuantScope follows a structured five-step pipeline designed for engineering accuracy.
-            Every measurement, formula, and result is traceable from source diagram to final report.
-          </p>
+          <ScrollReveal animation="blur-up" immediate className="max-w-3xl">
+            <p className="eyebrow">How It Works</p>
+            <h1 className="page-title mt-3">From upload to verified quantity</h1>
+            <p className="page-subtitle mt-4">
+              QuantScope follows a structured five-step pipeline designed for engineering accuracy.
+              Every measurement, formula, and result is traceable from source diagram to final report.
+            </p>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 
@@ -100,56 +105,65 @@ export default function HowItWorksPage() {
           <div className="grid items-start gap-16 lg:grid-cols-2">
             <div className="space-y-10">
               {STEPS.map((step, i) => (
-                <div key={step.title} className="flex gap-5">
-                  <IconCircle name={step.icon} size={18} className="mt-1 h-11 w-11 shrink-0" />
-                  <div>
-                    <p className="font-mono text-xs text-primary">Step {String(i + 1).padStart(2, "0")}</p>
-                    <h2 className="mt-1 text-xl font-bold text-foreground">{step.title}</h2>
-                    <p className="mt-2 text-foreground-secondary">{step.summary}</p>
-                    <ul className="mt-4 space-y-2">
-                      {step.details.map((d) => (
-                        <li key={d} className="flex items-start gap-2 text-sm text-foreground-secondary">
-                          <Icon name="check" size={14} className="mt-0.5 shrink-0 text-primary" />
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
+                <ScrollReveal key={step.title} animation="fade-right" delay={i * 60}>
+                  <div className="flex gap-5">
+                    <IconCircle name={step.icon} size={18} className="mt-1 h-11 w-11 shrink-0" />
+                    <div>
+                      <p className="font-mono text-xs text-primary">Step {String(i + 1).padStart(2, "0")}</p>
+                      <h2 className="mt-1 text-xl font-bold text-foreground">{step.title}</h2>
+                      <p className="mt-2 text-foreground-secondary">{step.summary}</p>
+                      <ul className="mt-4 space-y-2">
+                        {step.details.map((d) => (
+                          <li key={d} className="flex items-start gap-2 text-sm text-foreground-secondary">
+                            <Icon name="check" size={14} className="mt-0.5 shrink-0 text-primary" />
+                            {d}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
-            <div className="sticky top-28">
-              <ProductFlowVisual />
-              <div className="mt-6 rounded-2xl border border-border bg-primary-soft/50 p-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-primary">Typical timeline</p>
-                <p className="mt-2 text-3xl font-bold text-foreground">&lt; 5 minutes</p>
-                <p className="mt-1 text-sm text-foreground-secondary">
-                  From upload to verified export for a standard single-page drawing.
-                </p>
-              </div>
-            </div>
+            <ScrollReveal animation="fade-left" className="sticky top-28">
+              <Tilt3D intensity={10} className="float-3d">
+                <ProductFlowVisual />
+              </Tilt3D>
+              <ScrollReveal animation="scale" delay={200}>
+                <div className="mt-6 rounded-2xl border border-border bg-primary-soft/50 p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">Typical timeline</p>
+                  <p className="mt-2 text-3xl font-bold text-foreground">&lt; 5 minutes</p>
+                  <p className="mt-1 text-sm text-foreground-secondary">
+                    From upload to verified export for a standard single-page drawing.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </ScrollReveal>
           </div>
         </MarketingContainer>
       </section>
 
       <section className="border-y border-border bg-surface py-20">
         <MarketingContainer>
-          <h2 className="page-title text-center">Why deterministic logic matters</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-foreground-secondary">
-            Engineering quantities must be defensible. QuantScope separates AI perception from
-            calculation logic so every number in your report can be traced to a formula and source.
-          </p>
+          <MarketingSectionHeader
+            title="Why deterministic logic matters"
+            subtitle="Engineering quantities must be defensible. QuantScope separates AI perception from calculation logic so every number in your report can be traced to a formula and source."
+          />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
               { icon: "scan" as IconName, title: "AI for perception", desc: "OCR and CV read diagrams — they never compute quantities." },
               { icon: "calculator" as IconName, title: "Rules for arithmetic", desc: "Deterministic engine applies verified formulas with step-by-step output." },
               { icon: "clipboard-check" as IconName, title: "Humans for validation", desc: "Engineers review, correct, and approve before export." },
-            ].map((item) => (
-              <div key={item.title} className="card-raised text-center">
-                <IconCircle name={item.icon} size={20} className="mx-auto" />
-                <h3 className="mt-4 font-semibold text-foreground">{item.title}</h3>
-                <p className="mt-2 text-sm text-foreground-secondary">{item.desc}</p>
-              </div>
+            ].map((item, i) => (
+              <ScrollReveal key={item.title} animation="fade-up" delay={i * 80}>
+                <Tilt3D intensity={6}>
+                  <div className="card-3d-lift h-full text-center">
+                    <IconCircle name={item.icon} size={20} className="mx-auto" />
+                    <h3 className="mt-4 font-semibold text-foreground">{item.title}</h3>
+                    <p className="mt-2 text-sm text-foreground-secondary">{item.desc}</p>
+                  </div>
+                </Tilt3D>
+              </ScrollReveal>
             ))}
           </div>
         </MarketingContainer>
@@ -157,12 +171,12 @@ export default function HowItWorksPage() {
 
       <section className="py-20">
         <MarketingContainer>
-          <div className="mx-auto max-w-3xl">
+          <ScrollReveal animation="blur-up" className="mx-auto max-w-3xl">
             <h2 className="page-title text-center">Frequently asked questions</h2>
             <div className="mt-10">
               <FaqAccordion items={FAQ} />
             </div>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 

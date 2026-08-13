@@ -262,7 +262,18 @@ body {
   }
 
   .glass-stat {
-    @apply rounded-2xl border border-border bg-surface px-5 py-4 shadow-sm;
+    @apply rounded-2xl border border-border bg-surface px-5 py-4 shadow-sm backdrop-blur-sm;
+    background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .glass-stat:hover {
+    @apply shadow-elevated;
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    transform: translateY(-3px);
   }
 
   .btn-marketing {
@@ -287,11 +298,181 @@ body {
 
   .marketing-page-hero {
     @apply border-b border-border bg-surface pb-16 pt-28 text-center md:pb-20 md:pt-32;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, var(--color-primary-soft), transparent),
+      var(--color-surface);
   }
 
   .marketing-page-hero .page-subtitle,
   .marketing-page-hero .page-title {
     @apply mx-auto;
+  }
+
+  /* Scroll reveal animations */
+  .reveal {
+    opacity: 0;
+    transition-property: opacity, transform, filter;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .reveal-fade-up {
+    transform: translateY(32px);
+  }
+
+  .reveal-fade-down {
+    transform: translateY(-24px);
+  }
+
+  .reveal-fade-in {
+    transform: none;
+  }
+
+  .reveal-fade-left {
+    transform: translateX(-36px);
+  }
+
+  .reveal-fade-right {
+    transform: translateX(36px);
+  }
+
+  .reveal-scale {
+    transform: scale(0.92);
+  }
+
+  .reveal-blur-up {
+    transform: translateY(28px);
+    filter: blur(6px);
+  }
+
+  /* 3D tilt cards */
+  .tilt-3d {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --glare-x: 50%;
+    --glare-y: 50%;
+    perspective: 1200px;
+  }
+
+  .tilt-3d-inner {
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tilt-3d-glare .tilt-3d-inner {
+    position: relative;
+  }
+
+  .tilt-3d-glare .tilt-3d-inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at var(--glare-x) var(--glare-y),
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 55%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .tilt-3d:hover .tilt-3d-inner::after {
+    opacity: 1;
+  }
+
+  .card-3d {
+    @apply rounded-2xl border border-border bg-surface shadow-sm;
+    transform-style: preserve-3d;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .card-3d:hover {
+    @apply shadow-elevated;
+    border-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    transform: translateY(-4px);
+  }
+
+  .card-3d-lift {
+    @apply card-3d p-6;
+  }
+
+  .float-3d {
+    animation: float-3d 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  @keyframes float-3d {
+    0%,
+    100% {
+      transform: translateY(0) rotateX(2deg) rotateY(-3deg);
+    }
+    50% {
+      transform: translateY(-12px) rotateX(-2deg) rotateY(3deg);
+    }
+  }
+
+  .marketing-hero-glow {
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 20%, rgba(91, 174, 234, 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 60%, rgba(249, 179, 63, 0.12), transparent);
+  }
+
+  .marketing-mesh-dark {
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(91, 174, 234, 0.12), transparent),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(249, 179, 63, 0.08), transparent),
+      #354554;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2.5 text-sm font-medium text-foreground-secondary;
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .tag-pill:hover {
+    @apply bg-primary-soft text-foreground;
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none !important;
+      filter: none !important;
+      transition: none;
+    }
+
+    .float-3d {
+      animation: none;
+    }
+
+    .tilt-3d-inner {
+      transform: none !important;
+      transition: none;
+    }
+
+    .card-3d:hover,
+    .glass-stat:hover,
+    .tag-pill:hover {
+      transform: none;
+    }
   }
 
   /* Auth — split panel modal */

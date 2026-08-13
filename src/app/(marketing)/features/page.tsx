@@ -1,6 +1,9 @@
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
+import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
+import { Tilt3D } from "@/components/marketing/Tilt3D";
 
 const CATEGORIES = [
   {
@@ -60,12 +63,14 @@ export default function FeaturesPage() {
     <>
       <section className="marketing-page-hero">
         <MarketingContainer className="text-center">
-          <p className="eyebrow">Features</p>
-          <h1 className="page-title mt-3">Everything you need for quantity workflows</h1>
-          <p className="page-subtitle mx-auto mt-4">
-            From automated measurement extraction to verified calculations and professional reports —
-            QuantScope covers the full engineering quantity pipeline.
-          </p>
+          <ScrollReveal animation="blur-up" immediate>
+            <p className="eyebrow">Features</p>
+            <h1 className="page-title mt-3">Everything you need for quantity workflows</h1>
+            <p className="page-subtitle mx-auto mt-4">
+              From automated measurement extraction to verified calculations and professional reports —
+              QuantScope covers the full engineering quantity pipeline.
+            </p>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 
@@ -75,16 +80,22 @@ export default function FeaturesPage() {
           className={`py-16 ${idx % 2 === 0 ? "bg-background" : "border-y border-border bg-surface"}`}
         >
           <MarketingContainer>
-            <div className="mb-10 flex items-center gap-3">
-              <IconCircle name={cat.icon} size={20} />
-              <h2 className="text-2xl font-bold text-foreground">{cat.label}</h2>
-            </div>
+            <ScrollReveal animation="fade-up">
+              <div className="mb-10 flex items-center gap-3">
+                <IconCircle name={cat.icon} size={20} />
+                <h2 className="text-2xl font-bold text-foreground">{cat.label}</h2>
+              </div>
+            </ScrollReveal>
             <div className="grid gap-6 sm:grid-cols-2">
-              {cat.features.map((f) => (
-                <div key={f.title} className="card-raised">
-                  <h3 className="font-semibold text-foreground">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{f.desc}</p>
-                </div>
+              {cat.features.map((f, i) => (
+                <ScrollReveal key={f.title} animation="fade-up" delay={i * 60}>
+                  <Tilt3D intensity={5}>
+                    <div className="card-3d-lift h-full">
+                      <h3 className="font-semibold text-foreground">{f.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{f.desc}</p>
+                    </div>
+                  </Tilt3D>
+                </ScrollReveal>
               ))}
             </div>
           </MarketingContainer>
@@ -93,9 +104,9 @@ export default function FeaturesPage() {
 
       <section className="py-20">
         <MarketingContainer>
-          <div className="mx-auto max-w-4xl">
-            <h2 className="page-title text-center">QuantScope vs manual workflows</h2>
-            <div className="mt-10 overflow-hidden rounded-2xl border border-border">
+          <ScrollReveal animation="scale" className="mx-auto max-w-4xl">
+            <MarketingSectionHeader title="QuantScope vs manual workflows" />
+            <div className="mt-10 overflow-hidden rounded-2xl border border-border shadow-elevated">
               <table className="data-table">
                 <thead>
                   <tr>
@@ -129,7 +140,7 @@ export default function FeaturesPage() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 

@@ -1,6 +1,9 @@
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
+import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
+import { Tilt3D } from "@/components/marketing/Tilt3D";
 
 const VALUES = [
   { icon: "target" as IconName, title: "Precision over automation theater", desc: "We build tools that produce defensible numbers, not impressive demos." },
@@ -21,7 +24,7 @@ export default function AboutPage() {
     <>
       <section className="marketing-page-hero">
         <MarketingContainer>
-          <div className="mx-auto max-w-3xl">
+          <ScrollReveal animation="blur-up" immediate className="mx-auto max-w-3xl">
             <p className="eyebrow">About</p>
             <h1 className="page-title mt-3">Built for engineering precision</h1>
             <p className="mt-6 text-lg leading-relaxed text-foreground-secondary">
@@ -30,14 +33,14 @@ export default function AboutPage() {
               verified rules engine — so every number in your report is traceable, auditable, and
               defensible.
             </p>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 
       <section className="border-b border-border bg-surface py-20">
         <MarketingContainer>
           <div className="grid gap-16 lg:grid-cols-2">
-            <div>
+            <ScrollReveal animation="fade-right">
               <h2 className="text-2xl font-bold text-foreground">Our mission</h2>
               <p className="mt-4 leading-relaxed text-foreground-secondary">
                 Engineering teams spend hours manually reading diagrams, transcribing measurements into
@@ -49,8 +52,8 @@ export default function AboutPage() {
                 accuracy over automation theater. AI handles image understanding; calculation logic
                 handles arithmetic.
               </p>
-            </div>
-            <div>
+            </ScrollReveal>
+            <ScrollReveal animation="fade-left">
               <h2 className="text-2xl font-bold text-foreground">What we believe</h2>
               <ul className="mt-6 space-y-5">
                 {[
@@ -65,21 +68,25 @@ export default function AboutPage() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </ScrollReveal>
           </div>
         </MarketingContainer>
       </section>
 
       <section className="py-20">
         <MarketingContainer>
-          <h2 className="page-title text-center">Our values</h2>
+          <MarketingSectionHeader title="Our values" />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {VALUES.map((v) => (
-              <div key={v.title} className="card-raised">
-                <IconCircle name={v.icon} size={18} />
-                <h3 className="mt-4 font-semibold text-foreground">{v.title}</h3>
-                <p className="mt-2 text-sm text-foreground-secondary">{v.desc}</p>
-              </div>
+            {VALUES.map((v, i) => (
+              <ScrollReveal key={v.title} animation="fade-up" delay={i * 70}>
+                <Tilt3D intensity={6}>
+                  <div className="card-3d-lift h-full">
+                    <IconCircle name={v.icon} size={18} />
+                    <h3 className="mt-4 font-semibold text-foreground">{v.title}</h3>
+                    <p className="mt-2 text-sm text-foreground-secondary">{v.desc}</p>
+                  </div>
+                </Tilt3D>
+              </ScrollReveal>
             ))}
           </div>
         </MarketingContainer>
@@ -87,17 +94,19 @@ export default function AboutPage() {
 
       <section className="border-y border-border bg-primary-soft/30 py-20">
         <MarketingContainer>
-          <div className="mx-auto max-w-4xl">
+          <ScrollReveal animation="scale" className="mx-auto max-w-4xl">
             <h2 className="page-title text-center">Platform at a glance</h2>
             <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-              {STATS.map((s) => (
-                <div key={s.label} className="rounded-2xl border border-border bg-surface p-6 text-center">
-                  <p className="text-3xl font-bold text-primary">{s.value}</p>
-                  <p className="mt-1 text-xs uppercase tracking-wider text-foreground-muted">{s.label}</p>
-                </div>
+              {STATS.map((s, i) => (
+                <ScrollReveal key={s.label} animation="fade-up" delay={i * 60}>
+                  <div className="glass-stat text-center">
+                    <p className="text-3xl font-bold text-primary">{s.value}</p>
+                    <p className="mt-1 text-xs uppercase tracking-wider text-foreground-muted">{s.label}</p>
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 

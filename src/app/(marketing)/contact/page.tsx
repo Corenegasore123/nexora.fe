@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
+import { Tilt3D } from "@/components/marketing/Tilt3D";
 
 const CHANNELS = [
   {
@@ -31,9 +33,9 @@ const CHANNELS = [
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-[#354554] pb-20 pt-32 text-white md:pb-24 md:pt-36">
+      <section className="marketing-mesh-dark pb-20 pt-32 text-white md:pb-24 md:pt-36">
         <MarketingContainer className="text-center">
-          <div className="mx-auto max-w-2xl">
+          <ScrollReveal animation="blur-up" immediate className="mx-auto max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-accent">Contact</p>
             <h1 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">
               Let&apos;s talk about your quantity workflow
@@ -42,36 +44,37 @@ export default function ContactPage() {
               Whether you need a demo, enterprise deployment, or technical guidance — choose the channel
               that fits your needs.
             </p>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 
       <section className="relative pb-24">
         <MarketingContainer>
           <div className="-mt-12 grid gap-6 md:grid-cols-3">
-            {CHANNELS.map((ch) => (
-              <div
-                key={ch.title}
-                className="flex flex-col rounded-2xl border border-border bg-surface p-8 text-center shadow-elevated"
-              >
-                <IconCircle name={ch.icon} size={20} className="mx-auto" />
-                <h2 className="mt-5 text-lg font-bold text-foreground">{ch.title}</h2>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground-secondary">{ch.desc}</p>
-                {ch.internal ? (
-                  <Link href={ch.action} className="btn-primary mx-auto mt-8 inline-flex gap-2">
-                    {ch.cta}
-                    <Icon name="arrow-right" size={16} />
-                  </Link>
-                ) : (
-                  <a
-                    href={`mailto:${ch.action}`}
-                    className="btn-secondary mx-auto mt-8 inline-flex gap-2"
-                  >
-                    <Icon name="mail" size={16} />
-                    {ch.cta}
-                  </a>
-                )}
-              </div>
+            {CHANNELS.map((ch, i) => (
+              <ScrollReveal key={ch.title} animation="fade-up" delay={i * 80}>
+                <Tilt3D intensity={8}>
+                  <div className="card-3d flex h-full flex-col p-8 text-center shadow-elevated">
+                    <IconCircle name={ch.icon} size={20} className="mx-auto" />
+                    <h2 className="mt-5 text-lg font-bold text-foreground">{ch.title}</h2>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground-secondary">{ch.desc}</p>
+                    {ch.internal ? (
+                      <Link href={ch.action} className="btn-primary mx-auto mt-8 inline-flex gap-2">
+                        {ch.cta}
+                        <Icon name="arrow-right" size={16} />
+                      </Link>
+                    ) : (
+                      <a
+                        href={`mailto:${ch.action}`}
+                        className="btn-secondary mx-auto mt-8 inline-flex gap-2"
+                      >
+                        <Icon name="mail" size={16} />
+                        {ch.cta}
+                      </a>
+                    )}
+                  </div>
+                </Tilt3D>
+              </ScrollReveal>
             ))}
           </div>
         </MarketingContainer>
@@ -79,24 +82,26 @@ export default function ContactPage() {
 
       <section className="border-y border-border bg-background py-20">
         <MarketingContainer>
-          <div className="mx-auto max-w-3xl text-center">
+          <ScrollReveal animation="scale" className="mx-auto max-w-3xl text-center">
             <h2 className="text-2xl font-bold text-foreground">What to expect</h2>
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               {[
                 { icon: "history" as IconName, label: "Response time", value: "1–2 business days" },
                 { icon: "map-pin" as IconName, label: "Coverage", value: "Remote-first · Global" },
                 { icon: "shield" as IconName, label: "Enterprise SLA", value: "Available on request" },
-              ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-border bg-surface p-6">
-                  <Icon name={item.icon} size={22} className="mx-auto text-primary" />
-                  <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
-                    {item.label}
-                  </p>
-                  <p className="mt-1 font-medium text-foreground">{item.value}</p>
-                </div>
+              ].map((item, i) => (
+                <ScrollReveal key={item.label} animation="fade-up" delay={i * 70}>
+                  <div className="glass-stat">
+                    <Icon name={item.icon} size={22} className="mx-auto text-primary" />
+                    <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
+                      {item.label}
+                    </p>
+                    <p className="mt-1 font-medium text-foreground">{item.value}</p>
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </MarketingContainer>
       </section>
 
