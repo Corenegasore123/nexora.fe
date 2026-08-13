@@ -25,7 +25,7 @@ function resolvePageMeta(pathname: string): AppPageMeta {
   if (routes[pathname]) return routes[pathname];
   if (/^\/app\/projects\/[^/]+$/.test(pathname)) return { title: "Project", subtitle: "Workspace" };
   if (/^\/app\/history\/[^/]+$/.test(pathname)) return { title: "Calculation", subtitle: "Analysis detail" };
-  return { title: "QuantScope" };
+  return { title: "QuantaScope" };
 }
 
 type AppPageContextValue = {

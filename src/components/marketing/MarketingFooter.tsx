@@ -10,8 +10,8 @@ export function MarketingFooter() {
           <div className="marketing-footer-grid">
             <div className="marketing-footer-brand">
               <div className="marketing-footer-logo">
-                <span className="marketing-footer-logo-mark">QS</span>
-                <p className="text-lg font-bold text-white">QuantScope</p>
+                <span className="marketing-footer-logo-mark">Qa</span>
+                <p className="text-lg font-bold text-white">QuantaScope</p>
               </div>
               <p className="marketing-footer-desc">
                 Intelligent quantity platform for engineers — OCR, computer vision, and deterministic
@@ -69,7 +69,7 @@ export function MarketingFooter() {
           </div>
         </div>
         <p className="marketing-footer-copy">
-          © {new Date().getFullYear()} QuantScope · Deterministic engineering calculations
+          © {new Date().getFullYear()} QuantaScope · Deterministic engineering calculations
         </p>
       </MarketingContainer>
     </footer>

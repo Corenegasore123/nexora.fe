@@ -71,7 +71,7 @@ export function LandingPage() {
               </ScrollReveal>
               <ScrollReveal animation="fade-up" immediate delay={160}>
                 <p className="mt-6 text-base leading-relaxed text-foreground-secondary md:text-lg">
-                  QuantScope transforms technical diagrams into structured measurements and verified
+                  QuantaScope transforms technical diagrams into structured measurements and verified
                   calculations using OCR, computer vision, and deterministic logic — never
                   LLM-invented numbers.
                 </p>
@@ -191,7 +191,7 @@ export function LandingPage() {
       <section className="marketing-defer bg-background py-24">
         <MarketingContainer>
           <MarketingSectionHeader
-            eyebrow="The QuantScope difference"
+            eyebrow="The QuantaScope difference"
             title="Why choose us"
             subtitle="We don't just extract text from images. We deliver a complete engineering workflow designed around accuracy, auditability, and team collaboration."
           />

@@ -67,7 +67,7 @@ export default function FeaturesPage() {
             <h1 className="page-title mt-3">Everything you need for quantity workflows</h1>
             <p className="page-subtitle mx-auto mt-4">
               From automated measurement extraction to verified calculations and professional reports —
-              QuantScope covers the full engineering quantity pipeline.
+              QuantaScope covers the full engineering quantity pipeline.
             </p>
           </ScrollReveal>
         </MarketingContainer>
@@ -104,14 +104,14 @@ export default function FeaturesPage() {
       <section className="py-20">
         <MarketingContainer>
           <ScrollReveal animation="scale" className="mx-auto max-w-4xl">
-            <MarketingSectionHeader title="QuantScope vs manual workflows" />
+            <MarketingSectionHeader title="QuantaScope vs manual workflows" />
             <div className="mt-10 overflow-hidden rounded-2xl border border-border shadow-elevated">
               <table className="data-table">
                 <thead>
                   <tr>
                     <th>Capability</th>
                     <th className="text-center">Manual</th>
-                    <th className="text-center">QuantScope</th>
+                    <th className="text-center">QuantaScope</th>
                   </tr>
                 </thead>
                 <tbody>

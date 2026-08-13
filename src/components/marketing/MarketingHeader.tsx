@@ -48,8 +48,8 @@ export function MarketingHeader() {
         >
           {/* Logo */}
           <Link href="/" prefetch className="marketing-nav-logo">
-            <span className="marketing-nav-logo-mark">QS</span>
-            <span className="marketing-nav-logo-text">QuantScope</span>
+            <span className="marketing-nav-logo-mark">Qa</span>
+            <span className="marketing-nav-logo-text">QuantaScope</span>
           </Link>
 
           {/* Desktop nav — centered */}

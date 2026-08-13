@@ -1,4 +1,4 @@
-# QuantScope Frontend
+# QuantaScope Frontend
 
 Next.js UI for uploading building diagrams and viewing calculation results.
 

@@ -27,7 +27,7 @@ export default function AboutPage() {
             <p className="eyebrow">About</p>
             <h1 className="page-title mt-3">Built for engineering precision</h1>
             <p className="mt-6 text-lg leading-relaxed text-foreground-secondary">
-              QuantScope is a professional platform for extracting measurements from technical diagrams
+              QuantaScope is a professional platform for extracting measurements from technical diagrams
               and performing deterministic quantity calculations. We combine OCR, computer vision, and a
               verified rules engine — so every number in your report is traceable, auditable, and
               defensible.
@@ -43,7 +43,7 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold text-foreground">Our mission</h2>
               <p className="mt-4 leading-relaxed text-foreground-secondary">
                 Engineering teams spend hours manually reading diagrams, transcribing measurements into
-                spreadsheets, and running formulas that are impossible to audit. QuantScope automates
+                spreadsheets, and running formulas that are impossible to audit. QuantaScope automates
                 the tedious parts while keeping calculation logic transparent and verifiable.
               </p>
               <p className="mt-4 leading-relaxed text-foreground-secondary">

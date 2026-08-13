@@ -66,7 +66,7 @@ const STEPS = [
 
 const FAQ = [
   {
-    q: "Does QuantScope use AI for calculations?",
+    q: "Does QuantaScope use AI for calculations?",
     a: "No. AI is used only for image understanding (OCR and computer vision). All arithmetic runs through a deterministic rules engine with full audit trails.",
   },
   {
@@ -92,7 +92,7 @@ export default function HowItWorksPage() {
             <p className="eyebrow">How It Works</p>
             <h1 className="page-title mt-3">From upload to verified quantity</h1>
             <p className="page-subtitle mx-auto mt-4">
-              QuantScope follows a structured five-step pipeline designed for engineering accuracy.
+              QuantaScope follows a structured five-step pipeline designed for engineering accuracy.
               Every measurement, formula, and result is traceable from source diagram to final report.
             </p>
           </ScrollReveal>
@@ -137,7 +137,7 @@ export default function HowItWorksPage() {
         <MarketingContainer>
           <MarketingSectionHeader
             title="Why deterministic logic matters"
-            subtitle="Engineering quantities must be defensible. QuantScope separates AI perception from calculation logic so every number in your report can be traced to a formula and source."
+            subtitle="Engineering quantities must be defensible. QuantaScope separates AI perception from calculation logic so every number in your report can be traced to a formula and source."
           />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[

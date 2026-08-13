@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QuantScope — Intelligent Building Quantity Platform",
+  title: "QuantaScope — Intelligent Building Quantity Platform",
   description:
     "Transform technical diagrams into structured measurements and verified calculations",
 };

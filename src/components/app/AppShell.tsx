@@ -63,20 +63,24 @@ export function AppSidebar({
         />
       )}
       <aside
-        className={`app-sidebar lg:relative ${collapsed ? "app-sidebar-collapsed" : ""} ${mobileOpen ? "app-sidebar-mobile app-sidebar-mobile-open" : "app-sidebar-mobile"} lg:translate-x-0`}
+        className={`app-sidebar ${collapsed ? "app-sidebar-collapsed" : ""} ${mobileOpen ? "app-sidebar-open" : ""}`}
       >
         <div className="app-sidebar-header">
-          {!collapsed && (
+          {collapsed ? (
+            <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="QuantaScope">
+              Qa
+            </Link>
+          ) : (
             <Link href="/app" className="flex min-w-0 items-center gap-2.5" onClick={onClose}>
-              <span className="app-sidebar-logo-mark">QS</span>
-              <span className="app-sidebar-logo-text">QuantScope</span>
+              <span className="app-sidebar-logo-mark">Qa</span>
+              <span className="app-sidebar-logo-text">QuantaScope</span>
             </Link>
           )}
           <button
             type="button"
             onClick={() => setCollapsed((c) => !c)}
-            className="hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block"
-            aria-label="Toggle sidebar"
+            className={`hidden rounded-lg p-2 text-white/60 transition-colors hover:bg-white/5 hover:text-white lg:block ${collapsed ? "absolute right-1 top-3" : ""}`}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <Icon name="menu" size={18} />
           </button>
@@ -106,18 +110,18 @@ export function AppSidebar({
 
         <div className="app-sidebar-footer">
           {user && !collapsed && <p className="app-sidebar-user">{user.name}</p>}
-          <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link mt-2">
+          <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link mt-2" title={collapsed ? "Profile" : undefined}>
             <Icon name="user" size={18} className="text-white/50" />
             {!collapsed && "Profile"}
           </Link>
-          <Link href="/app/settings" onClick={onClose} className="app-sidebar-footer-link">
+          <Link href="/app/settings" onClick={onClose} className="app-sidebar-footer-link" title={collapsed ? "Settings" : undefined}>
             <Icon name="settings" size={18} className="text-white/50" />
             {!collapsed && "Settings"}
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className={`app-sidebar-signout ${collapsed ? "!mt-2 !px-2" : ""}`}
+            className="app-sidebar-signout"
             title={collapsed ? "Sign out" : undefined}
           >
             <Icon name="log-out" size={18} className="app-sidebar-signout-icon shrink-0" />
