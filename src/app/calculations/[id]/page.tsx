@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ImageAnnotation } from "@/components/ImageAnnotation";
+import { CalculationEditor } from "@/components/CalculationEditor";
 import { classifyConfidence } from "@/lib/confidence";
 import { apiUrl, apiFetch } from "@/lib/api";
 
 interface JobDetail {
   id: string;
   status: string;
+  version: number;
+  scenarioName: string | null;
   workItem: string | null;
   method: string | null;
   overallConfidence: number | null;
@@ -20,6 +23,7 @@ interface JobDetail {
     unit: string;
     rawText: string;
     confidence: number;
+    userCorrected?: boolean;
     boundingBox: { x: number; y: number; width: number; height: number };
     label: string | null;
   }>;
@@ -38,6 +42,21 @@ interface JobDetail {
     result: number;
     unit: string;
   }>;
+  revisions?: Array<{
+    id: string;
+    version: number;
+    label: string | null;
+    result: number;
+    unit: string;
+    createdAt: string;
+  }>;
+  scenarios?: Array<{
+    id: string;
+    scenarioName: string | null;
+    version: number;
+    result: { result: number; unit: string } | null;
+  }>;
+  parentJob?: { id: string; scenarioName: string | null; version: number } | null;
   result: {
     formula: string;
     formulaLatex: string;
@@ -69,10 +88,14 @@ export default function CalculationDetailPage() {
   const id = params.id as string;
   const [job, setJob] = useState<JobDetail | null>(null);
 
-  useEffect(() => {
+  const reload = () => {
     apiFetch<JobDetail>(`/api/calculations/${id}`)
       .then(setJob)
       .catch(console.error);
+  };
+
+  useEffect(() => {
+    reload();
   }, [id]);
 
   if (!job) {
@@ -100,8 +123,18 @@ export default function CalculationDetailPage() {
           <p className="eyebrow">Result</p>
           <h1 className="page-title mt-3">{job.image.filename}</h1>
           <p className="mt-2 text-sm text-neutral-500">
-            {job.workItem?.replace(/_/g, " ")} · {job.method?.replace(/_/g, " ")}
+            {job.scenarioName ? `${job.scenarioName} · ` : ""}
+            {job.workItem?.replace(/_/g, " ")} · {job.method?.replace(/_/g, " ")} · v
+            {job.version}
           </p>
+          {job.parentJob && (
+            <a
+              href={`/calculations/${job.parentJob.id}`}
+              className="mt-1 inline-block text-xs text-neutral-500 hover:text-white"
+            >
+              ← Original calculation
+            </a>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <a href={apiUrl(`/api/calculations/${id}/report?format=pdf`)} className="btn-ghost">
@@ -177,6 +210,20 @@ export default function CalculationDetailPage() {
       </div>
 
       <section className="mt-12">
+        <h2 className="section-label">Variables — Edit &amp; Recalculate</h2>
+        <div className="mt-4">
+          <CalculationEditor
+            jobId={id}
+            version={job.version}
+            variables={job.variables}
+            revisions={job.revisions ?? []}
+            scenarios={job.scenarios ?? []}
+            onUpdated={reload}
+          />
+        </div>
+      </section>
+
+      <section className="mt-12">
         <h2 className="section-label">Detected Measurements</h2>
         <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-surface">
           <table className="data-table">
@@ -194,7 +241,12 @@ export default function CalculationDetailPage() {
                 const cls = classifyConfidence(m.confidence);
                 return (
                   <tr key={m.id}>
-                    <td className="font-mono text-white">{m.rawText}</td>
+                    <td className="font-mono text-white">
+                      {m.rawText}
+                      {m.userCorrected && (
+                        <span className="ml-2 text-xs text-emerald-400">corrected</span>
+                      )}
+                    </td>
                     <td>{m.value}</td>
                     <td>{m.unit}</td>
                     <td>{(m.confidence * 100).toFixed(0)}%</td>
@@ -211,25 +263,6 @@ export default function CalculationDetailPage() {
               })}
             </tbody>
           </table>
-        </div>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="section-label">Variables Assigned</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {job.variables.map((v) => (
-            <div key={v.name} className="card-raised">
-              <p className="text-xs uppercase tracking-wider text-neutral-500">
-                {v.name.replace(/_/g, " ")}
-              </p>
-              <p className="mt-2 text-xl font-semibold text-white">
-                {v.value} {v.unit}
-              </p>
-              <p className="mt-1 text-xs text-neutral-500">
-                {(v.confidence * 100).toFixed(0)}% confidence
-              </p>
-            </div>
-          ))}
         </div>
       </section>
 

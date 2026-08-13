@@ -197,3 +197,35 @@ export async function uploadProjectDocument(projectId: string, file: File) {
 export async function deleteDocument(documentId: string) {
   return apiFetch<{ ok: boolean }>(`/api/documents/${documentId}`, { method: "DELETE" });
 }
+
+// ─── Calculation correction & scenarios ─────────────────────────────────────
+
+export async function correctVariable(
+  jobId: string,
+  variableName: string,
+  value: number,
+  unit = "m"
+) {
+  return apiFetch<{ jobId: string; version: number; result: number; unit: string }>(
+    `/api/calculations/${jobId}/variables/${variableName}`,
+    { method: "PATCH", body: JSON.stringify({ value, unit }) }
+  );
+}
+
+export async function createScenario(
+  jobId: string,
+  name: string,
+  overrides: Record<string, { value: number; unit?: string }>
+) {
+  return apiFetch<{ jobId: string }>(`/api/calculations/${jobId}/scenarios`, {
+    method: "POST",
+    body: JSON.stringify({ name, overrides }),
+  });
+}
+
+export async function recalculateJob(jobId: string) {
+  return apiFetch<{ jobId: string; version: number; result: number; unit: string }>(
+    `/api/calculations/${jobId}/recalculate`,
+    { method: "POST", body: JSON.stringify({}) }
+  );
+}
