@@ -94,7 +94,29 @@ export interface Project {
   status: "ACTIVE" | "COMPLETED" | "ARCHIVED";
   createdAt: string;
   updatedAt: string;
-  _count?: { calculationJobs: number; images: number };
+  role?: "OWNER" | "EDITOR" | "VIEWER";
+  isOwner?: boolean;
+  owner?: { id: string; name: string; email?: string };
+  _count?: { calculationJobs: number; images: number; members?: number };
+}
+
+export interface ProjectMember {
+  id?: string;
+  userId: string;
+  name: string;
+  email: string;
+  role: "OWNER" | "EDITOR" | "VIEWER";
+  createdAt?: string;
+}
+
+export interface Notification {
+  id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  link: string | null;
+  read: boolean;
+  createdAt: string;
 }
 
 export interface Document {
@@ -191,6 +213,56 @@ export async function getProjectCalculations(projectId: string) {
 
 export async function getProjectActivity(projectId: string) {
   return apiFetch<{ activity: ActivityEntry[] }>(`/api/projects/${projectId}/activity`);
+}
+
+export async function getProjectMembers(projectId: string) {
+  return apiFetch<{
+    owner: ProjectMember | null;
+    members: ProjectMember[];
+    currentRole: "OWNER" | "EDITOR" | "VIEWER";
+  }>(`/api/projects/${projectId}/members`);
+}
+
+export async function addProjectMember(
+  projectId: string,
+  email: string,
+  role: "EDITOR" | "VIEWER" = "VIEWER"
+) {
+  return apiFetch<{ member: ProjectMember }>(`/api/projects/${projectId}/members`, {
+    method: "POST",
+    body: JSON.stringify({ email, role }),
+  });
+}
+
+export async function updateProjectMemberRole(
+  projectId: string,
+  userId: string,
+  role: "EDITOR" | "VIEWER"
+) {
+  return apiFetch<{ member: ProjectMember }>(`/api/projects/${projectId}/members/${userId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ role }),
+  });
+}
+
+export async function removeProjectMember(projectId: string, userId: string) {
+  return apiFetch<{ ok: boolean }>(`/api/projects/${projectId}/members/${userId}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getNotifications() {
+  return apiFetch<{ notifications: Notification[]; unreadCount: number }>("/api/notifications");
+}
+
+export async function markNotificationRead(id: string) {
+  return apiFetch<{ notification: Notification }>(`/api/notifications/${id}/read`, {
+    method: "PATCH",
+  });
+}
+
+export async function markAllNotificationsRead() {
+  return apiFetch<{ ok: boolean }>("/api/notifications/read-all", { method: "POST" });
 }
 
 export async function uploadProjectDocument(projectId: string, file: File) {

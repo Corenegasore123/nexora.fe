@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const NAV = [
   { href: "/dashboard", label: "Dashboard" },
@@ -59,6 +60,7 @@ export function AppHeader() {
           ))}
           {!loading && user && (
             <div className="flex items-center gap-4 border-l border-border pl-6">
+              <NotificationBell />
               <span className="hidden text-xs text-neutral-500 sm:inline">{user.name}</span>
               <button type="button" onClick={handleLogout} className="nav-link">
                 Log out

@@ -8,14 +8,17 @@ import {
   getProjectDocuments,
   getProjectCalculations,
   getProjectActivity,
+  getProjectMembers,
   uploadProjectDocument,
   deleteDocument,
   Project,
   Document,
   ActivityEntry,
+  ProjectMember,
 } from "@/lib/api";
+import { ProjectTeam } from "@/components/ProjectTeam";
 
-type Tab = "overview" | "documents" | "calculations" | "activity";
+type Tab = "overview" | "documents" | "calculations" | "activity" | "team";
 
 function formatBytes(n: number) {
   if (n < 1024) return `${n} B`;
@@ -40,21 +43,28 @@ export default function ProjectDetailPage() {
     Awaited<ReturnType<typeof getProjectCalculations>>["calculations"]
   >([]);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [team, setTeam] = useState<{
+    owner: ProjectMember | null;
+    members: ProjectMember[];
+    currentRole: "OWNER" | "EDITOR" | "VIEWER";
+  } | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
-    const [p, docs, calcs, act] = await Promise.all([
+    const [p, docs, calcs, act, members] = await Promise.all([
       getProject(projectId),
       getProjectDocuments(projectId),
       getProjectCalculations(projectId),
       getProjectActivity(projectId),
+      getProjectMembers(projectId),
     ]);
     setProject(p.project);
     setDocuments(docs.documents);
     setCalculations(calcs.calculations);
     setActivity(act.activity);
+    setTeam(members);
   }, [projectId]);
 
   useEffect(() => {
@@ -92,6 +102,7 @@ export default function ProjectDetailPage() {
     { id: "overview", label: "Overview" },
     { id: "documents", label: "Documents" },
     { id: "calculations", label: "Calculations" },
+    { id: "team", label: "Team" },
     { id: "activity", label: "Activity" },
   ];
 
@@ -104,10 +115,16 @@ export default function ProjectDetailPage() {
           {project.description && (
             <p className="page-subtitle">{project.description}</p>
           )}
+          <p className="mt-2 text-xs text-neutral-500">
+            {project.isOwner ? "You own this project" : `Shared · ${project.role}`}
+            {project.owner && !project.isOwner && ` · Owner: ${project.owner.name}`}
+          </p>
         </div>
-        <Link href={`/calculator?project=${projectId}`} className="btn-primary">
-          Upload &amp; Analyze
-        </Link>
+        {(project.role === "OWNER" || project.role === "EDITOR") && (
+          <Link href={`/calculator?project=${projectId}`} className="btn-primary">
+            Upload &amp; Analyze
+          </Link>
+        )}
       </div>
 
       <div className="mt-8 flex gap-2 border-b border-border">
@@ -148,6 +165,7 @@ export default function ProjectDetailPage() {
 
       {tab === "documents" && (
         <div className="mt-8">
+          {(project.role === "OWNER" || project.role === "EDITOR") && (
           <div className="flex items-center gap-4">
             <input
               ref={fileRef}
@@ -165,6 +183,7 @@ export default function ProjectDetailPage() {
               {uploading ? "Uploading…" : "Upload document"}
             </button>
           </div>
+          )}
           {uploadError && (
             <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
               {uploadError}
@@ -193,6 +212,7 @@ export default function ProjectDetailPage() {
                       {new Date(doc.createdAt).toLocaleString()}
                     </td>
                     <td>
+                      {(project.role === "OWNER" || project.role === "EDITOR") && (
                       <button
                         type="button"
                         onClick={() => handleDelete(doc.id)}
@@ -200,6 +220,7 @@ export default function ProjectDetailPage() {
                       >
                         Delete
                       </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -256,6 +277,18 @@ export default function ProjectDetailPage() {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {tab === "team" && team && (
+        <div className="mt-8">
+          <ProjectTeam
+            projectId={projectId}
+            currentRole={team.currentRole}
+            owner={team.owner}
+            members={team.members}
+            onChanged={load}
+          />
         </div>
       )}
 

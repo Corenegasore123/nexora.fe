@@ -35,8 +35,16 @@ export default function ProjectsPage() {
             <Link key={p.id} href={`/projects/${p.id}`} className="card-raised block">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-semibold text-white">{p.name}</p>
-                <span className="text-xs uppercase tracking-wider text-neutral-500">{p.status}</span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-xs uppercase tracking-wider text-neutral-500">{p.status}</span>
+                  {p.role && p.role !== "OWNER" && (
+                    <span className="text-[10px] text-neutral-600">{p.role}</span>
+                  )}
+                </div>
               </div>
+              {p.owner && !p.isOwner && (
+                <p className="mt-1 text-xs text-neutral-600">Shared by {p.owner.name}</p>
+              )}
               {p.description && (
                 <p className="mt-2 line-clamp-2 text-sm text-neutral-400">{p.description}</p>
               )}
