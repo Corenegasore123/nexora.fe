@@ -28,17 +28,22 @@ const THEME_ICON: Record<Theme, IconName> = {
   system: "monitor",
 };
 
-export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "settings" }) {
+export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "settings" | "header" }) {
   const [theme, setTheme] = useState<Theme>("system");
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const initial = getStoredTheme();
     setTheme(initial);
     applyTheme(initial);
+    setIsDark(resolveDark(initial));
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      if (getStoredTheme() === "system") applyTheme("system");
+      if (getStoredTheme() === "system") {
+        applyTheme("system");
+        setIsDark(resolveDark("system"));
+      }
     };
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
@@ -48,7 +53,10 @@ export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "se
     setTheme(next);
     localStorage.setItem("quantscope-theme", next);
     applyTheme(next);
+    setIsDark(resolveDark(next));
   };
+
+  const toggleLightDark = () => select(isDark ? "light" : "dark");
 
   if (variant === "settings") {
     return (
@@ -72,18 +80,29 @@ export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "se
     );
   }
 
-  const cycle = () => select(theme === "light" ? "dark" : theme === "dark" ? "system" : "light");
+  if (variant === "header") {
+    return (
+      <button
+        type="button"
+        onClick={toggleLightDark}
+        className="theme-toggle-header"
+        aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+        title={`Switch to ${isDark ? "light" : "dark"} mode`}
+      >
+        <Icon name={isDark ? "sun" : "moon"} size={18} />
+      </button>
+    );
+  }
 
   return (
     <button
       type="button"
-      onClick={cycle}
-      className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-foreground-muted hover:bg-pending-bg hover:text-foreground"
-      aria-label={`Theme: ${theme}`}
-      title={`Theme: ${theme}`}
+      onClick={toggleLightDark}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground-muted transition-colors hover:bg-pending-bg hover:text-foreground"
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      <Icon name={THEME_ICON[theme]} size={16} />
-      <span className="hidden sm:inline capitalize">{theme}</span>
+      <Icon name={isDark ? "sun" : "moon"} size={18} />
     </button>
   );
 }

@@ -1,30 +1,138 @@
 import Link from "next/link";
+import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 
-const FEATURES = [
-  { title: "Measurement extraction", desc: "OCR + computer vision on technical drawings with confidence scoring." },
-  { title: "Deterministic engine", desc: "Verified formulas — no LLM-generated arithmetic." },
-  { title: "Project workspaces", desc: "Organize documents, team access, and calculation history." },
-  { title: "Scenario comparison", desc: "Compare baselines, versions, and what-if scenarios." },
-  { title: "Audit trail", desc: "Full chain from source measurement to final result." },
-  { title: "Report export", desc: "PDF, CSV, JSON with multiple template types." },
+const CATEGORIES = [
+  {
+    label: "Extraction",
+    icon: "scan" as IconName,
+    features: [
+      { title: "OCR dimension detection", desc: "Reads numeric labels, units, and annotations from technical drawings with high accuracy." },
+      { title: "Computer vision pipeline", desc: "Identifies bounding regions, scale references, and structural elements in diagrams." },
+      { title: "Confidence scoring", desc: "Every extracted value carries a confidence score so reviewers know what to prioritize." },
+      { title: "Multi-format support", desc: "Process JPG, PNG, WEBP, and multi-page PDF documents in a single workflow." },
+    ],
+  },
+  {
+    label: "Calculation",
+    icon: "calculator" as IconName,
+    features: [
+      { title: "Deterministic rules engine", desc: "Verified formulas with no LLM-generated arithmetic — every step is reproducible." },
+      { title: "Methodology versioning", desc: "Rules are versioned so you always know which formula set produced a result." },
+      { title: "Chapter 3 earthwork", desc: "Built-in support for cut/fill volume, area, and related quantity formulas." },
+      { title: "Scenario comparison", desc: "Compare baselines, revisions, and what-if scenarios with delta reporting." },
+    ],
+  },
+  {
+    label: "Collaboration",
+    icon: "users" as IconName,
+    features: [
+      { title: "Project workspaces", desc: "Organize documents, calculations, and team members in scoped project containers." },
+      { title: "Role-based access", desc: "Owner, editor, and viewer roles with granular permissions on every resource." },
+      { title: "Revision history", desc: "Full audit trail on measurement corrections and calculation reruns." },
+      { title: "Notifications", desc: "Stay informed when analyses complete, fail, or require review." },
+    ],
+  },
+  {
+    label: "Reporting",
+    icon: "file-text" as IconName,
+    features: [
+      { title: "PDF export", desc: "Professional reports with methodology, inputs, steps, and final quantities." },
+      { title: "CSV & JSON export", desc: "Structured data for downstream systems, spreadsheets, and integrations." },
+      { title: "Audit trail attachment", desc: "Every report links back to source measurements and formula versions." },
+      { title: "Template types", desc: "Summary, detailed, and comparison report templates for different audiences." },
+    ],
+  },
+];
+
+const COMPARE = [
+  { label: "Manual spreadsheet workflow", manual: true, quantscope: false },
+  { label: "Traceable source measurements", manual: false, quantscope: true },
+  { label: "Automated OCR extraction", manual: false, quantscope: true },
+  { label: "Deterministic formula engine", manual: "Partial", quantscope: true },
+  { label: "Team collaboration & roles", manual: false, quantscope: true },
+  { label: "Confidence scoring", manual: false, quantscope: true },
+  { label: "Export-ready audit reports", manual: "Partial", quantscope: true },
 ];
 
 export default function FeaturesPage() {
   return (
-    <div className="mx-auto max-w-7xl px-6 py-20">
-      <p className="eyebrow text-center">Features</p>
-      <h1 className="page-title mt-3 text-center">Everything you need for quantity workflows</h1>
-      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((f) => (
-          <div key={f.title} className="card-raised">
-            <h2 className="font-semibold text-foreground">{f.title}</h2>
-            <p className="mt-2 text-sm text-foreground-secondary">{f.desc}</p>
+    <>
+      <section className="marketing-page-hero">
+        <div className="mx-auto max-w-7xl text-center">
+          <p className="eyebrow">Features</p>
+          <h1 className="page-title mt-3">Everything you need for quantity workflows</h1>
+          <p className="page-subtitle mx-auto mt-4">
+            From automated measurement extraction to verified calculations and professional reports —
+            QuantScope covers the full engineering quantity pipeline.
+          </p>
+        </div>
+      </section>
+
+      {CATEGORIES.map((cat, idx) => (
+        <section
+          key={cat.label}
+          className={`px-6 py-16 ${idx % 2 === 0 ? "bg-background" : "border-y border-border bg-surface"}`}
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-10 flex items-center gap-3">
+              <IconCircle name={cat.icon} size={20} />
+              <h2 className="text-2xl font-bold text-foreground">{cat.label}</h2>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2">
+              {cat.features.map((f) => (
+                <div key={f.title} className="card-raised">
+                  <h3 className="font-semibold text-foreground">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{f.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="mt-16 text-center">
-        <Link href="/sign-up" className="btn-primary">Get Started</Link>
-      </div>
-    </div>
+        </section>
+      ))}
+
+      <section className="mx-auto max-w-4xl px-6 py-20">
+        <h2 className="page-title text-center">QuantScope vs manual workflows</h2>
+        <div className="mt-10 overflow-hidden rounded-2xl border border-border">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th className="text-center">Manual</th>
+                <th className="text-center">QuantScope</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARE.map((row) => (
+                <tr key={row.label}>
+                  <td className="font-medium text-foreground">{row.label}</td>
+                  <td className="text-center">
+                    {row.manual === true ? (
+                      <Icon name="check" size={16} className="mx-auto text-foreground-muted" />
+                    ) : row.manual === false ? (
+                      <span className="text-foreground-placeholder">—</span>
+                    ) : (
+                      <span className="text-xs text-foreground-muted">{row.manual}</span>
+                    )}
+                  </td>
+                  <td className="text-center">
+                    {row.quantscope ? (
+                      <Icon name="check" size={16} className="mx-auto text-primary" />
+                    ) : (
+                      <span className="text-foreground-placeholder">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-12 text-center">
+          <Link href="/sign-up" className="btn-primary inline-flex gap-2">
+            Get Started Free
+            <Icon name="arrow-right" size={16} />
+          </Link>
+        </div>
+      </section>
+    </>
   );
 }

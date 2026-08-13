@@ -81,8 +81,8 @@ const config: Config = {
           8: "var(--chart-8)",
         },
         ink: {
-          DEFAULT: "#111827",
-          deep: "#0A0F1C",
+          DEFAULT: "#1D232A",
+          deep: "#141a20",
         },
       },
       ringColor: {

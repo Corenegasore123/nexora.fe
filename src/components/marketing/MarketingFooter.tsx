@@ -3,43 +3,70 @@ import { Icon } from "@/components/icons/Icon";
 
 export function MarketingFooter() {
   return (
-    <footer className="px-4 py-12 md:px-6">
+    <footer className="bg-[#1D232A] px-4 py-14 md:px-6">
       <div className="marketing-footer-shell">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#72D28E] text-xs font-bold text-[#1D232A]">
                 QS
               </span>
-              <p className="text-lg font-bold">QuantScope</p>
+              <p className="text-lg font-bold text-[#F2FFF5]">QuantScope</p>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
               Intelligent quantity platform for engineers — OCR, computer vision, and deterministic
               calculations with full auditability.
             </p>
-            <p className="mt-3 text-xs uppercase tracking-widest text-white/40">
+            <p className="mt-3 text-xs uppercase tracking-widest text-white/35">
               One platform · Verified quantities · Full audit trail
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Product</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/45">Product</p>
             <ul className="mt-4 space-y-3 text-sm text-white/70">
-              <li><Link href="/how-it-works" className="inline-flex items-center gap-2 hover:text-primary"><Icon name="layers" size={14} />How It Works</Link></li>
-              <li><Link href="/features" className="inline-flex items-center gap-2 hover:text-primary"><Icon name="sparkles" size={14} />Features</Link></li>
-              <li><Link href="/sign-up" className="inline-flex items-center gap-2 hover:text-primary"><Icon name="arrow-right" size={14} />Get Started</Link></li>
+              <li>
+                <Link href="/how-it-works" className="inline-flex items-center gap-2 transition-colors hover:text-[#72D28E]">
+                  <Icon name="layers" size={14} />
+                  How It Works
+                </Link>
+              </li>
+              <li>
+                <Link href="/features" className="inline-flex items-center gap-2 transition-colors hover:text-[#72D28E]">
+                  <Icon name="sparkles" size={14} />
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link href="/sign-up" className="inline-flex items-center gap-2 transition-colors hover:text-[#72D28E]">
+                  <Icon name="arrow-right" size={14} />
+                  Get Started
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Company</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/45">Company</p>
             <ul className="mt-4 space-y-3 text-sm text-white/70">
-              <li><Link href="/about" className="hover:text-primary">About</Link></li>
-              <li><Link href="/contact" className="hover:text-primary">Contact</Link></li>
-              <li><Link href="/sign-in" className="hover:text-primary">Sign In</Link></li>
+              <li>
+                <Link href="/about" className="transition-colors hover:text-[#72D28E]">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="transition-colors hover:text-[#72D28E]">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/sign-in" className="transition-colors hover:text-[#72D28E]">
+                  Sign In
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
       </div>
-      <p className="mt-6 text-center text-xs text-foreground-placeholder">
+      <p className="mt-8 text-center text-xs text-white/35">
         © {new Date().getFullYear()} QuantScope · Deterministic engineering calculations
       </p>
     </footer>

@@ -47,10 +47,10 @@ export function LandingPage() {
     <>
       {/* Cinematic hero */}
       <section className="marketing-hero marketing-hero-grid relative min-h-[92vh]">
-        <div className="absolute inset-0 bg-gradient-to-br from-ink via-[#0a1628] to-ink-deep" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1D232A] via-[#141a20] to-[#0f1419]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1D232A] via-transparent to-transparent" />
 
-        <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-6 pb-16 pt-32 md:min-h-[92vh] md:pb-20 md:pt-36">
+        <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-6 pb-16 pt-36 md:min-h-[92vh] md:pb-20 md:pt-40">
           <div className="grid items-end gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-white/80 backdrop-blur-sm">
@@ -97,17 +97,20 @@ export function LandingPage() {
       </section>
 
       {/* Workflow */}
-      <section className="bg-surface py-24">
+      <section className="border-b border-border bg-surface py-24">
         <div className="mx-auto max-w-7xl px-6">
           <p className="eyebrow text-center">Product Workflow</p>
           <h2 className="page-title mt-3 text-center">Five steps to verified quantities</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-foreground-secondary">
+            A structured pipeline from upload to export — every step auditable and deterministic.
+          </p>
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
             {WORKFLOW.map((w) => (
-              <div key={w.step} className="card-raised group">
-                <IconCircle name={w.icon} size={18} className="h-11 w-11" />
+              <div key={w.step} className="card-raised group transition-all hover:border-primary/30 hover:shadow-elevated">
+                <IconCircle name={w.icon} size={18} className="h-11 w-11 transition-colors group-hover:border-primary/40" />
                 <p className="mt-4 font-mono text-xs text-primary">{w.step}</p>
                 <h3 className="mt-1 font-semibold text-foreground">{w.title}</h3>
-                <p className="mt-2 text-sm text-foreground-secondary">{w.desc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{w.desc}</p>
               </div>
             ))}
           </div>
@@ -115,7 +118,7 @@ export function LandingPage() {
       </section>
 
       {/* Platform spotlight — split dark section */}
-      <section className="bg-ink py-24 text-[#f8fafc]">
+      <section className="bg-[#1D232A] py-24 text-[#F2FFF5]">
         <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">Analysis Workspace</p>
@@ -159,7 +162,7 @@ export function LandingPage() {
       </section>
 
       {/* Why choose */}
-      <section className="py-24">
+      <section className="bg-background py-24">
         <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
           <div>
             <p className="eyebrow">The QuantScope difference</p>
@@ -180,7 +183,7 @@ export function LandingPage() {
               ))}
             </ul>
           </div>
-          <div className="relative rounded-3xl border border-border bg-gradient-to-br from-primary-soft to-surface p-8 shadow-elevated">
+          <div className="relative rounded-3xl border border-border bg-surface p-8 shadow-elevated dark:bg-gradient-to-br dark:from-primary-soft/50 dark:to-surface">
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: "Projects", value: "12", icon: "folder" as IconName },
@@ -188,7 +191,7 @@ export function LandingPage() {
                 { label: "Reports", value: "31", icon: "file-text" as IconName },
                 { label: "Accuracy", value: "99%", icon: "target" as IconName },
               ].map((m) => (
-                <div key={m.label} className="rounded-2xl border border-border bg-surface p-4">
+                <div key={m.label} className="rounded-2xl border border-border bg-background p-4 dark:bg-surface">
                   <Icon name={m.icon} size={18} className="text-primary" />
                   <p className="mt-3 text-2xl font-bold text-foreground">{m.value}</p>
                   <p className="text-xs text-foreground-muted">{m.label}</p>
@@ -222,7 +225,7 @@ export function LandingPage() {
       </section>
 
       {/* Security */}
-      <section className="py-24">
+      <section className="border-t border-border bg-surface py-24">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <IconCircle name="shield" size={22} className="mx-auto h-14 w-14" />
           <h2 className="page-title mt-6">Enterprise-grade data isolation</h2>
@@ -234,7 +237,7 @@ export function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-primary-soft/40 py-24">
+      <section className="border-t border-border bg-primary-soft/30 py-24 dark:bg-primary-soft/20">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-3xl font-bold text-foreground md:text-4xl">
             Turn your technical diagrams into verified quantities.

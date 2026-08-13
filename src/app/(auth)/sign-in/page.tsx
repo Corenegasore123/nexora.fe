@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { login, ApiError } from "@/lib/api";
 import { Icon } from "@/components/icons/Icon";
-import { AuthField, AuthFormSuspense, AuthLayout, useAuthRedirect } from "@/components/marketing/AuthLayout";
+import { AuthCard, AuthField, AuthFormSuspense, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
 function SignInForm() {
   const { redirect, router } = useAuthRedirect();
@@ -28,27 +28,22 @@ function SignInForm() {
   };
 
   return (
-    <AuthLayout
-      badge="Workspace access"
-      title="Sign in."
-      subtitle="Secure access to your projects, calculations, measurement review, and report exports."
+    <AuthCard
+      title="Welcome back"
+      subtitle="Sign in to access your workspace, projects, and calculations."
       footer={
         <p className="text-center text-sm text-foreground-muted">
           No account?{" "}
-          <Link href="/sign-up" className="inline-link">
+          <Link href="/sign-up" className="inline-link font-medium">
             Create one
           </Link>
         </p>
       }
     >
-      <p className="eyebrow">Sign in</p>
-      <h2 className="mt-2 text-2xl font-bold text-foreground">Welcome back</h2>
-      <p className="mt-1 text-sm text-foreground-secondary">Use your credentials to continue.</p>
-
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <AuthField
           id="email"
-          label="Email"
+          label="Email address"
           type="email"
           icon="mail"
           value={email}
@@ -64,14 +59,15 @@ function SignInForm() {
           value={password}
           onChange={setPassword}
           autoComplete="current-password"
+          password
         />
         {error && <div className="alert-error text-sm">{error}</div>}
-        <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2">
-          {loading ? "Signing in…" : "Access workspace"}
+        <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2 py-3.5">
+          {loading ? "Signing in…" : "Sign in"}
           {!loading && <Icon name="arrow-right" size={16} />}
         </button>
       </form>
-    </AuthLayout>
+    </AuthCard>
   );
 }
 
