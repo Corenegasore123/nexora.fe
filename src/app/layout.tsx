@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Montserrat, JetBrains_Mono } from "next/font/google";
-import { AppHeader } from "@/components/AppHeader";
 import { ThemeScript } from "@/components/ThemeScript";
 import "./globals.css";
 
@@ -19,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "QuantScope — Intelligent Building Quantity Platform",
   description:
-    "Upload building diagrams for automatic measurement extraction and auditable quantity calculations",
+    "Transform technical diagrams into structured measurements and verified calculations",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,15 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeScript />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <AppHeader />
-        <main className="animate-fade-in">{children}</main>
-        <footer className="mt-auto border-t border-border bg-surface py-8">
-          <div className="mx-auto max-w-6xl px-6">
-            <p className="text-xs uppercase tracking-widest text-foreground-placeholder">
-              QuantScope · Deterministic Calculations · v1.0.0
-            </p>
-          </div>
-        </footer>
+        {children}
       </body>
     </html>
   );

@@ -18,7 +18,7 @@ export function NewProjectForm() {
     setError(null);
     try {
       const { project } = await createProject(name, description || undefined);
-      router.push(`/projects/${project.id}`);
+      router.push(`/app/projects/${project.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create project");
       setLoading(false);

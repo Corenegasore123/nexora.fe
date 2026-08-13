@@ -99,7 +99,7 @@ export function ComparisonView({ jobId }: { jobId: string }) {
                 <td>
                   {row.type !== "baseline" && (
                     <Link
-                      href={`/calculations/${row.id}`}
+                      href={`/app/history/${row.id}`}
                       className="text-xs text-foreground-muted hover:text-primary"
                     >
                       Open

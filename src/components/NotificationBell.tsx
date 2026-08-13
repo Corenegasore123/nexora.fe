@@ -58,7 +58,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative nav-link"
+        className="rounded-lg px-2 py-1 text-xs font-medium text-foreground-muted hover:bg-pending-bg hover:text-primary"
         aria-label="Notifications"
       >
         Alerts

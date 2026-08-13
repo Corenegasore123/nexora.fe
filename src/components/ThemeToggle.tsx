@@ -2,39 +2,77 @@
 
 import { useEffect, useState } from "react";
 
-type Theme = "light" | "dark";
+type Theme = "light" | "dark" | "system";
 
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = localStorage.getItem("quantscope-theme");
-  if (stored === "dark" || stored === "light") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+function resolveDark(theme: Theme): boolean {
+  if (theme === "dark") return true;
+  if (theme === "light") return false;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle("dark", resolveDark(theme));
+}
+
+function getStoredTheme(): Theme {
+  if (typeof window === "undefined") return "system";
+  const stored = localStorage.getItem("quantscope-theme");
+  if (stored === "dark" || stored === "light" || stored === "system") return stored;
+  return "system";
+}
+
+export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "settings" }) {
+  const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
-    const initial = getInitialTheme();
+    const initial = getStoredTheme();
     setTheme(initial);
-    document.documentElement.classList.toggle("dark", initial === "dark");
+    applyTheme(initial);
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => {
+      if (getStoredTheme() === "system") applyTheme("system");
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const toggle = () => {
-    const next: Theme = theme === "light" ? "dark" : "light";
+  const select = (next: Theme) => {
     setTheme(next);
     localStorage.setItem("quantscope-theme", next);
-    document.documentElement.classList.toggle("dark", next === "dark");
+    applyTheme(next);
   };
+
+  if (variant === "settings") {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {(["light", "dark", "system"] as Theme[]).map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => select(t)}
+            className={`rounded-lg border px-4 py-2 text-sm capitalize transition-colors ${
+              theme === t
+                ? "border-primary bg-primary-soft text-primary"
+                : "border-border text-foreground-secondary hover:border-border-strong"
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <button
       type="button"
-      onClick={toggle}
-      className="nav-link"
-      aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+      onClick={() => select(theme === "light" ? "dark" : theme === "dark" ? "system" : "light")}
+      className="rounded-lg px-2 py-1 text-xs font-medium uppercase tracking-wider text-foreground-muted hover:bg-pending-bg hover:text-foreground"
+      aria-label="Cycle theme"
+      title={`Theme: ${theme}`}
     >
-      {theme === "light" ? "Dark" : "Light"}
+      {theme === "light" ? "Light" : theme === "dark" ? "Dark" : "System"}
     </button>
   );
 }

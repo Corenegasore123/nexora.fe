@@ -81,7 +81,7 @@ export function CalculationEditor({
         }
       }
       const { jobId: newId } = await createScenario(jobId, scenarioName, overrides);
-      window.location.href = `/calculations/${newId}`;
+      window.location.href = `/app/history/${newId}`;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Scenario failed");
       setLoading(false);
@@ -213,7 +213,7 @@ export function CalculationEditor({
             {scenarios.map((s) => (
               <a
                 key={s.id}
-                href={`/calculations/${s.id}`}
+                href={`/app/history/${s.id}`}
                 className="card-raised flex items-center justify-between hover:border-border-strong"
               >
                 <p className="text-sm text-foreground">{s.scenarioName ?? "Scenario"}</p>
