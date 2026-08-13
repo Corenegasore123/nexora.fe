@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getProjects, Project } from "@/lib/api";
 import { Icon } from "@/components/icons/Icon";
 import { useSetAppPageMeta } from "@/components/app/AppPageContext";
+import { NewProjectOverlay } from "@/components/app/NewProjectOverlay";
 import { SkeletonTable } from "@/components/ui/Skeleton";
 
 type ProjectFilter = "all" | Project["status"];
@@ -120,11 +122,45 @@ function ProjectTable({ projects }: { projects: Project[] }) {
 }
 
 export default function ProjectsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="dashboard-shell">
+          <div className="mt-6">
+            <SkeletonTable rows={6} />
+          </div>
+        </div>
+      }
+    >
+      <ProjectsPageContent />
+    </Suspense>
+  );
+}
+
+function ProjectsPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<ProjectFilter>("all");
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [createOpen, setCreateOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("create") === "1") {
+      setCreateOpen(true);
+    }
+  }, [searchParams]);
+
+  const closeCreate = () => {
+    setCreateOpen(false);
+    if (searchParams.get("create")) {
+      router.replace("/app/projects", { scroll: false });
+    }
+  };
+
+  const openCreate = () => setCreateOpen(true);
 
   useEffect(() => {
     getProjects()
@@ -189,6 +225,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="dashboard-shell">
+      <NewProjectOverlay open={createOpen} onClose={closeCreate} />
       <div className="dashboard-metrics">
         <div className="dashboard-metric">
           <span className="dashboard-metric-label">Total projects</span>
@@ -219,9 +256,9 @@ export default function ProjectsPage() {
               Search, filter, and browse your workspaces.
             </p>
           </div>
-          <Link href="/app/projects/new" className="dashboard-section-link">
+          <button type="button" onClick={openCreate} className="dashboard-section-link">
             New project
-          </Link>
+          </button>
         </div>
 
         <div className="projects-toolbar">
@@ -280,9 +317,9 @@ export default function ProjectsPage() {
             <p className="text-sm font-medium text-foreground">{emptyMessage.title}</p>
             <p className="mt-1 text-sm text-foreground-muted">{emptyMessage.description}</p>
             {projects.length === 0 && (
-              <Link href="/app/projects/new" className="btn-primary mt-4 inline-flex">
+              <button type="button" onClick={openCreate} className="btn-primary mt-4 inline-flex">
                 Create project
-              </Link>
+              </button>
             )}
           </div>
         ) : viewMode === "table" ? (

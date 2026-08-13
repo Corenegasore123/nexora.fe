@@ -471,6 +471,134 @@ body {
     @apply block rounded-xl border border-border bg-background p-5 transition-colors hover:border-border-strong hover:bg-surface;
   }
 
+  .project-overlay {
+    @apply fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4;
+    animation: project-overlay-in 0.2s ease-out;
+  }
+
+  .project-overlay-backdrop {
+    @apply absolute inset-0 border-0;
+    background-color: color-mix(in srgb, #354554 45%, transparent);
+    backdrop-filter: blur(4px);
+    animation: project-overlay-in 0.2s ease-out;
+  }
+
+  .project-overlay-panel {
+    @apply relative flex w-full max-w-md flex-col overflow-hidden border border-border bg-surface shadow-modal;
+    border-radius: 1.25rem 1.25rem 0 0;
+    animation: project-panel-in 0.24s ease-out;
+  }
+
+  @media (min-width: 640px) {
+    .project-overlay-panel {
+      border-radius: 1rem;
+    }
+  }
+
+  .project-overlay-header {
+    @apply flex items-start justify-between gap-4 px-6 py-5;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary-soft) 55%, var(--color-surface)),
+      var(--color-surface)
+    );
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 85%, transparent);
+  }
+
+  .project-overlay-heading {
+    @apply flex min-w-0 items-start gap-3;
+  }
+
+  .project-overlay-icon {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-[var(--color-on-accent)] shadow-sm;
+  }
+
+  .project-overlay-title {
+    @apply text-base font-semibold tracking-tight text-foreground;
+  }
+
+  .project-overlay-subtitle {
+    @apply mt-1 text-sm leading-relaxed text-foreground-secondary;
+  }
+
+  .project-overlay-close {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted transition-colors hover:border-border-strong hover:text-foreground;
+  }
+
+  .project-form {
+    @apply flex flex-col;
+  }
+
+  .project-form-body {
+    @apply space-y-5 px-6 py-6;
+  }
+
+  .project-form-field {
+    @apply space-y-2;
+  }
+
+  .project-form-label-row {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .project-form-label {
+    @apply block text-sm font-medium text-foreground;
+  }
+
+  .project-form-required {
+    @apply text-error;
+  }
+
+  .project-form-input {
+    @apply w-full rounded-xl border border-border-strong bg-[var(--color-input-background)] px-4 py-3 text-sm text-foreground outline-none transition-all placeholder:text-foreground-placeholder;
+  }
+
+  .project-form-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  .project-form-counter {
+    @apply text-[11px] font-medium tabular-nums text-foreground-muted;
+  }
+
+  .project-form-error {
+    @apply mx-6 mb-4 rounded-xl border border-error-border bg-error-bg px-4 py-3 text-sm text-error;
+  }
+
+  .project-form-footer {
+    @apply flex flex-col-reverse gap-3 border-t border-border px-6 py-4 sm:flex-row sm:justify-end;
+    background-color: color-mix(in srgb, var(--color-background) 65%, var(--color-surface));
+  }
+
+  .project-form-btn {
+    @apply w-full sm:w-auto;
+  }
+
+  @keyframes project-overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes project-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .project-form-section {
+    @apply max-w-2xl;
+  }
+
   .dashboard-section {
     @apply card space-y-0 p-0;
   }
@@ -480,7 +608,7 @@ body {
   }
 
   .dashboard-section-link {
-    @apply shrink-0 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
+    @apply shrink-0 border-0 bg-transparent p-0 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
   }
 
   .dashboard-table-wrap {

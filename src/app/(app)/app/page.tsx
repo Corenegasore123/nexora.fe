@@ -29,7 +29,7 @@ function formatStatus(status: string) {
 
 const QUICK_ACTIONS = [
   { href: "/app/calculator", label: "New calculation", icon: "plus-circle" as const, primary: true },
-  { href: "/app/projects/new", label: "New project", icon: "folder" as const },
+  { href: "/app/projects?create=1", label: "New project", icon: "folder" as const },
   { href: "/app/projects", label: "Browse projects", icon: "layout-dashboard" as const },
   { href: "/app/history", label: "View history", icon: "history" as const },
   { href: "/app/reports", label: "Reports", icon: "file-text" as const },
@@ -220,7 +220,7 @@ export default function DashboardPage() {
                 title="No projects yet"
                 description="Create a project to organize documents and calculations."
                 actionLabel="Create project"
-                actionHref="/app/projects/new"
+                actionHref="/app/projects?create=1"
               />
             ) : (
               <div className="dashboard-table-wrap">

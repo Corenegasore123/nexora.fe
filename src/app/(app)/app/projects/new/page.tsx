@@ -1,18 +1,14 @@
-import Link from "next/link";
-import { NewProjectForm } from "@/components/NewProjectForm";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NewProjectPage() {
-  return (
-    <div className="page-shell">
-      <p className="eyebrow">Projects</p>
-      <h1 className="page-title mt-3">New Project</h1>
-      <p className="page-subtitle">Create a workspace for documents and calculations.</p>
-      <NewProjectForm />
-      <p className="mt-8">
-        <Link href="/app/projects" className="text-sm text-foreground-muted hover:text-primary">
-          ← Back to projects
-        </Link>
-      </p>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/app/projects?create=1");
+  }, [router]);
+
+  return null;
 }

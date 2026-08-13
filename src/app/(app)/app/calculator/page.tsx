@@ -190,7 +190,7 @@ function CalculatorContent() {
         )}
         {projects.length === 0 && (
           <p className="mt-4 text-sm text-foreground-muted">
-            <Link href="/app/projects/new" className="text-foreground underline underline-offset-4">
+            <Link href="/app/projects?create=1" className="text-foreground underline underline-offset-4">
               Create a project
             </Link>{" "}
             to organize uploads.
