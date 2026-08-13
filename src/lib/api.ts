@@ -309,3 +309,91 @@ export async function recalculateJob(jobId: string) {
     { method: "POST", body: JSON.stringify({}) }
   );
 }
+
+// ─── Admin ──────────────────────────────────────────────────────────────────
+
+export interface AdminStats {
+  users: number;
+  admins: number;
+  projects: number;
+  calculations: number;
+  completedCalculations: number;
+  pendingCalculations: number;
+  failedCalculations: number;
+  documents: number;
+  auditLogs: number;
+  recentUsers: number;
+  activeSessions: number;
+}
+
+export interface SystemHealth {
+  status: "ready" | "degraded";
+  database: string;
+  redis: string;
+  queue: string;
+  cvService: string;
+  uptimeSeconds: number;
+  nodeVersion: string;
+  env: string;
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+  createdAt: string;
+  emailVerifiedAt: string | null;
+  _count?: { projects: number; calculationJobs: number; sessions: number };
+}
+
+export interface AuditLogEntry {
+  id: string;
+  action: string;
+  resource: string | null;
+  metadata: Record<string, unknown> | null;
+  ipAddress: string | null;
+  createdAt: string;
+  user: { id: string; name: string; email: string } | null;
+}
+
+export async function getAdminStats() {
+  return apiFetch<{ stats: AdminStats; health: SystemHealth }>("/api/admin/stats");
+}
+
+export async function getAdminUsers(params?: { search?: string; page?: number }) {
+  const q = new URLSearchParams();
+  if (params?.search) q.set("search", params.search);
+  if (params?.page) q.set("page", String(params.page));
+  return apiFetch<{ users: AdminUser[]; total: number; page: number; limit: number }>(
+    `/api/admin/users?${q}`
+  );
+}
+
+export async function updateAdminUser(
+  id: string,
+  data: Partial<{ role: "USER" | "ADMIN"; name: string }>
+) {
+  return apiFetch<{ user: AdminUser }>(`/api/admin/users/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getAdminAudit(params?: {
+  action?: string;
+  userId?: string;
+  page?: number;
+}) {
+  const q = new URLSearchParams();
+  if (params?.action) q.set("action", params.action);
+  if (params?.userId) q.set("userId", params.userId);
+  if (params?.page) q.set("page", String(params.page));
+  return apiFetch<{ logs: AuditLogEntry[]; total: number; page: number; limit: number }>(
+    `/api/admin/audit?${q}`
+  );
+}
+
+export async function getAdminAuditActions() {
+  return apiFetch<{ actions: string[] }>("/api/admin/audit/actions");
+}

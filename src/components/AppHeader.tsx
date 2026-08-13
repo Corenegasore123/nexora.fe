@@ -60,6 +60,11 @@ export function AppHeader() {
           ))}
           {!loading && user && (
             <div className="flex items-center gap-4 border-l border-border pl-6">
+              {user.role === "ADMIN" && (
+                <Link href="/admin" className="nav-link hidden sm:inline">
+                  Admin
+                </Link>
+              )}
               <NotificationBell />
               <span className="hidden text-xs text-neutral-500 sm:inline">{user.name}</span>
               <button type="button" onClick={handleLogout} className="nav-link">
