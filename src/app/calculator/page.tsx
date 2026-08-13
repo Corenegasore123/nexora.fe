@@ -3,10 +3,12 @@
 import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { apiFetch, getProjects, Project } from "@/lib/api";
+import { apiUrl, apiFetch, getProjects, Project } from "@/lib/api";
 
 const STATUS_LABELS: Record<string, string> = {
   UPLOADING: "Uploading…",
+  QUEUED: "Queued…",
+  PROCESSING: "Processing…",
   PROCESSING_IMAGE: "Processing image…",
   EXTRACTING_MEASUREMENTS: "Extracting measurements…",
   INTERPRETING_DIAGRAM: "Interpreting diagram…",
@@ -18,6 +20,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 const PIPELINE_STEPS = [
   "UPLOADING",
+  "QUEUED",
   "PROCESSING_IMAGE",
   "EXTRACTING_MEASUREMENTS",
   "INTERPRETING_DIAGRAM",
@@ -72,29 +75,64 @@ function CalculatorContent() {
     [onFileSelect]
   );
 
-  const pollJob = async (jobId: string) => {
+  const pollJob = (jobId: string) => {
     const interval = setInterval(async () => {
       try {
         const job = await apiFetch<{ status: string; errorMessage?: string }>(
           `/api/calculations/${jobId}`
         );
-        setStatus(job.status);
-
-        if (job.status === "COMPLETED") {
-          clearInterval(interval);
-          setLoading(false);
-          router.push(`/calculations/${jobId}`);
-        } else if (job.status === "FAILED") {
-          clearInterval(interval);
-          setLoading(false);
-          setError(job.errorMessage ?? "Processing failed");
-        }
+        handleJobStatus(jobId, job.status, job.errorMessage, () => clearInterval(interval));
       } catch {
         clearInterval(interval);
         setLoading(false);
         setError("Lost connection while processing");
       }
     }, 1500);
+  };
+
+  const handleJobStatus = (
+    jobId: string,
+    jobStatus: string,
+    errorMessage: string | undefined,
+    cleanup: () => void
+  ) => {
+    setStatus(jobStatus);
+    if (jobStatus === "COMPLETED") {
+      cleanup();
+      setLoading(false);
+      router.push(`/calculations/${jobId}`);
+    } else if (jobStatus === "FAILED") {
+      cleanup();
+      setLoading(false);
+      setError(errorMessage ?? "Processing failed");
+    }
+  };
+
+  const watchJob = (jobId: string) => {
+    const es = new EventSource(apiUrl(`/api/calculations/${jobId}/stream`));
+
+    es.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data) as {
+          status: string;
+          message?: string;
+          fallback?: string;
+        };
+        if (data.fallback === "poll") {
+          es.close();
+          pollJob(jobId);
+          return;
+        }
+        handleJobStatus(jobId, data.status, data.message, () => es.close());
+      } catch {
+        // ignore malformed events
+      }
+    };
+
+    es.onerror = () => {
+      es.close();
+      pollJob(jobId);
+    };
   };
 
   const handleCalculate = async () => {
@@ -114,7 +152,7 @@ function CalculatorContent() {
         headers: {},
       });
       setStatus(data.status);
-      pollJob(data.jobId);
+      watchJob(data.jobId);
     } catch (err) {
       setLoading(false);
       setError(err instanceof Error ? err.message : "Upload failed");
