@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState, Suspense } from "react";
 import { register, ApiError } from "@/lib/api";
 import { Icon } from "@/components/icons/Icon";
-import { AuthCard, AuthField, useAuthRedirect } from "@/components/marketing/AuthLayout";
+import { AuthSplit, AuthField, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
 function SignUpForm() {
   const { redirect, router } = useAuthRedirect();
@@ -30,13 +30,19 @@ function SignUpForm() {
   };
 
   return (
-    <AuthCard
-      title="Create your account"
-      subtitle="Start uploading diagrams and running verified calculations."
+    <AuthSplit
+      badge="Get started"
+      brandTitle="Create account."
+      brandSubtitle="Start uploading diagrams, running verified calculations, and exporting audit-ready reports."
+      brandTags={["Upload", "Analyze", "Export"]}
+      brandFooter="Free to start · No credit card required"
+      formEyebrow="Register"
+      formTitle="Get started free"
+      formSubtitle="Create your workspace in under a minute."
       footer={
         <p className="text-center text-sm text-foreground-muted">
           Already have an account?{" "}
-          <Link href="/sign-in" className="inline-link font-medium">
+          <Link href="/sign-in" className="inline-link font-bold">
             Sign in
           </Link>
         </p>
@@ -55,7 +61,7 @@ function SignUpForm() {
         />
         <AuthField
           id="email"
-          label="Email address"
+          label="Email"
           type="email"
           icon="mail"
           value={email}
@@ -70,6 +76,7 @@ function SignUpForm() {
           icon="lock"
           value={password}
           onChange={setPassword}
+          placeholder="Password"
           autoComplete="new-password"
           password
         />
@@ -80,16 +87,17 @@ function SignUpForm() {
           icon="lock"
           value={confirmPassword}
           onChange={setConfirmPassword}
+          placeholder="Confirm password"
           autoComplete="new-password"
           password
         />
-        {error && <div className="alert-error text-sm">{error}</div>}
-        <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2 py-3.5">
+        {error && <div className="alert-error text-sm font-medium">{error}</div>}
+        <button type="submit" disabled={loading} className="btn-auth-submit">
           {loading ? "Creating account…" : "Create account"}
           {!loading && <Icon name="arrow-right" size={16} />}
         </button>
       </form>
-    </AuthCard>
+    </AuthSplit>
   );
 }
 

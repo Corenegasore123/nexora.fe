@@ -242,7 +242,19 @@ body {
   }
 
   .marketing-nav-shell {
-    @apply mx-auto flex h-[4.25rem] max-w-6xl items-center rounded-full border border-white/10 bg-[#354554]/95 px-6 shadow-elevated backdrop-blur-xl;
+    @apply mx-auto flex h-[4.25rem] w-full max-w-6xl items-center rounded-full border border-white/10 bg-[#354554]/95 px-6 shadow-elevated backdrop-blur-xl;
+  }
+
+  .marketing-wrap {
+    @apply px-4;
+  }
+
+  .marketing-inner {
+    @apply mx-auto w-full max-w-6xl;
+  }
+
+  .marketing-cta-card {
+    @apply relative overflow-hidden rounded-3xl border border-[#354554]/20 bg-[#354554] p-8 shadow-elevated md:p-10;
   }
 
   .btn-marketing-signin {
@@ -265,90 +277,44 @@ body {
     @apply btn-marketing border-2 border-primary bg-surface text-primary hover:bg-primary-soft;
   }
 
+  .marketing-footer-wrap {
+    @apply bg-[#3d4f5c] py-14;
+  }
+
   .marketing-footer-shell {
-    @apply mx-auto max-w-6xl rounded-3xl border border-white/10 bg-[#354554] px-8 py-14 text-white shadow-elevated md:px-12;
+    @apply w-full rounded-3xl border border-black/20 bg-[#2a3844] px-8 py-14 text-white shadow-modal md:px-12;
   }
 
   .marketing-page-hero {
-    @apply border-b border-border bg-surface px-6 pb-16 pt-28 md:pb-20 md:pt-32;
+    @apply border-b border-border bg-surface pb-16 pt-28 text-center md:pb-20 md:pt-32;
   }
 
-  /* Auth — centered form card */
+  .marketing-page-hero .page-subtitle,
+  .marketing-page-hero .page-title {
+    @apply mx-auto;
+  }
+
+  /* Auth — split panel modal */
   .auth-page-bg {
     background:
       radial-gradient(ellipse 80% 60% at 50% -10%, var(--color-primary-soft), transparent),
       var(--color-background);
   }
 
-  .auth-card {
-    @apply relative w-full max-w-[420px] rounded-2xl border border-border bg-surface p-8 shadow-modal md:p-10;
-  }
-
-  .auth-card-toolbar {
-    @apply absolute right-4 top-4 flex items-center gap-1;
-  }
-
-  .auth-close-btn {
-    @apply inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground-muted transition-colors hover:bg-pending-bg hover:text-foreground;
-  }
-
-  .auth-logo {
-    @apply mx-auto flex w-fit items-center gap-2.5;
-  }
-
-  .auth-logo-mark {
-    @apply flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-xs font-bold text-[var(--color-on-primary)];
-  }
-
-  .auth-logo-text {
-    @apply text-base font-bold tracking-tight text-foreground;
-  }
-
-  .auth-card-header {
-    @apply mt-8 text-center;
-  }
-
-  .auth-card-title {
-    @apply text-2xl font-bold tracking-tight text-foreground;
-  }
-
-  .auth-card-subtitle {
-    @apply mt-2 text-sm leading-relaxed text-foreground-secondary;
-  }
-
-  .auth-card-body {
-    @apply mt-8;
-  }
-
-  .auth-card-footer {
-    @apply mt-8 border-t border-border pt-6;
-  }
-
-  .auth-label {
-    @apply mb-2 block text-xs font-medium uppercase tracking-wider text-foreground-muted;
-  }
-
-  .input-action {
-    @apply absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-foreground-muted transition-colors hover:bg-pending-bg hover:text-foreground;
-  }
-
-  /* 404 */
-  .not-found-page {
-    background:
-      radial-gradient(ellipse 70% 50% at 50% 0%, var(--color-primary-soft), transparent),
-      var(--color-background);
-  }
-
-  .not-found-card {
-    @apply w-full max-w-lg rounded-2xl border border-border bg-surface px-8 py-12 shadow-elevated md:px-12;
-  }
-
   .auth-split {
-    @apply mx-auto grid min-h-[calc(100vh-8rem)] max-w-5xl overflow-hidden rounded-3xl border border-border bg-surface shadow-modal md:grid-cols-2;
+    @apply mx-auto grid w-full max-w-6xl overflow-hidden rounded-3xl border border-border bg-surface shadow-modal md:grid-cols-2;
   }
 
   .auth-split-brand {
-    @apply relative flex flex-col justify-between bg-ink p-8 text-[#f8fafc] md:p-10;
+    @apply relative overflow-hidden;
+  }
+
+  .auth-close-btn {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted shadow-sm transition-colors hover:border-border-strong hover:bg-pending-bg hover:text-foreground;
+  }
+
+  .auth-label {
+    @apply mb-2 block text-xs font-bold uppercase tracking-wider text-foreground-muted;
   }
 
   .input-with-icon {
@@ -360,6 +326,25 @@ body {
   }
 
   .input-icon {
-    @apply pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-foreground-muted;
+    @apply pointer-events-none absolute left-3.5 top-1/2 z-[1] -translate-y-1/2 text-foreground-muted;
+  }
+
+  .input-action {
+    @apply absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-foreground-muted transition-colors hover:bg-pending-bg hover:text-foreground;
+  }
+
+  .btn-auth-submit {
+    @apply flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3.5 text-sm font-bold uppercase tracking-wide text-[var(--color-on-accent)] transition-all hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* 404 */
+  .not-found-page {
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, var(--color-primary-soft), transparent),
+      var(--color-background);
+  }
+
+  .not-found-card {
+    @apply w-full max-w-lg rounded-2xl border border-border bg-surface px-8 py-12 shadow-elevated md:px-12;
   }
 }

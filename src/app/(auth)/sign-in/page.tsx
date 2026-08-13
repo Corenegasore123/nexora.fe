@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { login, ApiError } from "@/lib/api";
 import { Icon } from "@/components/icons/Icon";
-import { AuthCard, AuthField, AuthFormSuspense, useAuthRedirect } from "@/components/marketing/AuthLayout";
+import { AuthSplit, AuthField, AuthFormSuspense, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
 function SignInForm() {
   const { redirect, router } = useAuthRedirect();
@@ -28,13 +28,19 @@ function SignInForm() {
   };
 
   return (
-    <AuthCard
-      title="Welcome back"
-      subtitle="Sign in to access your workspace, projects, and calculations."
+    <AuthSplit
+      badge="Workspace access"
+      brandTitle="Sign in."
+      brandSubtitle="Secure access to your projects, calculations, measurement review, and report exports."
+      brandTags={["OCR", "Calculations", "Audit trail"]}
+      brandFooter="Deterministic logic · Full traceability · Team workspaces"
+      formEyebrow="Sign in"
+      formTitle="Welcome back"
+      formSubtitle="Use your credentials to continue."
       footer={
         <p className="text-center text-sm text-foreground-muted">
           No account?{" "}
-          <Link href="/sign-up" className="inline-link font-medium">
+          <Link href="/sign-up" className="inline-link font-bold">
             Create one
           </Link>
         </p>
@@ -43,7 +49,7 @@ function SignInForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <AuthField
           id="email"
-          label="Email address"
+          label="Email"
           type="email"
           icon="mail"
           value={email}
@@ -58,16 +64,17 @@ function SignInForm() {
           icon="lock"
           value={password}
           onChange={setPassword}
+          placeholder="Password"
           autoComplete="current-password"
           password
         />
-        {error && <div className="alert-error text-sm">{error}</div>}
-        <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2 py-3.5">
-          {loading ? "Signing in…" : "Sign in"}
+        {error && <div className="alert-error text-sm font-medium">{error}</div>}
+        <button type="submit" disabled={loading} className="btn-auth-submit">
+          {loading ? "Signing in…" : "Access workspace"}
           {!loading && <Icon name="arrow-right" size={16} />}
         </button>
       </form>
-    </AuthCard>
+    </AuthSplit>
   );
 }
 

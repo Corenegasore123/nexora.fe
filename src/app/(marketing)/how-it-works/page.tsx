@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { ProductFlowVisual } from "@/components/marketing/ProductFlowVisual";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
+import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { MarketingCta } from "@/components/marketing/MarketingCta";
 
 const STEPS = [
   {
@@ -84,53 +85,55 @@ export default function HowItWorksPage() {
   return (
     <>
       <section className="marketing-page-hero">
-        <div className="mx-auto max-w-7xl">
+        <MarketingContainer>
           <p className="eyebrow">How It Works</p>
           <h1 className="page-title mt-3 max-w-3xl">From upload to verified quantity</h1>
           <p className="page-subtitle mt-4">
             QuantScope follows a structured five-step pipeline designed for engineering accuracy.
             Every measurement, formula, and result is traceable from source diagram to final report.
           </p>
-        </div>
+        </MarketingContainer>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="grid items-start gap-16 lg:grid-cols-2">
-          <div className="space-y-10">
-            {STEPS.map((step, i) => (
-              <div key={step.title} className="flex gap-5">
-                <IconCircle name={step.icon} size={18} className="mt-1 h-11 w-11 shrink-0" />
-                <div>
-                  <p className="font-mono text-xs text-primary">Step {String(i + 1).padStart(2, "0")}</p>
-                  <h2 className="mt-1 text-xl font-bold text-foreground">{step.title}</h2>
-                  <p className="mt-2 text-foreground-secondary">{step.summary}</p>
-                  <ul className="mt-4 space-y-2">
-                    {step.details.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-sm text-foreground-secondary">
-                        <Icon name="check" size={14} className="mt-0.5 shrink-0 text-primary" />
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
+      <section className="py-20">
+        <MarketingContainer>
+          <div className="grid items-start gap-16 lg:grid-cols-2">
+            <div className="space-y-10">
+              {STEPS.map((step, i) => (
+                <div key={step.title} className="flex gap-5">
+                  <IconCircle name={step.icon} size={18} className="mt-1 h-11 w-11 shrink-0" />
+                  <div>
+                    <p className="font-mono text-xs text-primary">Step {String(i + 1).padStart(2, "0")}</p>
+                    <h2 className="mt-1 text-xl font-bold text-foreground">{step.title}</h2>
+                    <p className="mt-2 text-foreground-secondary">{step.summary}</p>
+                    <ul className="mt-4 space-y-2">
+                      {step.details.map((d) => (
+                        <li key={d} className="flex items-start gap-2 text-sm text-foreground-secondary">
+                          <Icon name="check" size={14} className="mt-0.5 shrink-0 text-primary" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
+              ))}
+            </div>
+            <div className="sticky top-28">
+              <ProductFlowVisual />
+              <div className="mt-6 rounded-2xl border border-border bg-primary-soft/50 p-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">Typical timeline</p>
+                <p className="mt-2 text-3xl font-bold text-foreground">&lt; 5 minutes</p>
+                <p className="mt-1 text-sm text-foreground-secondary">
+                  From upload to verified export for a standard single-page drawing.
+                </p>
               </div>
-            ))}
-          </div>
-          <div className="sticky top-28">
-            <ProductFlowVisual />
-            <div className="mt-6 rounded-2xl border border-border bg-primary-soft/50 p-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">Typical timeline</p>
-              <p className="mt-2 text-3xl font-bold text-foreground">&lt; 5 minutes</p>
-              <p className="mt-1 text-sm text-foreground-secondary">
-                From upload to verified export for a standard single-page drawing.
-              </p>
             </div>
           </div>
-        </div>
+        </MarketingContainer>
       </section>
 
       <section className="border-y border-border bg-surface py-20">
-        <div className="mx-auto max-w-7xl px-6">
+        <MarketingContainer>
           <h2 className="page-title text-center">Why deterministic logic matters</h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-foreground-secondary">
             Engineering quantities must be defensible. QuantScope separates AI perception from
@@ -149,21 +152,21 @@ export default function HowItWorksPage() {
               </div>
             ))}
           </div>
-        </div>
+        </MarketingContainer>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-20">
-        <h2 className="page-title text-center">Frequently asked questions</h2>
-        <div className="mt-10">
-          <FaqAccordion items={FAQ} />
-        </div>
-        <div className="mt-12 text-center">
-          <Link href="/sign-up" className="btn-primary inline-flex gap-2">
-            Start Free
-            <Icon name="arrow-right" size={16} />
-          </Link>
-        </div>
+      <section className="py-20">
+        <MarketingContainer>
+          <div className="mx-auto max-w-3xl">
+            <h2 className="page-title text-center">Frequently asked questions</h2>
+            <div className="mt-10">
+              <FaqAccordion items={FAQ} />
+            </div>
+          </div>
+        </MarketingContainer>
       </section>
+
+      <MarketingCta />
     </>
   );
 }

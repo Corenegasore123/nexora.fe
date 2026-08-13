@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
+import { MarketingContainer } from "@/components/marketing/MarketingContainer";
+import { MarketingCta } from "@/components/marketing/MarketingCta";
 
 const CATEGORIES = [
   {
@@ -58,22 +59,22 @@ export default function FeaturesPage() {
   return (
     <>
       <section className="marketing-page-hero">
-        <div className="mx-auto max-w-7xl text-center">
+        <MarketingContainer className="text-center">
           <p className="eyebrow">Features</p>
           <h1 className="page-title mt-3">Everything you need for quantity workflows</h1>
           <p className="page-subtitle mx-auto mt-4">
             From automated measurement extraction to verified calculations and professional reports —
             QuantScope covers the full engineering quantity pipeline.
           </p>
-        </div>
+        </MarketingContainer>
       </section>
 
       {CATEGORIES.map((cat, idx) => (
         <section
           key={cat.label}
-          className={`px-6 py-16 ${idx % 2 === 0 ? "bg-background" : "border-y border-border bg-surface"}`}
+          className={`py-16 ${idx % 2 === 0 ? "bg-background" : "border-y border-border bg-surface"}`}
         >
-          <div className="mx-auto max-w-7xl">
+          <MarketingContainer>
             <div className="mb-10 flex items-center gap-3">
               <IconCircle name={cat.icon} size={20} />
               <h2 className="text-2xl font-bold text-foreground">{cat.label}</h2>
@@ -86,53 +87,53 @@ export default function FeaturesPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </MarketingContainer>
         </section>
       ))}
 
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <h2 className="page-title text-center">QuantScope vs manual workflows</h2>
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Capability</th>
-                <th className="text-center">Manual</th>
-                <th className="text-center">QuantScope</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARE.map((row) => (
-                <tr key={row.label}>
-                  <td className="font-medium text-foreground">{row.label}</td>
-                  <td className="text-center">
-                    {row.manual === true ? (
-                      <Icon name="check" size={16} className="mx-auto text-foreground-muted" />
-                    ) : row.manual === false ? (
-                      <span className="text-foreground-placeholder">—</span>
-                    ) : (
-                      <span className="text-xs text-foreground-muted">{row.manual}</span>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    {row.quantscope ? (
-                      <Icon name="check" size={16} className="mx-auto text-primary" />
-                    ) : (
-                      <span className="text-foreground-placeholder">—</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-12 text-center">
-          <Link href="/sign-up" className="btn-primary inline-flex gap-2">
-            Get Started Free
-            <Icon name="arrow-right" size={16} />
-          </Link>
-        </div>
+      <section className="py-20">
+        <MarketingContainer>
+          <div className="mx-auto max-w-4xl">
+            <h2 className="page-title text-center">QuantScope vs manual workflows</h2>
+            <div className="mt-10 overflow-hidden rounded-2xl border border-border">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Capability</th>
+                    <th className="text-center">Manual</th>
+                    <th className="text-center">QuantScope</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARE.map((row) => (
+                    <tr key={row.label}>
+                      <td className="font-medium text-foreground">{row.label}</td>
+                      <td className="text-center">
+                        {row.manual === true ? (
+                          <Icon name="check" size={16} className="mx-auto text-foreground-muted" />
+                        ) : row.manual === false ? (
+                          <span className="text-foreground-placeholder">—</span>
+                        ) : (
+                          <span className="text-xs text-foreground-muted">{row.manual}</span>
+                        )}
+                      </td>
+                      <td className="text-center">
+                        {row.quantscope ? (
+                          <Icon name="check" size={16} className="mx-auto text-primary" />
+                        ) : (
+                          <span className="text-foreground-placeholder">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </MarketingContainer>
       </section>
+
+      <MarketingCta />
     </>
   );
 }

@@ -1,5 +1,7 @@
+import { TechnicalDrawingVisual } from "./TechnicalDrawingVisual";
+
 const STEPS = [
-  { label: "Technical drawing", detail: "JPG · PNG · PDF", accent: false },
+  { label: "Technical drawing", detail: "JPG · PNG · PDF", accent: false, isDrawing: true },
   { label: "Detected measurements", detail: "OCR + CV extraction", accent: true },
   { label: "Mapped variables", detail: "L, W, H → inputs", accent: false },
   { label: "Deterministic calc", detail: "Verified formulas", accent: true },
@@ -9,9 +11,11 @@ const STEPS = [
 export function ProductFlowVisual({
   variant = "light",
   compact = false,
+  drawingOnly = false,
 }: {
   variant?: "light" | "dark";
   compact?: boolean;
+  drawingOnly?: boolean;
 }) {
   const dark = variant === "dark";
   const card = dark
@@ -19,6 +23,23 @@ export function ProductFlowVisual({
     : "border-border bg-surface text-foreground";
   const muted = dark ? "text-white/50" : "text-foreground-muted";
   const accentBg = dark ? "bg-primary/15 border-primary/30" : "bg-primary-soft border-primary/20";
+
+  if (drawingOnly) {
+    return (
+      <div className={`relative w-full ${compact ? "max-w-sm" : "max-w-md"}`}>
+        <div className={`overflow-hidden rounded-xl border shadow-elevated ${card}`}>
+          <div className="border-b border-border bg-[#fafbfc] px-3 py-2 dark:border-white/10 dark:bg-white/5">
+            <p className={`text-[10px] font-semibold uppercase tracking-widest ${muted}`}>
+              Source drawing · Cross-section A-A
+            </p>
+          </div>
+          <div className="p-3">
+            <TechnicalDrawingVisual compact={compact} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative w-full ${compact ? "max-w-md" : "max-w-lg"}`}>
@@ -34,15 +55,17 @@ export function ProductFlowVisual({
             <div key={step.label}>
               <div className={`rounded-xl border px-4 py-3 ${step.accent ? accentBg : card}`}>
                 <div className="flex items-center justify-between gap-3">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium">{step.label}</p>
                     <p className={`text-xs ${muted}`}>{step.detail}</p>
                   </div>
                   {step.result && (
-                    <span className="font-mono text-sm font-semibold text-success">{step.result}</span>
+                    <span className="shrink-0 font-mono text-sm font-semibold text-success">{step.result}</span>
                   )}
-                  {i === 0 && !step.result && (
-                    <div className="h-10 w-14 rounded border border-white/20 bg-[var(--color-image-canvas)]" />
+                  {"isDrawing" in step && step.isDrawing && (
+                    <div className="w-24 shrink-0 overflow-hidden rounded border border-border">
+                      <TechnicalDrawingVisual compact />
+                    </div>
                   )}
                 </div>
               </div>

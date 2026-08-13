@@ -1,6 +1,6 @@
 export default function AuthRouteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="auth-page-bg flex min-h-screen items-center justify-center px-4 py-10">
+    <div className="auth-page-bg flex min-h-screen items-center justify-center px-4 py-8 md:px-6 md:py-12">
       {children}
     </div>
   );
