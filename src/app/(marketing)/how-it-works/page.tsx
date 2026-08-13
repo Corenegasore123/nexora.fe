@@ -1,15 +1,10 @@
-import dynamic from "next/dynamic";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
+import { FaqAccordionLazy } from "@/components/marketing/FaqAccordionLazy";
 import { ProductFlowVisualLazy } from "@/components/marketing/ProductFlowVisualLazy";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
 import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
 import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
-
-const FaqAccordion = dynamic(
-  () => import("@/components/marketing/FaqAccordion").then((m) => m.FaqAccordion),
-  { ssr: false, loading: () => <div className="h-48 animate-pulse rounded-2xl bg-pending-bg/50" aria-hidden /> }
-);
 
 const STEPS = [
   {
@@ -169,7 +164,7 @@ export default function HowItWorksPage() {
           <ScrollReveal animation="blur-up" className="mx-auto max-w-3xl">
             <h2 className="page-title text-center">Frequently asked questions</h2>
             <div className="mt-10">
-              <FaqAccordion items={FAQ} />
+              <FaqAccordionLazy items={FAQ} />
             </div>
           </ScrollReveal>
         </MarketingContainer>
