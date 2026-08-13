@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState, Suspense } from "react";
+import { FormEvent, useState } from "react";
 import { login, ApiError } from "@/lib/api";
+import { Icon } from "@/components/icons/Icon";
+import { AuthField, AuthFormSuspense, AuthLayout, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
 function SignInForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from") ?? "/app";
-
+  const { redirect, router } = useAuthRedirect();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +19,7 @@ function SignInForm() {
     setError(null);
     try {
       await login(email, password);
-      router.push(from.startsWith("/app") ? from : "/app");
+      redirect();
       router.refresh();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Login failed");
@@ -30,64 +28,57 @@ function SignInForm() {
   };
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-6 py-16">
-      <div className="w-full max-w-md">
-        <p className="eyebrow">Sign in</p>
-        <h1 className="page-title mt-3">Welcome back</h1>
-        <p className="page-subtitle">Sign in to access your QuantScope workspace.</p>
-
-        <form onSubmit={handleSubmit} className="mt-10 space-y-5">
-          <div>
-            <label htmlFor="email" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-field w-full"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-2 block text-xs uppercase tracking-wider text-foreground-muted">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field w-full"
-            />
-          </div>
-
-          {error && <div className="alert-error text-sm">{error}</div>}
-
-          <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
-
-        <p className="mt-8 text-center text-sm text-foreground-muted">
+    <AuthLayout
+      badge="Workspace access"
+      title="Sign in."
+      subtitle="Secure access to your projects, calculations, measurement review, and report exports."
+      footer={
+        <p className="text-center text-sm text-foreground-muted">
           No account?{" "}
           <Link href="/sign-up" className="inline-link">
             Create one
           </Link>
         </p>
-      </div>
-    </div>
+      }
+    >
+      <p className="eyebrow">Sign in</p>
+      <h2 className="mt-2 text-2xl font-bold text-foreground">Welcome back</h2>
+      <p className="mt-1 text-sm text-foreground-secondary">Use your credentials to continue.</p>
+
+      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <AuthField
+          id="email"
+          label="Email"
+          type="email"
+          icon="mail"
+          value={email}
+          onChange={setEmail}
+          placeholder="you@company.com"
+          autoComplete="email"
+        />
+        <AuthField
+          id="password"
+          label="Password"
+          type="password"
+          icon="lock"
+          value={password}
+          onChange={setPassword}
+          autoComplete="current-password"
+        />
+        {error && <div className="alert-error text-sm">{error}</div>}
+        <button type="submit" disabled={loading} className="btn-primary flex w-full items-center justify-center gap-2">
+          {loading ? "Signing in…" : "Access workspace"}
+          {!loading && <Icon name="arrow-right" size={16} />}
+        </button>
+      </form>
+    </AuthLayout>
   );
 }
 
 export default function SignInPage() {
   return (
-    <Suspense>
+    <AuthFormSuspense>
       <SignInForm />
-    </Suspense>
+    </AuthFormSuspense>
   );
 }

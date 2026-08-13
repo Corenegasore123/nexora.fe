@@ -9,6 +9,8 @@ import {
   Notification,
 } from "@/lib/api";
 
+import { Icon } from "@/components/icons/Icon";
+
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -58,12 +60,12 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="rounded-lg px-2 py-1 text-xs font-medium text-foreground-muted hover:bg-pending-bg hover:text-primary"
+        className="relative inline-flex items-center justify-center rounded-lg p-2 text-foreground-muted hover:bg-pending-bg hover:text-primary"
         aria-label="Notifications"
       >
-        Alerts
+        <Icon name="bell" size={18} />
         {unreadCount > 0 && (
-          <span className="absolute -right-3 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-[var(--color-on-primary)]">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-[var(--color-on-primary)]">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const apiOrigin = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Prevent Next from using C:\Users\user when a parent lockfile exists
+  outputFileTracingRoot: path.join(process.cwd()),
   async redirects() {
     return [
       { source: "/login", destination: "/sign-in", permanent: true },

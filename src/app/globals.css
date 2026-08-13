@@ -279,4 +279,60 @@ body {
   .inline-link {
     @apply text-primary-active underline underline-offset-4 hover:text-primary;
   }
+
+  /* Marketing — premium public site */
+  .marketing-hero {
+    @apply relative overflow-hidden bg-ink text-[#f8fafc];
+  }
+
+  .marketing-hero-grid {
+    background-image:
+      linear-gradient(rgba(21, 94, 239, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 94, 239, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .marketing-nav-shell {
+    @apply mx-auto mt-4 max-w-6xl rounded-full border border-white/10 bg-[#111827]/80 px-4 py-2 shadow-elevated backdrop-blur-xl;
+  }
+
+  .glass-stat {
+    @apply rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md;
+  }
+
+  .btn-marketing {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-wide transition-all;
+  }
+
+  .btn-marketing-primary {
+    @apply btn-marketing bg-primary text-[var(--color-on-primary)] hover:bg-primary-hover;
+  }
+
+  .btn-marketing-outline {
+    @apply btn-marketing border border-white/30 bg-white/5 text-white hover:border-white/50 hover:bg-white/10;
+  }
+
+  .marketing-footer-shell {
+    @apply mx-auto max-w-6xl rounded-3xl border border-border bg-ink px-8 py-12 text-[#f8fafc] md:px-12;
+  }
+
+  .auth-split {
+    @apply mx-auto grid min-h-[calc(100vh-8rem)] max-w-5xl overflow-hidden rounded-3xl border border-border bg-surface shadow-modal md:grid-cols-2;
+  }
+
+  .auth-split-brand {
+    @apply relative flex flex-col justify-between bg-ink p-8 text-[#f8fafc] md:p-10;
+  }
+
+  .input-with-icon {
+    @apply relative;
+  }
+
+  .input-with-icon .input-field {
+    @apply pl-11;
+  }
+
+  .input-icon {
+    @apply pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-foreground-muted;
+  }
 }

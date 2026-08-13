@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Icon, type IconName } from "@/components/icons/Icon";
 
 type Theme = "light" | "dark" | "system";
 
@@ -20,6 +21,12 @@ function getStoredTheme(): Theme {
   if (stored === "dark" || stored === "light" || stored === "system") return stored;
   return "system";
 }
+
+const THEME_ICON: Record<Theme, IconName> = {
+  light: "sun",
+  dark: "moon",
+  system: "monitor",
+};
 
 export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "settings" }) {
   const [theme, setTheme] = useState<Theme>("system");
@@ -51,12 +58,13 @@ export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "se
             key={t}
             type="button"
             onClick={() => select(t)}
-            className={`rounded-lg border px-4 py-2 text-sm capitalize transition-colors ${
+            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm capitalize transition-colors ${
               theme === t
                 ? "border-primary bg-primary-soft text-primary"
                 : "border-border text-foreground-secondary hover:border-border-strong"
             }`}
           >
+            <Icon name={THEME_ICON[t]} size={16} />
             {t}
           </button>
         ))}
@@ -64,15 +72,18 @@ export function ThemeToggle({ variant = "compact" }: { variant?: "compact" | "se
     );
   }
 
+  const cycle = () => select(theme === "light" ? "dark" : theme === "dark" ? "system" : "light");
+
   return (
     <button
       type="button"
-      onClick={() => select(theme === "light" ? "dark" : theme === "dark" ? "system" : "light")}
-      className="rounded-lg px-2 py-1 text-xs font-medium uppercase tracking-wider text-foreground-muted hover:bg-pending-bg hover:text-foreground"
-      aria-label="Cycle theme"
+      onClick={cycle}
+      className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-foreground-muted hover:bg-pending-bg hover:text-foreground"
+      aria-label={`Theme: ${theme}`}
       title={`Theme: ${theme}`}
     >
-      {theme === "light" ? "Light" : theme === "dark" ? "Dark" : "System"}
+      <Icon name={THEME_ICON[theme]} size={16} />
+      <span className="hidden sm:inline capitalize">{theme}</span>
     </button>
   );
 }
