@@ -63,9 +63,7 @@ export function AppSidebar({
         />
       )}
       <aside
-        className={`app-sidebar fixed inset-y-0 left-0 z-50 w-64 transition-transform lg:static lg:translate-x-0 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        } ${collapsed ? "lg:w-16" : "lg:w-64"}`}
+        className={`app-sidebar lg:relative ${collapsed ? "app-sidebar-collapsed" : ""} ${mobileOpen ? "app-sidebar-mobile app-sidebar-mobile-open" : "app-sidebar-mobile"} lg:translate-x-0`}
       >
         <div className="app-sidebar-header">
           {!collapsed && (

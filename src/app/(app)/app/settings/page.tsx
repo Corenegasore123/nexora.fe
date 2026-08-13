@@ -34,7 +34,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <div className="mx-auto max-w-3xl space-y-6">
+      <div className="w-full max-w-3xl space-y-6">
         <section className="settings-section">
           <div className="settings-section-header">
             <span className="settings-section-icon">
