@@ -119,6 +119,9 @@ export interface DashboardData {
     completedAnalyses: number;
     pendingAnalyses: number;
     documents: number;
+    revisedCalculations: number;
+    correctedMeasurements: number;
+    needsReview: number;
   };
   recentProjects: Project[];
   recentCalculations: Array<{
@@ -127,10 +130,15 @@ export interface DashboardData {
     createdAt: string;
     overallConfidence: number | null;
     image: { filename: string };
-    result: { result: number; unit: string } | null;
+    result: { result: number; unit: string; validation?: { status?: string } } | null;
     project: { id: string; name: string } | null;
   }>;
   recentDocuments: Array<Document & { project: { id: string; name: string } | null }>;
+  needsReview: Array<{
+    id: string;
+    image: { filename: string };
+    result: { result: number; unit: string } | null;
+  }>;
 }
 
 export interface ActivityEntry {

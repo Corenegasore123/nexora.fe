@@ -8,7 +8,8 @@ import { AuthUser, getMe, logout } from "@/lib/api";
 const NAV = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/projects", label: "Projects" },
-  { href: "/calculator", label: "Calculator" },
+  { href: "/upload", label: "Upload", mobileOnly: true },
+  { href: "/calculator", label: "Calculator", desktopOnly: true },
   { href: "/calculations", label: "History" },
   { href: "/rules", label: "Rules" },
 ];
@@ -46,9 +47,13 @@ export function AppHeader() {
         <Link href="/" className="text-lg font-bold tracking-tight text-white">
           QuantScope
         </Link>
-        <nav className="flex items-center gap-8">
+        <nav className="flex items-center gap-4 md:gap-8">
           {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link">
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`nav-link ${"mobileOnly" in item && item.mobileOnly ? "md:hidden" : ""} ${"desktopOnly" in item && item.desktopOnly ? "hidden md:inline" : ""}`}
+            >
               {item.label}
             </Link>
           ))}

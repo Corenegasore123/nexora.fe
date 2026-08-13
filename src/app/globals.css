@@ -107,4 +107,8 @@ body {
   .status-processing {
     @apply border-amber-500/30 bg-amber-500/10 text-amber-400;
   }
+
+  .fab {
+    @apply fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-white text-black shadow-lg transition-transform hover:scale-105 active:scale-95;
+  }
 }
