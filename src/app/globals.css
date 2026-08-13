@@ -789,51 +789,11 @@ body {
   }
 
   .password-strength-bar {
-    @apply h-1 flex-1 rounded-full bg-border transition-colors duration-300;
-  }
-
-  .password-strength-bar-error {
-    @apply bg-error;
-  }
-
-  .password-strength-bar-warning {
-    @apply bg-warning;
-  }
-
-  .password-strength-bar-fair {
-    background-color: color-mix(in srgb, var(--color-warning) 70%, var(--color-accent));
-  }
-
-  .password-strength-bar-good {
-    @apply bg-accent;
-  }
-
-  .password-strength-bar-strong {
-    @apply bg-success;
+    @apply h-2 flex-1 rounded-full transition-colors duration-300;
   }
 
   .password-strength-label {
     @apply text-[11px] font-semibold uppercase tracking-wide;
-  }
-
-  .password-strength-label-error {
-    @apply text-error;
-  }
-
-  .password-strength-label-warning {
-    @apply text-warning;
-  }
-
-  .password-strength-label-fair {
-    @apply text-foreground-secondary;
-  }
-
-  .password-strength-label-good {
-    @apply text-accent;
-  }
-
-  .password-strength-label-strong {
-    @apply text-success;
   }
 
   .marketing-defer {

@@ -37,11 +37,10 @@ export function validateConfirmPassword(password: string, confirm: string): stri
 export type PasswordStrengthResult = {
   bars: 0 | 1 | 2 | 3 | 4;
   label: string;
-  color: "error" | "warning" | "fair" | "good" | "strong";
 };
 
 export function getPasswordStrength(password: string): PasswordStrengthResult {
-  if (!password) return { bars: 0, label: "", color: "error" };
+  if (!password) return { bars: 0, label: "" };
 
   let points = 0;
   if (password.length >= 8) points++;
@@ -50,10 +49,10 @@ export function getPasswordStrength(password: string): PasswordStrengthResult {
   if (/\d/.test(password)) points++;
   if (/[^A-Za-z0-9]/.test(password)) points++;
 
-  if (points <= 1) return { bars: 1, label: "Weak", color: "error" };
-  if (points === 2) return { bars: 2, label: "Fair", color: "warning" };
-  if (points === 3) return { bars: 3, label: "Good", color: "good" };
-  return { bars: 4, label: "Strong", color: "strong" };
+  if (points <= 1) return { bars: 1, label: "Weak" };
+  if (points === 2) return { bars: 2, label: "Fair" };
+  if (points === 3) return { bars: 3, label: "Good" };
+  return { bars: 4, label: "Strong" };
 }
 
 export function validateSignIn(email: string, password: string): FieldErrors {
