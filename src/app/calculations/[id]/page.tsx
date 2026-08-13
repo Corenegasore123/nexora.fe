@@ -43,7 +43,18 @@ interface JobDetail {
     formulaLatex: string;
     result: number;
     unit: string;
-    validation: { status?: string; warnings?: string[] };
+    validation: {
+      status?: string;
+      warnings?: string[];
+      lowConfidenceIds?: string[];
+      provenance?: {
+        provider: string;
+        pipelineVersion: string;
+        preprocessed: boolean;
+        preprocessingOps: string[];
+        fallbackUsed: boolean;
+      };
+    };
   } | null;
 }
 
@@ -105,6 +116,31 @@ export default function CalculationDetailPage() {
         </div>
       </div>
 
+      {job.result?.validation?.status === "needs_review" && (
+        <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4">
+          <p className="text-sm font-medium text-amber-200">Review recommended</p>
+          <p className="mt-1 text-sm text-amber-200/80">
+            Some measurements have low confidence. Verify values before using this result
+            professionally.
+          </p>
+          {job.result.validation.warnings && job.result.validation.warnings.length > 0 && (
+            <ul className="mt-3 space-y-1 text-xs text-amber-200/70">
+              {job.result.validation.warnings.map((w) => (
+                <li key={w}>• {w}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {job.result?.validation?.provenance && (
+        <div className="mt-6 text-xs text-neutral-600">
+          OCR: {job.result.validation.provenance.provider} · Pipeline{" "}
+          {job.result.validation.provenance.pipelineVersion}
+          {job.result.validation.provenance.fallbackUsed && " · Aggressive preprocessing used"}
+        </div>
+      )}
+
       <div className="mt-12 grid gap-8 lg:grid-cols-2">
         <section>
           <h2 className="section-label">Input Image</h2>
@@ -162,7 +198,14 @@ export default function CalculationDetailPage() {
                     <td>{m.value}</td>
                     <td>{m.unit}</td>
                     <td>{(m.confidence * 100).toFixed(0)}%</td>
-                    <td className={`capitalize ${confidenceBadge(cls)}`}>{cls}</td>
+                    <td className={`capitalize ${confidenceBadge(cls)}`}>
+                      {cls}
+                      {job.result?.validation?.lowConfidenceIds?.includes(m.id) && (
+                        <span className="ml-2 text-amber-400" title="Low confidence">
+                          ⚠
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
