@@ -1,33 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Icon } from "@/components/icons/Icon";
 
 export function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
   const [open, setOpen] = useState<number | null>(0);
+  const baseId = useId();
 
   return (
-    <div className="space-y-3">
+    <div className="faq-list">
       {items.map((item, i) => {
         const isOpen = open === i;
+        const panelId = `${baseId}-panel-${i}`;
+        const buttonId = `${baseId}-button-${i}`;
+
         return (
-          <div key={item.q} className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div key={item.q} className={`faq-item ${isOpen ? "faq-item-open" : ""}`}>
             <button
+              id={buttonId}
               type="button"
               onClick={() => setOpen(isOpen ? null : i)}
-              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-pending-bg/50"
+              className="faq-trigger"
               aria-expanded={isOpen}
+              aria-controls={panelId}
             >
-              <span className="font-semibold text-foreground">{item.q}</span>
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground-muted">
-                <Icon name={isOpen ? "minus" : "plus"} size={16} />
+              <span className="faq-index">{String(i + 1).padStart(2, "0")}</span>
+              <span className="faq-question">{item.q}</span>
+              <span className="faq-chevron" aria-hidden>
+                <Icon name="chevron-down" size={18} />
               </span>
             </button>
-            {isOpen && (
-              <div className="border-t border-border px-6 pb-5 pt-4">
-                <p className="text-sm leading-relaxed text-foreground-secondary">{item.a}</p>
+
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              className={`faq-panel ${isOpen ? "faq-panel-open" : ""}`}
+            >
+              <div className="faq-panel-inner">
+                <div className="faq-panel-body">
+                  <p>{item.a}</p>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         );
       })}

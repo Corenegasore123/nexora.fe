@@ -14,14 +14,36 @@ const ANIMATION_CLASS: Record<Animation, string> = {
   "blur-up": "reveal-blur-up",
 };
 
+type RevealCallback = () => void;
+
+let sharedObserver: IntersectionObserver | null = null;
+const revealCallbacks = new WeakMap<Element, RevealCallback>();
+
+function getSharedObserver(threshold: number, rootMargin: string) {
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          revealCallbacks.get(entry.target)?.();
+          sharedObserver?.unobserve(entry.target);
+          revealCallbacks.delete(entry.target);
+        }
+      },
+      { threshold, rootMargin }
+    );
+  }
+  return sharedObserver;
+}
+
 export function ScrollReveal({
   children,
   animation = "fade-up",
   delay = 0,
-  duration = 700,
+  duration = 600,
   className = "",
   immediate = false,
-  threshold = 0.12,
+  threshold = 0.1,
 }: {
   children: ReactNode;
   animation?: Animation;
@@ -35,30 +57,25 @@ export function ScrollReveal({
   const [visible, setVisible] = useState(immediate);
 
   useEffect(() => {
-    if (immediate) return;
+    if (immediate || visible) return;
 
     const el = ref.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold, rootMargin: "0px 0px -40px 0px" }
-    );
-
+    const observer = getSharedObserver(threshold, "0px 0px -32px 0px");
+    revealCallbacks.set(el, () => setVisible(true));
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [immediate, threshold]);
+
+    return () => {
+      observer.unobserve(el);
+      revealCallbacks.delete(el);
+    };
+  }, [immediate, threshold, visible]);
 
   return (
     <div

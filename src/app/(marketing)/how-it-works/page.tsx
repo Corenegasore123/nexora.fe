@@ -1,5 +1,5 @@
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
-import { ProductFlowVisual } from "@/components/marketing/ProductFlowVisual";
+import { ProductFlowVisualLazy } from "@/components/marketing/ProductFlowVisualLazy";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
@@ -88,11 +88,11 @@ export default function HowItWorksPage() {
   return (
     <>
       <section className="marketing-page-hero">
-        <MarketingContainer>
-          <ScrollReveal animation="blur-up" immediate className="max-w-3xl">
+        <MarketingContainer className="text-center">
+          <ScrollReveal animation="blur-up" immediate className="mx-auto max-w-3xl">
             <p className="eyebrow">How It Works</p>
             <h1 className="page-title mt-3">From upload to verified quantity</h1>
-            <p className="page-subtitle mt-4">
+            <p className="page-subtitle mx-auto mt-4">
               QuantScope follows a structured five-step pipeline designed for engineering accuracy.
               Every measurement, formula, and result is traceable from source diagram to final report.
             </p>
@@ -100,19 +100,19 @@ export default function HowItWorksPage() {
         </MarketingContainer>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 md:py-20">
         <MarketingContainer>
-          <div className="grid items-start gap-16 lg:grid-cols-2">
-            <div className="space-y-10">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14 xl:gap-16">
+            <div className="order-2 space-y-8 lg:order-1 lg:space-y-10">
               {STEPS.map((step, i) => (
-                <ScrollReveal key={step.title} animation="fade-right" delay={i * 60}>
-                  <div className="flex gap-5">
-                    <IconCircle name={step.icon} size={18} className="mt-1 h-11 w-11 shrink-0" />
-                    <div>
+                <ScrollReveal key={step.title} animation="fade-up" delay={i * 50}>
+                  <div className="flex gap-4 sm:gap-5">
+                    <IconCircle name={step.icon} size={18} className="mt-1 h-10 w-10 shrink-0 sm:h-11 sm:w-11" />
+                    <div className="min-w-0">
                       <p className="font-mono text-xs text-primary">Step {String(i + 1).padStart(2, "0")}</p>
-                      <h2 className="mt-1 text-xl font-bold text-foreground">{step.title}</h2>
-                      <p className="mt-2 text-foreground-secondary">{step.summary}</p>
-                      <ul className="mt-4 space-y-2">
+                      <h2 className="mt-1 text-lg font-bold text-foreground sm:text-xl">{step.title}</h2>
+                      <p className="mt-2 text-sm text-foreground-secondary sm:text-base">{step.summary}</p>
+                      <ul className="mt-3 space-y-2 sm:mt-4">
                         {step.details.map((d) => (
                           <li key={d} className="flex items-start gap-2 text-sm text-foreground-secondary">
                             <Icon name="check" size={14} className="mt-0.5 shrink-0 text-primary" />
@@ -125,19 +125,10 @@ export default function HowItWorksPage() {
                 </ScrollReveal>
               ))}
             </div>
-            <ScrollReveal animation="fade-left" className="sticky top-28">
+            <ScrollReveal animation="fade-up" className="order-1 mx-auto w-full max-w-md lg:order-2 lg:sticky lg:top-28 lg:max-w-none">
               <Tilt3D intensity={10} className="float-3d">
-                <ProductFlowVisual />
+                <ProductFlowVisualLazy />
               </Tilt3D>
-              <ScrollReveal animation="scale" delay={200}>
-                <div className="mt-6 rounded-2xl border border-border bg-primary-soft/50 p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">Typical timeline</p>
-                  <p className="mt-2 text-3xl font-bold text-foreground">&lt; 5 minutes</p>
-                  <p className="mt-1 text-sm text-foreground-secondary">
-                    From upload to verified export for a standard single-page drawing.
-                  </p>
-                </div>
-              </ScrollReveal>
             </ScrollReveal>
           </div>
         </MarketingContainer>

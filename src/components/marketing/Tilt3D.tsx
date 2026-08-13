@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 export function Tilt3D({
   children,
@@ -14,10 +14,15 @@ export function Tilt3D({
   glare?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [interactive, setInteractive] = useState(false);
+
+  useEffect(() => {
+    setInteractive(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
 
   function onMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!el || !interactive || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const rect = el.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
@@ -41,9 +46,9 @@ export function Tilt3D({
   return (
     <div
       ref={ref}
-      className={`tilt-3d ${glare ? "tilt-3d-glare" : ""} ${className}`}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
+      className={`tilt-3d ${interactive && glare ? "tilt-3d-glare" : ""} ${className}`}
+      onMouseMove={interactive ? onMove : undefined}
+      onMouseLeave={interactive ? onLeave : undefined}
     >
       <div className="tilt-3d-inner">{children}</div>
     </div>

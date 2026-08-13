@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
-import { ProductFlowVisual } from "./ProductFlowVisual";
+import { ProductFlowVisualLazy } from "./ProductFlowVisualLazy";
 import { MarketingContainer } from "./MarketingContainer";
 import { MarketingCta } from "./MarketingCta";
 import { ScrollReveal } from "./ScrollReveal";
@@ -91,7 +91,7 @@ export function LandingPage() {
             </div>
             <ScrollReveal animation="fade-right" immediate delay={200} className="mx-auto hidden w-full max-w-sm lg:block lg:max-w-none">
               <Tilt3D intensity={14} className="float-3d">
-                <ProductFlowVisual variant="light" drawingOnly />
+                <ProductFlowVisualLazy variant="light" drawingOnly />
               </Tilt3D>
             </ScrollReveal>
           </div>
@@ -154,15 +154,13 @@ export function LandingPage() {
           <div className="mt-14 grid items-center gap-12 lg:grid-cols-2">
             <ScrollReveal animation="fade-right" className="order-2 lg:order-1">
               <ul className="space-y-4 text-left">
-                {PLATFORM_FEATURES.map((item, i) => (
-                  <ScrollReveal key={item} animation="fade-left" delay={i * 50}>
-                    <li className="flex items-start gap-3 text-sm text-white/85">
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
-                        <Icon name="check" size={12} />
-                      </span>
-                      {item}
-                    </li>
-                  </ScrollReveal>
+                {PLATFORM_FEATURES.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-white/85">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent">
+                      <Icon name="check" size={12} />
+                    </span>
+                    {item}
+                  </li>
                 ))}
               </ul>
               <div className="mt-10 text-center lg:text-left">
@@ -176,7 +174,7 @@ export function LandingPage() {
               <Tilt3D intensity={12}>
                 <div className="overflow-hidden rounded-3xl border border-white/10 shadow-modal">
                   <div className="bg-[#fafbfc] p-4">
-                    <ProductFlowVisual variant="light" drawingOnly compact />
+                    <ProductFlowVisualLazy variant="light" drawingOnly compact />
                   </div>
                   <div className="border-t border-white/10 bg-[#2a3844] p-5 text-center">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Sample output</p>

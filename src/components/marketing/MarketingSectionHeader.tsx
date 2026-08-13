@@ -14,7 +14,7 @@ export function MarketingSectionHeader({
   className?: string;
 }) {
   return (
-    <ScrollReveal animation="blur-up" className={centered ? `text-center ${className}` : className}>
+    <ScrollReveal animation="fade-up" className={centered ? `text-center ${className}` : className}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h2 className={`page-title ${eyebrow ? "mt-3" : ""} ${centered ? "mx-auto" : ""}`}>{title}</h2>
       {subtitle && (
