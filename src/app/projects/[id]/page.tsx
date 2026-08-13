@@ -17,6 +17,7 @@ import {
   ProjectMember,
 } from "@/lib/api";
 import { ProjectTeam } from "@/components/ProjectTeam";
+import { apiUrl } from "@/lib/api";
 
 type Tab = "overview" | "documents" | "calculations" | "activity" | "team";
 
@@ -238,7 +239,30 @@ export default function ProjectDetailPage() {
       )}
 
       {tab === "calculations" && (
-        <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-surface">
+        <div className="mt-8">
+          {calculations.length > 0 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              <a
+                href={apiUrl(`/api/projects/${projectId}/report?format=csv&template=summary`)}
+                className="btn-secondary py-2 text-xs"
+              >
+                Export all (CSV)
+              </a>
+              <a
+                href={apiUrl(`/api/projects/${projectId}/report?format=csv&template=client`)}
+                className="btn-ghost py-2 text-xs"
+              >
+                Client bundle
+              </a>
+              <a
+                href={apiUrl(`/api/projects/${projectId}/report?format=pdf`)}
+                className="btn-ghost py-2 text-xs"
+              >
+                PDF summary
+              </a>
+            </div>
+          )}
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
           <table className="data-table">
             <thead>
               <tr>
@@ -277,6 +301,7 @@ export default function ProjectDetailPage() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

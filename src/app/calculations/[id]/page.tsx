@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ImageAnnotation } from "@/components/ImageAnnotation";
 import { CalculationEditor } from "@/components/CalculationEditor";
+import { ReportExportMenu } from "@/components/ReportExportMenu";
+import { ComparisonView } from "@/components/ComparisonView";
 import { classifyConfidence } from "@/lib/confidence";
 import { apiUrl, apiFetch } from "@/lib/api";
 
@@ -136,17 +138,7 @@ export default function CalculationDetailPage() {
             </a>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          <a href={apiUrl(`/api/calculations/${id}/report?format=pdf`)} className="btn-ghost">
-            PDF
-          </a>
-          <a href={apiUrl(`/api/calculations/${id}/report?format=json`)} className="btn-ghost">
-            JSON
-          </a>
-          <a href={apiUrl(`/api/calculations/${id}/report?format=csv`)} className="btn-ghost">
-            CSV
-          </a>
-        </div>
+        <ReportExportMenu jobId={id} filename={job.image.filename} />
       </div>
 
       {job.result?.validation?.status === "needs_review" && (
@@ -222,6 +214,8 @@ export default function CalculationDetailPage() {
           />
         </div>
       </section>
+
+      <ComparisonView jobId={id} />
 
       <section className="mt-12">
         <h2 className="section-label">Detected Measurements</h2>
