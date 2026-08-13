@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons/Icon";
 import { MarketingContainer } from "./MarketingContainer";
-import { ScrollReveal } from "./ScrollReveal";
-import { Tilt3D } from "./Tilt3D";
+import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
 
 export function MarketingCta() {
   return (

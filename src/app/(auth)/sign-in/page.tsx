@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { login, ApiError } from "@/lib/api";
+import { validateEmail, validateSignIn } from "@/lib/auth-validation";
 import { Icon } from "@/components/icons/Icon";
 import { AuthSplit, AuthField, AuthFormSuspense, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
@@ -10,15 +11,28 @@ function SignInForm() {
   const { redirect, router } = useAuthRedirect();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const validateField = (field: "email" | "password") => {
+    setErrors((prev) => ({
+      ...prev,
+      email: field === "email" ? validateEmail(email) : prev.email,
+      password: field === "password" ? (password ? undefined : "Password is required") : prev.password,
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const nextErrors = validateSignIn(email, password);
+    setErrors(nextErrors);
+    if (Object.values(nextErrors).some(Boolean)) return;
+
     setLoading(true);
     setError(null);
     try {
-      await login(email, password);
+      await login(email.trim(), password);
       redirect();
       router.refresh();
     } catch (err) {
@@ -46,16 +60,21 @@ function SignInForm() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         <AuthField
           id="email"
           label="Email"
           type="email"
           icon="mail"
           value={email}
-          onChange={setEmail}
+          onChange={(v) => {
+            setEmail(v);
+            if (errors.email) validateField("email");
+          }}
+          onBlur={() => validateField("email")}
           placeholder="you@company.com"
           autoComplete="email"
+          error={errors.email}
         />
         <AuthField
           id="password"
@@ -63,10 +82,15 @@ function SignInForm() {
           type="password"
           icon="lock"
           value={password}
-          onChange={setPassword}
+          onChange={(v) => {
+            setPassword(v);
+            if (errors.password) validateField("password");
+          }}
+          onBlur={() => validateField("password")}
           placeholder="Password"
           autoComplete="current-password"
           password
+          error={errors.password}
         />
         {error && <div className="alert-error text-sm font-medium">{error}</div>}
         <button type="submit" disabled={loading} className="btn-auth-submit">

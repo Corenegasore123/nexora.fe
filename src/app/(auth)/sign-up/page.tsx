@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { FormEvent, useState, Suspense } from "react";
 import { register, ApiError } from "@/lib/api";
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateName,
+  validatePassword,
+  validateSignUp,
+} from "@/lib/auth-validation";
 import { Icon } from "@/components/icons/Icon";
 import { AuthSplit, AuthField, useAuthRedirect } from "@/components/marketing/AuthLayout";
 
@@ -12,15 +19,33 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const validateField = (field: "name" | "email" | "password" | "confirmPassword") => {
+    setErrors((prev) => ({
+      ...prev,
+      name: field === "name" ? validateName(name) : prev.name,
+      email: field === "email" ? validateEmail(email) : prev.email,
+      password: field === "password" ? validatePassword(password, true) : prev.password,
+      confirmPassword:
+        field === "confirmPassword" || field === "password"
+          ? validateConfirmPassword(password, confirmPassword)
+          : prev.confirmPassword,
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const nextErrors = validateSignUp(name, email, password, confirmPassword);
+    setErrors(nextErrors);
+    if (Object.values(nextErrors).some(Boolean)) return;
+
     setLoading(true);
     setError(null);
     try {
-      await register(name, email, password, confirmPassword);
+      await register(name.trim(), email.trim(), password, confirmPassword);
       redirect();
       router.refresh();
     } catch (err) {
@@ -48,16 +73,21 @@ function SignUpForm() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         <AuthField
           id="name"
           label="Full name"
           type="text"
           icon="user"
           value={name}
-          onChange={setName}
+          onChange={(v) => {
+            setName(v);
+            if (errors.name) validateField("name");
+          }}
+          onBlur={() => validateField("name")}
           placeholder="Jane Engineer"
           autoComplete="name"
+          error={errors.name}
         />
         <AuthField
           id="email"
@@ -65,9 +95,14 @@ function SignUpForm() {
           type="email"
           icon="mail"
           value={email}
-          onChange={setEmail}
+          onChange={(v) => {
+            setEmail(v);
+            if (errors.email) validateField("email");
+          }}
+          onBlur={() => validateField("email")}
           placeholder="you@company.com"
           autoComplete="email"
+          error={errors.email}
         />
         <AuthField
           id="password"
@@ -75,10 +110,17 @@ function SignUpForm() {
           type="password"
           icon="lock"
           value={password}
-          onChange={setPassword}
+          onChange={(v) => {
+            setPassword(v);
+            if (errors.password) validateField("password");
+            if (errors.confirmPassword && confirmPassword) validateField("confirmPassword");
+          }}
+          onBlur={() => validateField("password")}
           placeholder="Password"
           autoComplete="new-password"
           password
+          showStrength
+          error={errors.password}
         />
         <AuthField
           id="confirm"
@@ -86,10 +128,15 @@ function SignUpForm() {
           type="password"
           icon="lock"
           value={confirmPassword}
-          onChange={setConfirmPassword}
+          onChange={(v) => {
+            setConfirmPassword(v);
+            if (errors.confirmPassword) validateField("confirmPassword");
+          }}
+          onBlur={() => validateField("confirmPassword")}
           placeholder="Confirm password"
           autoComplete="new-password"
           password
+          error={errors.confirmPassword}
         />
         {error && <div className="alert-error text-sm font-medium">{error}</div>}
         <button type="submit" disabled={loading} className="btn-auth-submit">

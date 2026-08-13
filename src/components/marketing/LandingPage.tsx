@@ -3,8 +3,7 @@ import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { ProductFlowVisualLazy } from "./ProductFlowVisualLazy";
 import { MarketingContainer } from "./MarketingContainer";
 import { MarketingCta } from "./MarketingCta";
-import { ScrollReveal } from "./ScrollReveal";
-import { Tilt3D } from "./Tilt3D";
+import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
 import { MarketingSectionHeader } from "./MarketingSectionHeader";
 
 const STATS = [
@@ -113,7 +112,7 @@ export function LandingPage() {
       </section>
 
       {/* Workflow */}
-      <section className="border-b border-border bg-surface py-24">
+      <section className="marketing-defer border-b border-border bg-surface py-24">
         <MarketingContainer className="text-center">
           <MarketingSectionHeader
             eyebrow="Product Workflow"
@@ -138,7 +137,7 @@ export function LandingPage() {
       </section>
 
       {/* Platform spotlight */}
-      <section className="marketing-mesh-dark py-24 text-white">
+      <section className="marketing-defer marketing-mesh-dark py-24 text-white">
         <MarketingContainer>
           <ScrollReveal animation="blur-up" className="text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-accent">Analysis Workspace</p>
@@ -189,7 +188,7 @@ export function LandingPage() {
       </section>
 
       {/* Why choose */}
-      <section className="bg-background py-24">
+      <section className="marketing-defer bg-background py-24">
         <MarketingContainer>
           <MarketingSectionHeader
             eyebrow="The QuantScope difference"
@@ -240,7 +239,7 @@ export function LandingPage() {
       </section>
 
       {/* Use cases + Security */}
-      <section className="border-y border-border bg-surface py-24">
+      <section className="marketing-defer border-y border-border bg-surface py-24">
         <MarketingContainer className="text-center">
           <ScrollReveal animation="scale">
             <IconCircle name="shield" size={22} className="mx-auto h-14 w-14" />

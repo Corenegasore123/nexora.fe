@@ -1,4 +1,6 @@
-import { ScrollReveal } from "./ScrollReveal";
+"use client";
+
+import { ScrollReveal } from "@/components/marketing/lazy-motion";
 
 export function MarketingSectionHeader({
   eyebrow,

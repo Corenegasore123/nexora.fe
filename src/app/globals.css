@@ -762,6 +762,85 @@ body {
     @apply mb-2 block text-xs font-bold uppercase tracking-wider text-foreground-muted;
   }
 
+  .auth-required {
+    @apply ml-0.5 text-error;
+  }
+
+  .auth-field-error {
+    @apply mt-1.5 text-xs font-medium text-error;
+  }
+
+  .input-field-error {
+    border-color: var(--color-error-border);
+    @apply ring-2 ring-[color-mix(in_srgb,var(--color-error)_25%,transparent)];
+  }
+
+  .input-field-error:focus {
+    border-color: var(--color-error);
+    @apply ring-[color-mix(in_srgb,var(--color-error)_35%,transparent)];
+  }
+
+  .password-strength {
+    @apply mt-2.5 space-y-1.5;
+  }
+
+  .password-strength-bars {
+    @apply flex gap-1.5;
+  }
+
+  .password-strength-bar {
+    @apply h-1 flex-1 rounded-full bg-border transition-colors duration-300;
+  }
+
+  .password-strength-bar-error {
+    @apply bg-error;
+  }
+
+  .password-strength-bar-warning {
+    @apply bg-warning;
+  }
+
+  .password-strength-bar-fair {
+    background-color: color-mix(in srgb, var(--color-warning) 70%, var(--color-accent));
+  }
+
+  .password-strength-bar-good {
+    @apply bg-accent;
+  }
+
+  .password-strength-bar-strong {
+    @apply bg-success;
+  }
+
+  .password-strength-label {
+    @apply text-[11px] font-semibold uppercase tracking-wide;
+  }
+
+  .password-strength-label-error {
+    @apply text-error;
+  }
+
+  .password-strength-label-warning {
+    @apply text-warning;
+  }
+
+  .password-strength-label-fair {
+    @apply text-foreground-secondary;
+  }
+
+  .password-strength-label-good {
+    @apply text-accent;
+  }
+
+  .password-strength-label-strong {
+    @apply text-success;
+  }
+
+  .marketing-defer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 480px;
+  }
+
   .input-with-icon {
     @apply relative;
   }

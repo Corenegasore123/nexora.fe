@@ -2,8 +2,7 @@ import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
 import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
-import { ScrollReveal } from "@/components/marketing/ScrollReveal";
-import { Tilt3D } from "@/components/marketing/Tilt3D";
+import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
 
 const VALUES = [
   { icon: "target" as IconName, title: "Precision over automation theater", desc: "We build tools that produce defensible numbers, not impressive demos." },

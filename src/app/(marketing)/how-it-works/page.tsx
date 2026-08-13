@@ -1,11 +1,15 @@
+import dynamic from "next/dynamic";
 import { Icon, IconCircle, type IconName } from "@/components/icons/Icon";
 import { ProductFlowVisualLazy } from "@/components/marketing/ProductFlowVisualLazy";
-import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { MarketingContainer } from "@/components/marketing/MarketingContainer";
 import { MarketingCta } from "@/components/marketing/MarketingCta";
 import { MarketingSectionHeader } from "@/components/marketing/MarketingSectionHeader";
-import { ScrollReveal } from "@/components/marketing/ScrollReveal";
-import { Tilt3D } from "@/components/marketing/Tilt3D";
+import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
+
+const FaqAccordion = dynamic(
+  () => import("@/components/marketing/FaqAccordion").then((m) => m.FaqAccordion),
+  { ssr: false, loading: () => <div className="h-48 animate-pulse rounded-2xl bg-pending-bg/50" aria-hidden /> }
+);
 
 const STEPS = [
   {

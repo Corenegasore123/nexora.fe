@@ -1,10 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, ReactNode, useState } from "react";
 import { Icon } from "@/components/icons/Icon";
-import { TechnicalDrawingVisual } from "@/components/marketing/TechnicalDrawingVisual";
+import { PasswordStrength } from "@/components/marketing/PasswordStrength";
+
+const TechnicalDrawingVisual = dynamic(
+  () => import("@/components/marketing/TechnicalDrawingVisual").then((m) => m.TechnicalDrawingVisual),
+  { ssr: false, loading: () => <div className="h-full w-full bg-[#2a3844]" aria-hidden /> }
+);
 
 export function AuthSplit({
   badge,
@@ -31,7 +37,6 @@ export function AuthSplit({
 }) {
   return (
     <div className="auth-split animate-fade-in">
-      {/* Left brand panel */}
       <div className="auth-split-brand">
         <div className="absolute inset-0 opacity-20">
           <TechnicalDrawingVisual className="h-full w-full scale-110 object-cover" compact />
@@ -62,7 +67,6 @@ export function AuthSplit({
         </div>
       </div>
 
-      {/* Right form panel */}
       <div className="relative flex flex-col justify-center p-8 md:p-10 lg:p-12">
         <Link href="/" className="auth-close-btn absolute right-4 top-4 md:right-6 md:top-6" aria-label="Back to home">
           <Icon name="x" size={18} />
@@ -86,9 +90,13 @@ export function AuthField({
   icon,
   value,
   onChange,
+  onBlur,
   placeholder,
   autoComplete,
   password = false,
+  required = true,
+  error,
+  showStrength = false,
 }: {
   id: string;
   label: string;
@@ -96,9 +104,13 @@ export function AuthField({
   icon: "mail" | "lock" | "user";
   value: string;
   onChange: (v: string) => void;
+  onBlur?: () => void;
   placeholder?: string;
   autoComplete?: string;
   password?: boolean;
+  required?: boolean;
+  error?: string;
+  showStrength?: boolean;
 }) {
   const [visible, setVisible] = useState(false);
   const inputType = password ? (visible ? "text" : "password") : type;
@@ -107,6 +119,11 @@ export function AuthField({
     <div>
       <label htmlFor={id} className="auth-label">
         {label}
+        {required && (
+          <span className="auth-required" aria-hidden>
+            *
+          </span>
+        )}
       </label>
       <div className="input-with-icon">
         <span className="input-icon">
@@ -115,12 +132,16 @@ export function AuthField({
         <input
           id={id}
           type={inputType}
-          required
+          required={required}
+          aria-required={required}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : showStrength ? `${id}-strength` : undefined}
           autoComplete={autoComplete}
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange(e.target.value)}
-          className={`input-field w-full ${password ? "!pr-12" : ""}`}
+          onBlur={onBlur}
+          className={`input-field w-full ${password ? "!pr-12" : ""} ${error ? "input-field-error" : ""}`}
         />
         {password && (
           <button
@@ -138,6 +159,16 @@ export function AuthField({
           </button>
         )}
       </div>
+      {showStrength && password && (
+        <div id={`${id}-strength`}>
+          <PasswordStrength password={value} />
+        </div>
+      )}
+      {error && (
+        <p id={`${id}-error`} className="auth-field-error" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
