@@ -130,7 +130,7 @@ export function AppSidebar({
 
         <div className="app-sidebar-footer">
           {user && !collapsed && <p className="app-sidebar-user">{user.name}</p>}
-          <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link mt-2" title={collapsed ? "Profile" : undefined}>
+          <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link" title={collapsed ? "Profile" : undefined}>
             <Icon name="user" size={18} className="text-white/50" />
             {!collapsed && "Profile"}
           </Link>
@@ -189,11 +189,11 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="app-shell-bg flex min-h-screen">
+    <div className="app-shell-bg app-shell-layout">
       <AppSidebar user={user} mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="app-main-column">
         <AppTopBar onMenuClick={() => setMobileOpen(true)} mobileOpen={mobileOpen} />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="app-main">{children}</main>
       </div>
     </div>
   );

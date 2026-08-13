@@ -152,12 +152,24 @@ body {
       var(--color-background);
   }
 
+  .app-shell-layout {
+    @apply flex h-dvh overflow-hidden;
+  }
+
+  .app-main-column {
+    @apply flex min-w-0 flex-1 flex-col overflow-hidden;
+  }
+
+  .app-main {
+    @apply flex-1 overflow-x-hidden overflow-y-auto;
+  }
+
   .app-sidebar {
     background-color: #354554;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
     height: 100dvh;
-    width: 16rem;
+    width: 17rem;
     position: sticky;
     top: 0;
     z-index: 40;
@@ -165,7 +177,7 @@ body {
   }
 
   .app-sidebar-collapsed {
-    width: 4.5rem;
+    width: 5rem;
   }
 
   @media (max-width: 1023px) {
@@ -183,7 +195,7 @@ body {
   }
 
   .app-sidebar-header {
-    @apply flex h-14 min-h-14 items-center justify-between gap-2 border-b border-white/10 px-4;
+    @apply flex h-16 min-h-16 shrink-0 items-center justify-between gap-3 border-b border-white/10 px-5;
   }
 
   .app-sidebar-brand {
@@ -211,32 +223,32 @@ body {
   }
 
   .app-nav-section {
-    @apply mb-1 mt-3 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/40 first:mt-0;
+    @apply mb-2 mt-5 px-3 text-[10px] font-semibold uppercase tracking-widest text-white/40 first:mt-1;
   }
 
   .app-nav-body {
-    @apply flex min-h-0 flex-col justify-start px-3 py-2;
+    @apply flex min-h-0 flex-col justify-start overflow-hidden px-4 py-4;
   }
 
   .app-nav-link {
-    @apply mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
+    @apply mb-1.5 flex items-center gap-3.5 rounded-xl px-3.5 py-2.5 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
   }
 
   .app-sidebar-collapsed .app-nav-body {
-    @apply px-2;
+    @apply px-2.5 py-3;
   }
 
   .app-sidebar-collapsed .app-nav-link,
   .app-sidebar-collapsed .app-sidebar-footer-link {
-    @apply justify-center gap-0 px-0 py-2.5;
+    @apply mb-2 justify-center gap-0 px-0 py-3;
   }
 
   .app-sidebar-collapsed .app-sidebar-signout {
-    @apply justify-center gap-0 px-0 py-2.5;
+    @apply justify-center gap-0 px-0 py-3;
   }
 
   .app-sidebar-collapsed .app-sidebar-footer {
-    @apply p-2;
+    @apply p-3;
   }
 
   .app-nav-link-active {
@@ -245,11 +257,11 @@ body {
   }
 
   .app-sidebar-footer {
-    @apply shrink-0 border-t border-white/10 p-3;
+    @apply shrink-0 space-y-1 border-t border-white/10 p-4;
   }
 
   .app-sidebar-footer-link {
-    @apply flex w-full items-center gap-3 rounded-xl px-3 py-1.5 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
+    @apply flex w-full items-center gap-3.5 rounded-xl px-3.5 py-2 text-sm text-white/75 transition-colors hover:bg-white/5 hover:text-white;
   }
 
   .app-sidebar-user {
@@ -257,24 +269,63 @@ body {
   }
 
   .app-topbar {
-    @apply flex h-14 shrink-0 items-center gap-4 border-b border-border px-4 lg:px-6;
-    background-color: color-mix(in srgb, var(--color-surface) 95%, transparent);
+    @apply sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-border px-4 backdrop-blur-md lg:px-8;
+    background-color: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--color-border) 80%, transparent);
   }
 
   .app-topbar-title-wrap {
-    @apply min-w-0 flex-1;
+    @apply min-w-0 flex-1 py-1;
   }
 
   .app-topbar-title {
-    @apply truncate text-base font-bold text-foreground;
+    @apply truncate text-lg font-bold tracking-tight text-foreground;
   }
 
   .app-topbar-subtitle {
-    @apply truncate text-xs text-foreground-muted;
+    @apply truncate text-sm text-foreground-secondary;
   }
 
   .app-topbar-actions {
-    @apply flex shrink-0 items-center gap-2;
+    @apply flex shrink-0 items-center gap-3;
+  }
+
+  .dashboard-page {
+    @apply mx-auto w-full max-w-7xl p-6 lg:p-8;
+  }
+
+  .dashboard-hero {
+    @apply card flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--color-primary-soft) 70%, var(--color-surface)), var(--color-surface));
+  }
+
+  .dashboard-stat-grid {
+    @apply mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .dashboard-stat-card {
+    @apply card flex items-start gap-4 transition-colors hover:border-border-strong;
+  }
+
+  .dashboard-stat-icon {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary;
+  }
+
+  .dashboard-stat-value {
+    @apply mt-1 text-3xl font-bold tabular-nums text-foreground;
+  }
+
+  .dashboard-section {
+    @apply mt-10;
+  }
+
+  .dashboard-section-header {
+    @apply mb-4 flex items-center justify-between gap-4;
+  }
+
+  .dashboard-panel {
+    @apply overflow-hidden rounded-2xl border border-border bg-surface shadow-sm;
   }
 
   .app-icon-btn {

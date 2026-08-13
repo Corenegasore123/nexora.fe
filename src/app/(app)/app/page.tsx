@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getDashboard, getMe, DashboardData, AuthUser } from "@/lib/api";
+import { Icon, type IconName } from "@/components/icons/Icon";
+import { useSetAppPageMeta } from "@/components/app/AppPageContext";
 import { SkeletonCard, SkeletonTable } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -13,16 +15,12 @@ function greeting() {
   return "Good evening";
 }
 
-function StatCard({ label, value, highlight }: { label: string; value: number; highlight?: "warning" | "success" }) {
-  const color =
-    highlight === "warning" ? "text-warning" : highlight === "success" ? "text-success" : "text-foreground";
-  return (
-    <div className="card">
-      <p className="eyebrow">{label}</p>
-      <p className={`mt-2 text-3xl font-bold tabular-nums ${color}`}>{value}</p>
-    </div>
-  );
-}
+const STAT_CONFIG = [
+  { key: "projects" as const, label: "Projects", icon: "folder" as IconName },
+  { key: "pendingAnalyses" as const, label: "Active Analyses", icon: "scan" as IconName, warn: true },
+  { key: "completedAnalyses" as const, label: "Completed", icon: "clipboard-check" as IconName },
+  { key: "documents" as const, label: "Documents", icon: "file-text" as IconName },
+];
 
 function statusClass(status: string) {
   if (status === "COMPLETED") return "status-badge status-completed";
@@ -34,6 +32,11 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
 
+  const firstName = user?.name?.split(" ")[0] ?? "there";
+  const pageSubtitle = useMemo(() => `${greeting()}, ${firstName}`, [firstName]);
+
+  useSetAppPageMeta({ title: "Dashboard", subtitle: pageSubtitle });
+
   useEffect(() => {
     Promise.all([getDashboard(), getMe()]).then(([d, u]) => {
       setData(d);
@@ -43,11 +46,15 @@ export default function DashboardPage() {
 
   if (!data) {
     return (
-      <div className="p-6 lg:p-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)}
+      <div className="dashboard-page">
+        <div className="dashboard-stat-grid !mt-0">
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
-        <div className="mt-8"><SkeletonTable rows={4} /></div>
+        <div className="dashboard-section">
+          <SkeletonTable rows={4} />
+        </div>
       </div>
     );
   }
@@ -55,36 +62,52 @@ export default function DashboardPage() {
   const processing = data.recentCalculations.filter(
     (j) => j.status !== "COMPLETED" && j.status !== "FAILED"
   );
-  const firstName = user?.name?.split(" ")[0] ?? "there";
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="dashboard-page">
+      <section className="dashboard-hero">
         <div>
-          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-            {greeting()}, {firstName}
-          </h1>
-          <p className="mt-1 text-sm text-foreground-secondary">
-            Here&apos;s what&apos;s happening with your work.
+          <p className="text-xs font-bold uppercase tracking-widest text-primary">Workspace overview</p>
+          <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">
+            Track projects, monitor processing jobs, and jump back into recent calculations.
           </p>
         </div>
-        <Link href="/app/calculator" className="btn-primary shrink-0">
-          + New Calculation
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/app/calculator" className="btn-primary inline-flex gap-2">
+            <Icon name="plus-circle" size={16} />
+            New Calculation
+          </Link>
+          <Link href="/app/projects/new" className="btn-secondary">
+            New Project
+          </Link>
+        </div>
+      </section>
+
+      <div className="dashboard-stat-grid">
+        {STAT_CONFIG.map((stat) => {
+          const value = data.stats[stat.key];
+          const highlight = stat.warn && value > 0;
+          return (
+            <div key={stat.key} className="dashboard-stat-card">
+              <span className="dashboard-stat-icon">
+                <Icon name={stat.icon} size={20} />
+              </span>
+              <div>
+                <p className="eyebrow">{stat.label}</p>
+                <p className={`dashboard-stat-value ${highlight ? "text-warning" : ""}`}>{value}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Projects" value={data.stats.projects} />
-        <StatCard label="Active Analyses" value={data.stats.pendingAnalyses} highlight={data.stats.pendingAnalyses > 0 ? "warning" : undefined} />
-        <StatCard label="Completed Calculations" value={data.stats.completedAnalyses} />
-        <StatCard label="Documents" value={data.stats.documents} />
-      </div>
-
-      <div className="mt-10 grid gap-8 xl:grid-cols-3">
+      <div className="dashboard-section grid gap-8 xl:grid-cols-3">
         <section className="xl:col-span-2">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="dashboard-section-header">
             <h2 className="section-label">Recent Projects</h2>
-            <Link href="/app/projects" className="text-xs text-foreground-muted hover:text-primary">View all</Link>
+            <Link href="/app/projects" className="text-xs font-semibold uppercase tracking-wide text-primary hover:underline">
+              View all
+            </Link>
           </div>
           {data.recentProjects.length === 0 ? (
             <EmptyState
@@ -94,7 +117,7 @@ export default function DashboardPage() {
               actionHref="/app/projects/new"
             />
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="dashboard-panel">
               <table className="data-table">
                 <thead>
                   <tr>
@@ -111,7 +134,7 @@ export default function DashboardPage() {
                       <td>{p._count?.calculationJobs ?? 0}</td>
                       <td>{p._count?.images ?? 0}</td>
                       <td>
-                        <Link href={`/app/projects/${p.id}`} className="text-xs text-primary hover:underline">
+                        <Link href={`/app/projects/${p.id}`} className="text-xs font-semibold text-primary hover:underline">
                           Open
                         </Link>
                       </td>
@@ -124,17 +147,19 @@ export default function DashboardPage() {
         </section>
 
         <section>
-          <h2 className="section-label mb-4">Processing</h2>
-          <div className="card min-h-[200px]">
+          <div className="dashboard-section-header">
+            <h2 className="section-label">Processing</h2>
+          </div>
+          <div className="card min-h-[220px]">
             {processing.length === 0 ? (
               <p className="text-sm text-foreground-muted">No jobs currently processing.</p>
             ) : (
-              <ul className="space-y-4">
+              <ul className="space-y-5">
                 {processing.slice(0, 3).map((job) => (
                   <li key={job.id}>
                     <p className="truncate text-sm font-medium text-foreground">{job.image.filename}</p>
                     <p className="mt-1 text-xs text-foreground-muted">{job.status.replace(/_/g, " ")}</p>
-                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border">
+                    <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-border">
                       <div className="h-full w-4/5 animate-pulse rounded-full bg-primary" />
                     </div>
                   </li>
@@ -145,12 +170,14 @@ export default function DashboardPage() {
         </section>
       </div>
 
-      <section className="mt-10">
-        <div className="mb-4 flex items-center justify-between">
+      <section className="dashboard-section">
+        <div className="dashboard-section-header">
           <h2 className="section-label">Recent Calculations</h2>
-          <Link href="/app/history" className="text-xs text-foreground-muted hover:text-primary">View history</Link>
+          <Link href="/app/history" className="text-xs font-semibold uppercase tracking-wide text-primary hover:underline">
+            View history
+          </Link>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+        <div className="dashboard-panel">
           <table className="data-table">
             <thead>
               <tr>
@@ -168,8 +195,10 @@ export default function DashboardPage() {
                       {job.image.filename}
                     </Link>
                   </td>
-                  <td className="hidden sm:table-cell text-foreground-muted">{job.project?.name ?? "—"}</td>
-                  <td><span className={statusClass(job.status)}>{job.status.replace(/_/g, " ")}</span></td>
+                  <td className="hidden text-foreground-muted sm:table-cell">{job.project?.name ?? "—"}</td>
+                  <td>
+                    <span className={statusClass(job.status)}>{job.status.replace(/_/g, " ")}</span>
+                  </td>
                   <td className="font-mono">{job.result ? `${job.result.result} ${job.result.unit}` : "—"}</td>
                 </tr>
               ))}
@@ -191,8 +220,10 @@ export default function DashboardPage() {
       </section>
 
       {data.needsReview.length > 0 && (
-        <section className="mt-10">
-          <h2 className="section-label mb-4">Needs Review</h2>
+        <section className="dashboard-section">
+          <div className="dashboard-section-header">
+            <h2 className="section-label">Needs Review</h2>
+          </div>
           <div className="space-y-3">
             {data.needsReview.map((job) => (
               <Link key={job.id} href={`/app/history/${job.id}`} className="card-raised flex justify-between gap-4">
