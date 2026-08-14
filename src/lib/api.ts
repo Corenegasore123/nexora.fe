@@ -32,6 +32,14 @@ export class ApiError extends Error {
   }
 }
 
+function handleUnauthorized() {
+  if (typeof window === "undefined") return;
+  const path = window.location.pathname;
+  if (path.startsWith("/sign-in") || path.startsWith("/sign-up")) return;
+  const from = encodeURIComponent(path);
+  window.location.href = `/sign-in?from=${from}`;
+}
+
 export async function apiFetch<T = unknown>(
   path: string,
   init?: RequestInit
@@ -48,6 +56,9 @@ export async function apiFetch<T = unknown>(
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
+    if (res.status === 401) {
+      handleUnauthorized();
+    }
     throw new ApiError(
       (data as { error?: string }).error ?? "Request failed",
       res.status,
@@ -56,6 +67,15 @@ export async function apiFetch<T = unknown>(
   }
 
   return data as T;
+}
+
+export async function checkSession(): Promise<boolean> {
+  try {
+    await apiFetch<{ ok: boolean }>("/api/auth/check");
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function readApi<T>(path: string, fallback: T, init?: RequestInit): Promise<T> {

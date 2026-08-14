@@ -11,6 +11,25 @@ const PUBLIC_PATHS = new Set([
   "/sign-up",
 ]);
 
+function apiOrigin() {
+  return (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+}
+
+async function sessionIsValid(request: NextRequest): Promise<boolean> {
+  const session = request.cookies.get("quantscope_session")?.value;
+  if (!session) return false;
+
+  try {
+    const res = await fetch(`${apiOrigin()}/api/auth/check`, {
+      headers: { cookie: request.headers.get("cookie") ?? "" },
+      cache: "no-store",
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -23,7 +42,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const session = request.cookies.get("quantscope_session");
+  const sessionCookie = request.cookies.get("quantscope_session");
   const isPublic = PUBLIC_PATHS.has(pathname);
   const isApp = pathname.startsWith("/app");
 
@@ -31,17 +50,24 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/app", request.url));
   }
 
-  if (isApp && !session?.value) {
+  const hasValidSession = sessionCookie?.value ? await sessionIsValid(request) : false;
+
+  if (isApp && !hasValidSession) {
     const signIn = new URL("/sign-in", request.url);
     signIn.searchParams.set("from", pathname);
-    return NextResponse.redirect(signIn);
+    const response = NextResponse.redirect(signIn);
+    if (sessionCookie?.value) {
+      response.cookies.delete("quantscope_session");
+      response.cookies.delete("quantscope_role");
+    }
+    return response;
   }
 
-  if (isPublic && session?.value && (pathname === "/sign-in" || pathname === "/sign-up")) {
+  if (isPublic && hasValidSession && (pathname === "/sign-in" || pathname === "/sign-up")) {
     return NextResponse.redirect(new URL("/app", request.url));
   }
 
-  if (!isPublic && !isApp && !session?.value) {
+  if (!isPublic && !isApp && !hasValidSession) {
     const signIn = new URL("/sign-in", request.url);
     signIn.searchParams.set("from", pathname);
     return NextResponse.redirect(signIn);
