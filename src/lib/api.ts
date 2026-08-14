@@ -282,6 +282,77 @@ export async function removeProjectMember(projectId: string, userId: string) {
   });
 }
 
+// ─── Project collaboration (chat & tasks) ───────────────────────────────────
+
+export interface ProjectMessage {
+  id: string;
+  projectId: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+  author: { id: string; name: string };
+}
+
+export interface ProjectTask {
+  id: string;
+  projectId: string;
+  title: string;
+  status: "TODO" | "IN_PROGRESS" | "DONE";
+  assigneeId: string;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
+  assignee: { id: string; name: string };
+  createdBy: { id: string; name: string };
+}
+
+export async function getProjectMessages(projectId: string) {
+  return readApi(`/api/projects/${projectId}/collaboration/messages`, {
+    messages: [] as ProjectMessage[],
+  });
+}
+
+export async function sendProjectMessage(projectId: string, body: string) {
+  return apiFetch<{ message: ProjectMessage }>(
+    `/api/projects/${projectId}/collaboration/messages`,
+    { method: "POST", body: JSON.stringify({ body }) }
+  );
+}
+
+export async function getProjectTasks(projectId: string) {
+  return readApi(`/api/projects/${projectId}/collaboration/tasks`, {
+    tasks: [] as ProjectTask[],
+  });
+}
+
+export async function createProjectTask(
+  projectId: string,
+  data: { title: string; assigneeId: string }
+) {
+  return apiFetch<{ task: ProjectTask }>(`/api/projects/${projectId}/collaboration/tasks`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateProjectTask(
+  projectId: string,
+  taskId: string,
+  data: Partial<{ title: string; status: ProjectTask["status"]; assigneeId: string }>
+) {
+  return apiFetch<{ task: ProjectTask }>(
+    `/api/projects/${projectId}/collaboration/tasks/${taskId}`,
+    { method: "PATCH", body: JSON.stringify(data) }
+  );
+}
+
+export async function deleteProjectTask(projectId: string, taskId: string) {
+  return apiFetch<{ ok: boolean }>(
+    `/api/projects/${projectId}/collaboration/tasks/${taskId}`,
+    { method: "DELETE" }
+  );
+}
+
 export async function getNotifications() {
   try {
     return await apiFetch<{ notifications: Notification[]; unreadCount: number }>("/api/notifications");

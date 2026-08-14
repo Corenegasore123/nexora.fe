@@ -439,6 +439,339 @@ body {
     @apply bg-surface text-primary;
   }
 
+  .project-detail-toolbar {
+    @apply flex flex-wrap items-center justify-between gap-3;
+  }
+
+  .project-workspace {
+    @apply space-y-5;
+  }
+
+  .project-workspace-header {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
+  }
+
+  .project-workspace-header-main {
+    @apply min-w-0 space-y-2;
+  }
+
+  .project-workspace-meta {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .project-workspace-shared {
+    @apply text-xs text-foreground-muted;
+  }
+
+  .project-workspace-metrics {
+    @apply grid grid-cols-3 gap-3 sm:gap-4;
+  }
+
+  .project-workspace-metric {
+    @apply rounded-xl border border-border bg-surface px-4 py-4 text-center;
+  }
+
+  .project-workspace-metric-value {
+    @apply block text-2xl font-semibold tabular-nums text-foreground;
+  }
+
+  .project-workspace-metric-label {
+    @apply mt-1 block text-xs font-medium uppercase tracking-wide text-foreground-muted;
+  }
+
+  .project-detail-hero {
+    @apply flex flex-col gap-4 rounded-2xl border border-border p-6 sm:flex-row sm:items-start sm:justify-between;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary-soft) 50%, var(--color-surface)),
+      var(--color-surface)
+    );
+  }
+
+  .project-detail-hero-main {
+    @apply min-w-0 space-y-3;
+  }
+
+  .project-detail-hero-title-row {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .project-detail-role {
+    @apply text-xs font-medium uppercase tracking-wider text-foreground-muted;
+  }
+
+  .project-detail-stats {
+    @apply flex flex-wrap gap-x-4 gap-y-1 text-sm text-foreground-secondary;
+  }
+
+  .project-detail-layout {
+    @apply grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem];
+  }
+
+  .project-detail-main {
+    @apply min-w-0 space-y-4;
+  }
+
+  .project-detail-panels {
+    @apply grid gap-6 lg:grid-cols-2;
+  }
+
+  .project-overview-collab {
+    @apply lg:col-span-2;
+  }
+
+  .project-overview-collab-preview {
+    @apply grid gap-3 px-6 pb-6 sm:grid-cols-2;
+  }
+
+  .project-overview-collab-item {
+    @apply flex items-center gap-2.5 rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground-secondary;
+  }
+
+  .project-collab-grid {
+    @apply grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-stretch;
+  }
+
+  .project-collab-panel {
+    @apply flex min-h-[32rem] flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm;
+  }
+
+  .project-collab-panel-compact {
+    @apply min-h-[24rem];
+  }
+
+  .project-collab-panel-header {
+    @apply flex items-start gap-3 border-b border-border px-5 py-4;
+  }
+
+  .project-collab-panel-icon {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-primary;
+  }
+
+  .project-collab-panel-title {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .project-collab-panel-desc {
+    @apply mt-0.5 text-xs text-foreground-muted;
+  }
+
+  .project-collab-live {
+    @apply shrink-0 rounded-full bg-success-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success;
+  }
+
+  .project-collab-error {
+    @apply border-t border-border px-5 py-2 text-xs text-error;
+  }
+
+  .project-task-badge {
+    @apply rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-semibold tabular-nums text-primary;
+  }
+
+  .project-task-filters {
+    @apply flex flex-wrap gap-1 border-b border-border px-4 py-3;
+  }
+
+  .project-task-filter {
+    @apply rounded-md px-2.5 py-1 text-xs font-medium text-foreground-muted transition-colors hover:bg-background hover:text-foreground;
+  }
+
+  .project-task-filter-active {
+    @apply bg-primary-soft text-primary;
+  }
+
+  .project-task-form {
+    @apply space-y-2 border-b border-border px-4 py-4;
+  }
+
+  .project-task-form-row {
+    @apply flex gap-2;
+  }
+
+  .project-task-select {
+    @apply min-w-0 flex-1;
+  }
+
+  .project-task-add {
+    @apply shrink-0 px-4 py-3 text-xs;
+  }
+
+  .project-task-list {
+    @apply min-h-0 flex-1 divide-y divide-border overflow-y-auto;
+  }
+
+  .project-task-empty {
+    @apply px-4 py-6 text-sm text-foreground-muted;
+  }
+
+  .project-task-empty-state {
+    @apply flex flex-col items-center px-6 py-10 text-center;
+  }
+
+  .project-task-empty-icon {
+    @apply mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground-muted;
+  }
+
+  .project-task-item {
+    @apply flex items-start gap-3 px-4 py-3 transition-colors;
+  }
+
+  .project-task-item:hover {
+    background-color: color-mix(in srgb, var(--color-background) 60%, transparent);
+  }
+
+  .project-task-status {
+    @apply mt-0.5 shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold uppercase tracking-wide transition-colors;
+  }
+
+  .project-task-status-todo {
+    @apply border-border bg-background text-foreground-muted;
+  }
+
+  .project-task-status-progress {
+    @apply bg-primary-soft text-primary;
+    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  .project-task-status-done {
+    @apply bg-success-bg text-success;
+    border-color: color-mix(in srgb, var(--color-success) 20%, transparent);
+  }
+
+  .project-task-main {
+    @apply min-w-0 flex-1;
+  }
+
+  .project-task-title {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  .project-task-title-done {
+    @apply text-foreground-muted line-through;
+  }
+
+  .project-task-assignee {
+    @apply mt-0.5 text-xs text-foreground-muted;
+  }
+
+  .project-task-remove {
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-error-bg hover:text-error;
+  }
+
+  .project-chat-feed {
+    @apply flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-5 py-4;
+  }
+
+  .project-chat-empty {
+    @apply text-sm text-foreground-muted;
+  }
+
+  .project-chat-empty-state {
+    @apply m-auto flex max-w-xs flex-col items-center py-8 text-center;
+  }
+
+  .project-chat-empty-icon {
+    @apply mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background text-foreground-muted;
+  }
+
+  .project-chat-row {
+    @apply flex gap-2.5;
+  }
+
+  .project-chat-row-self {
+    @apply flex-row-reverse;
+  }
+
+  .project-chat-row-self .project-chat-content {
+    @apply items-end;
+  }
+
+  .project-chat-avatar {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-background text-[11px] font-semibold text-primary ring-1 ring-border;
+  }
+
+  .project-chat-avatar-spacer {
+    @apply w-8 shrink-0;
+  }
+
+  .project-chat-content {
+    @apply flex min-w-0 max-w-[85%] flex-col gap-1;
+  }
+
+  .project-chat-meta {
+    @apply flex items-center gap-2;
+  }
+
+  .project-chat-name {
+    @apply text-xs font-semibold text-foreground;
+  }
+
+  .project-chat-time {
+    @apply text-[10px] text-foreground-muted;
+  }
+
+  .project-chat-text {
+    @apply rounded-2xl rounded-tl-md border border-border bg-background px-3 py-2 text-sm text-foreground;
+  }
+
+  .project-chat-row-self .project-chat-text {
+    @apply rounded-tl-2xl rounded-tr-md bg-primary-soft text-foreground;
+    border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  }
+
+  .project-chat-compose {
+    @apply flex gap-2 border-t border-border p-4;
+  }
+
+  .project-chat-input {
+    @apply min-w-0 flex-1;
+  }
+
+  .project-chat-send {
+    @apply shrink-0 px-4 py-3 text-xs;
+  }
+
+  .project-detail-back {
+    @apply inline-flex items-center gap-2 text-sm font-medium text-foreground-muted transition-colors hover:text-primary;
+  }
+
+  .project-detail-description {
+    @apply text-sm leading-relaxed text-foreground-secondary;
+  }
+
+  .project-detail-tabs {
+    @apply flex flex-wrap gap-1 border-b border-border pb-px;
+  }
+
+  .project-detail-tab {
+    @apply rounded-t-lg border border-transparent px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground;
+  }
+
+  .project-detail-tab-active {
+    @apply border-border border-b-surface bg-surface text-primary;
+    margin-bottom: -1px;
+  }
+
+  .project-detail-overview {
+    @apply grid gap-4 px-6 py-6 sm:grid-cols-3;
+  }
+
+  .project-detail-overview-item {
+    @apply rounded-xl border border-border bg-background px-4 py-4;
+  }
+
+  .project-detail-overview-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .project-detail-overview-value {
+    @apply mt-2 text-sm font-medium text-foreground;
+  }
+
+  .project-detail-export-bar {
+    @apply flex flex-wrap gap-2 border-b border-border px-6 py-4;
+  }
+
   .projects-toolbar {
     @apply flex flex-col gap-3 border-b border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between;
   }
@@ -660,11 +993,15 @@ body {
   }
 
   .profile-hero {
-    @apply card flex flex-col gap-6 sm:flex-row sm:items-center;
+    @apply flex flex-col gap-5 rounded-2xl border border-border bg-surface p-6 sm:flex-row sm:items-center;
   }
 
   .profile-avatar {
-    @apply flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-accent text-2xl font-bold text-[var(--color-on-accent)] shadow-sm;
+    @apply flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-2xl font-bold text-primary;
+  }
+
+  .profile-sections {
+    @apply grid gap-6 lg:grid-cols-2;
   }
 
   .profile-stat-grid {
@@ -683,6 +1020,26 @@ body {
     @apply text-sm font-medium text-foreground;
   }
 
+  .settings-page {
+    @apply lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:items-start lg:gap-8;
+  }
+
+  .settings-nav {
+    @apply hidden flex-col gap-1 lg:sticky lg:top-6 lg:flex;
+  }
+
+  .settings-nav-link {
+    @apply inline-flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-surface hover:text-foreground;
+  }
+
+  .settings-content {
+    @apply min-w-0;
+  }
+
+  .settings-panel-body {
+    @apply space-y-0 px-6 pb-6;
+  }
+
   .settings-section {
     @apply card w-full space-y-4;
   }
@@ -696,7 +1053,7 @@ body {
   }
 
   .settings-row {
-    @apply flex flex-col gap-1 border-t border-border pt-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between;
+    @apply flex flex-col gap-1 border-t border-border py-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between;
   }
 
   .settings-row-label {
@@ -707,8 +1064,256 @@ body {
     @apply text-sm text-foreground;
   }
 
+  .settings-value-verified {
+    @apply text-success;
+  }
+
+  .settings-value-pending {
+    @apply text-foreground-muted;
+  }
+
   .settings-coming-soon {
-    @apply rounded-xl border border-dashed border-border bg-background px-4 py-3 text-xs text-foreground-muted;
+    @apply mt-4 flex items-start gap-3 rounded-xl border border-dashed border-border bg-background px-4 py-3 text-xs leading-relaxed text-foreground-muted;
+  }
+
+  .rules-toolbar {
+    @apply border-b border-border px-6 py-4;
+  }
+
+  .rules-search {
+    @apply block w-full sm:max-w-md;
+  }
+
+  .rules-search-input {
+    @apply w-full;
+  }
+
+  .rules-filters {
+    @apply flex flex-wrap gap-2 border-b border-border px-6 py-4;
+  }
+
+  .rules-filter-tab {
+    @apply inline-flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground;
+  }
+
+  .rules-filter-tab-active {
+    @apply border-primary bg-primary-soft text-primary;
+  }
+
+  .rules-filter-count {
+    @apply rounded-md bg-surface px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-foreground-muted;
+  }
+
+  .rules-filter-tab-active .rules-filter-count {
+    @apply bg-surface text-primary;
+  }
+
+  .rules-formula {
+    @apply block max-w-md truncate rounded-md bg-background px-2 py-1 font-mono text-xs text-foreground-secondary;
+  }
+
+  .rules-table td {
+    @apply align-top;
+  }
+
+  .history-toolbar {
+    @apply border-b border-border px-6 py-4;
+  }
+
+  .history-search {
+    @apply block w-full sm:max-w-md;
+  }
+
+  .history-search-input {
+    @apply w-full;
+  }
+
+  .history-filters {
+    @apply flex flex-wrap gap-2 border-b border-border px-6 py-4;
+  }
+
+  .history-filter-tab {
+    @apply inline-flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground;
+  }
+
+  .history-filter-tab-active {
+    @apply border-primary bg-primary-soft text-primary;
+  }
+
+  .history-filter-count {
+    @apply rounded-md bg-surface px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-foreground-muted;
+  }
+
+  .history-filter-tab-active .history-filter-count {
+    @apply bg-surface text-primary;
+  }
+
+  .reports-export-actions {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .reports-export-btn {
+    @apply inline-flex rounded-md border border-border bg-background px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary transition-colors hover:border-primary hover:bg-primary-soft;
+  }
+
+  .calculator-page {
+    @apply space-y-6;
+  }
+
+  .calculator-layout {
+    @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start;
+  }
+
+  .calculator-setup-body {
+    @apply space-y-5 px-6 pb-6;
+  }
+
+  .calculator-field-label {
+    @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .calculator-no-project {
+    @apply flex items-start gap-3 rounded-xl border border-dashed border-border bg-background px-4 py-3 text-sm text-foreground-secondary;
+  }
+
+  .calculator-tips {
+    @apply space-y-2.5 border-t border-border pt-5 text-xs text-foreground-muted;
+  }
+
+  .calculator-tips li {
+    @apply flex items-center gap-2;
+  }
+
+  .calculator-upload-body {
+    @apply space-y-4 px-6 pb-6;
+  }
+
+  .calculator-dropzone {
+    @apply flex min-h-[18rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-background p-8 transition-colors;
+  }
+
+  .calculator-dropzone-active {
+    @apply border-primary bg-primary-soft;
+  }
+
+  .calculator-dropzone-has-file {
+    @apply border-border-strong;
+  }
+
+  .calculator-dropzone-empty {
+    @apply text-center;
+  }
+
+  .calculator-dropzone-icon {
+    @apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted;
+  }
+
+  .calculator-preview {
+    @apply max-h-72 rounded-xl object-contain;
+  }
+
+  .calculator-filename {
+    @apply mt-4 text-xs font-medium uppercase tracking-wide text-foreground-muted;
+  }
+
+  .calculator-pipeline {
+    @apply rounded-xl border border-border bg-background px-4 py-4;
+  }
+
+  .calculator-pipeline-header {
+    @apply flex items-center gap-3;
+  }
+
+  .calculator-spinner {
+    @apply h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent;
+  }
+
+  .calculator-pipeline-steps {
+    @apply mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6;
+  }
+
+  .calculator-pipeline-step {
+    @apply space-y-1.5;
+  }
+
+  .calculator-pipeline-bar {
+    @apply h-1 rounded-full bg-border;
+  }
+
+  .calculator-pipeline-bar-active {
+    @apply bg-primary;
+  }
+
+  .calculator-pipeline-label {
+    @apply block text-[10px] font-medium uppercase tracking-wide text-foreground-muted;
+  }
+
+  .calculator-pipeline-label-active {
+    @apply text-primary;
+  }
+
+  .calculator-error {
+    @apply flex items-start gap-2 rounded-xl border border-error-border bg-error-bg px-4 py-3 text-sm text-error;
+  }
+
+  .calculator-actions {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .calculator-submit {
+    @apply min-w-[10rem];
+  }
+
+  .history-detail {
+    @apply space-y-6;
+  }
+
+  .history-detail-header {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
+  }
+
+  .history-detail-header-main {
+    @apply min-w-0 space-y-2;
+  }
+
+  .history-detail-meta {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .history-detail-grid {
+    @apply grid gap-6 lg:grid-cols-2;
+  }
+
+  .history-detail-image-wrap {
+    @apply p-4;
+  }
+
+  .history-detail-result {
+    @apply px-6 pb-6;
+  }
+
+  .history-detail-result-value {
+    @apply text-4xl font-bold tracking-tight text-foreground sm:text-5xl;
+  }
+
+  .history-detail-result-unit {
+    @apply ml-2 text-2xl font-light text-foreground-secondary;
+  }
+
+  .history-detail-panel-body {
+    @apply px-6 pb-6;
+  }
+
+  .history-detail-steps {
+    @apply divide-y divide-border;
+  }
+
+  .history-detail-step {
+    @apply px-6 py-5;
+  }
+
+  .history-detail-error-icon {
+    @apply mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-error-border bg-error-bg text-error;
   }
 
   .input-field {

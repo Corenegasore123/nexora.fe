@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { apiFetch, apiUrl } from "@/lib/api";
+import { Icon } from "@/components/icons/Icon";
 
 interface ComparisonRow {
   id: string;
@@ -31,7 +32,7 @@ function formatDelta(delta: number | null, unit: string | null, pct: number | nu
 function typeBadge(type: ComparisonRow["type"]) {
   if (type === "baseline") return "status-badge status-completed";
   if (type === "scenario") return "status-badge status-processing";
-  return "status-badge";
+  return "status-badge status-pending";
 }
 
 function deltaClass(delta: number | null) {
@@ -40,32 +41,82 @@ function deltaClass(delta: number | null) {
   return "text-success";
 }
 
-export function ComparisonView({ jobId }: { jobId: string }) {
+export function ComparisonView({ jobId, embedded = false }: { jobId: string; embedded?: boolean }) {
   const [data, setData] = useState<ComparisonData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     apiFetch<ComparisonData>(`/api/calculations/${jobId}/compare`)
       .then(setData)
-      .catch(() => setData(null));
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
   }, [jobId]);
 
-  if (!data) return null;
+  if (loading) {
+    return embedded ? (
+      <section className="dashboard-section">
+        <div className="dashboard-empty">
+          <p className="text-sm text-foreground-muted">Loading comparisons…</p>
+        </div>
+      </section>
+    ) : null;
+  }
+
+  if (!data) {
+    return embedded ? (
+      <section className="dashboard-section">
+        <div className="dashboard-empty">
+          <p className="text-sm font-medium text-foreground">No comparison data</p>
+          <p className="mt-1 text-sm text-foreground-muted">
+            Create a scenario or revision to compare results.
+          </p>
+        </div>
+      </section>
+    ) : null;
+  }
 
   const rows = [data.baseline, ...data.scenarios, ...data.versions];
-  if (rows.length <= 1) return null;
+  if (rows.length <= 1) {
+    return embedded ? (
+      <section className="dashboard-section">
+        <div className="dashboard-section-header">
+          <span className="settings-section-icon">
+            <Icon name="scale" size={18} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-sm font-semibold text-foreground">Compare results</h2>
+            <p className="mt-1 text-xs text-foreground-muted">
+              Baseline only — create scenarios to compare variations.
+            </p>
+          </div>
+        </div>
+        <div className="dashboard-empty">
+          <p className="text-sm text-foreground-muted">
+            Use the Calculation tab to create a what-if scenario.
+          </p>
+        </div>
+      </section>
+    ) : null;
+  }
 
-  return (
-    <section className="mt-12">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="section-label">Comparison</h2>
-        <a
-          href={apiUrl(`/api/calculations/${jobId}/compare?format=csv`)}
-          className="text-xs text-foreground-muted hover:text-primary"
-        >
+  const content = (
+    <>
+      <div className="dashboard-section-header">
+        <span className="settings-section-icon">
+          <Icon name="scale" size={18} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm font-semibold text-foreground">Compare results</h2>
+          <p className="mt-1 text-xs text-foreground-muted">
+            Baseline vs scenarios and version revisions.
+          </p>
+        </div>
+        <a href={apiUrl(`/api/calculations/${jobId}/compare?format=csv`)} className="dashboard-section-link">
           Export CSV
         </a>
       </div>
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+      <div className="dashboard-table-wrap">
         <table className="data-table">
           <thead>
             <tr>
@@ -88,20 +139,17 @@ export function ComparisonView({ jobId }: { jobId: string }) {
                 <td>
                   <span className={typeBadge(row.type)}>{row.type}</span>
                 </td>
-                <td className="font-mono text-foreground">
+                <td className="font-mono text-sm">
                   {row.result !== null ? `${row.result} ${row.unit ?? ""}` : "—"}
                 </td>
-                <td className={deltaClass(row.delta)}>
+                <td className={`font-mono text-sm ${deltaClass(row.delta)}`}>
                   {row.type === "baseline"
                     ? "—"
                     : formatDelta(row.delta, row.unit, row.deltaPercent)}
                 </td>
                 <td>
                   {row.type !== "baseline" && (
-                    <Link
-                      href={`/app/history/${row.id}`}
-                      className="text-xs text-foreground-muted hover:text-primary"
-                    >
+                    <Link href={`/app/history/${row.id}`} className="dashboard-row-link text-xs">
                       Open
                     </Link>
                   )}
@@ -111,6 +159,12 @@ export function ComparisonView({ jobId }: { jobId: string }) {
           </tbody>
         </table>
       </div>
-    </section>
+    </>
   );
+
+  if (embedded) {
+    return <section className="dashboard-section">{content}</section>;
+  }
+
+  return <section className="mt-12">{content}</section>;
 }
