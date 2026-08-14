@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
-import { isAdmin } from "@/lib/roles";
 import { NotificationBell } from "@/components/NotificationBell";
 import { Icon, type IconName } from "@/components/icons/Icon";
+import { BrandMark } from "@/components/BrandMark";
 import { AppPageProvider, useAppPageMeta } from "@/components/app/AppPageContext";
 
 type NavItem = {
@@ -16,19 +16,13 @@ type NavItem = {
   section?: string;
 };
 
-/** Engineer workspace navigation — no platform admin entries. */
-const ENGINEER_NAV: NavItem[] = [
+const APP_NAV: NavItem[] = [
   { href: "/app", label: "Dashboard", icon: "layout-dashboard", section: "Overview" },
   { href: "/app/projects", label: "Projects", icon: "folder", section: "Overview" },
   { href: "/app/calculator", label: "New Calculation", icon: "plus-circle", section: "Analysis" },
   { href: "/app/history", label: "History", icon: "history", section: "Analysis" },
   { href: "/app/reports", label: "Reports", icon: "file-text", section: "Output" },
   { href: "/app/rules", label: "Rules", icon: "book-open", section: "Resources" },
-];
-
-/** Shown only to administrators — separate from the engineer workspace. */
-const ADMIN_NAV: NavItem[] = [
-  { href: "/app/admin", label: "Platform Admin", icon: "shield", section: "Administration" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -49,10 +43,7 @@ export function AppSidebar({
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
 
-  const navItems = useMemo(
-    () => (user && isAdmin(user.role) ? [...ENGINEER_NAV, ...ADMIN_NAV] : ENGINEER_NAV),
-    [user]
-  );
+  const navItems = APP_NAV;
 
   const handleLogout = async () => {
     await logout();
@@ -79,7 +70,7 @@ export function AppSidebar({
           {collapsed ? (
             <div className="app-sidebar-header-collapsed">
               <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="QuantaScope">
-                <Icon name="layers" size={16} />
+                <BrandMark size={16} />
               </Link>
               <button
                 type="button"
@@ -94,7 +85,7 @@ export function AppSidebar({
             <>
               <Link href="/app" className="app-sidebar-brand" onClick={onClose}>
                 <span className="app-sidebar-logo-mark">
-                  <Icon name="layers" size={16} />
+                  <BrandMark size={16} />
                 </span>
                 <span className="app-sidebar-logo-text">QuantaScope</span>
               </Link>

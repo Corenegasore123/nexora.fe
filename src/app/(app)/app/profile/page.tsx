@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getMe, AuthUser } from "@/lib/api";
-import { displayRole, isAdmin } from "@/lib/roles";
+import { displayRole } from "@/lib/roles";
 import { Icon } from "@/components/icons/Icon";
 import { useSetAppPageMeta } from "@/components/app/AppPageContext";
 import { SkeletonTable } from "@/components/ui/Skeleton";
@@ -25,8 +25,8 @@ function formatDate(value: string) {
   });
 }
 
-function roleLabel(role: AuthUser["role"]) {
-  return displayRole(role);
+function roleLabel() {
+  return displayRole();
 }
 
 export default function ProfilePage() {
@@ -67,13 +67,7 @@ export default function ProfilePage() {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-xl font-semibold text-foreground sm:text-2xl">{user.name}</h2>
-            <span
-              className={
-                isAdmin(user.role) ? "status-badge status-processing" : "status-badge status-completed"
-              }
-            >
-              {roleLabel(user.role)}
-            </span>
+            <span className="status-badge status-completed">{roleLabel()}</span>
           </div>
           <p className="mt-1 text-sm text-foreground-secondary">{user.email}</p>
           <p className="mt-2 text-xs text-foreground-muted">
@@ -125,7 +119,7 @@ export default function ProfilePage() {
             </div>
             <div className="settings-row">
               <span className="settings-row-label">Role</span>
-              <span className="settings-row-value">{roleLabel(user.role)}</span>
+              <span className="settings-row-value">{roleLabel()}</span>
             </div>
             <div className="settings-row">
               <span className="settings-row-label">Verification</span>
@@ -159,32 +153,6 @@ export default function ProfilePage() {
             </p>
           </div>
         </section>
-
-        {isAdmin(user.role) && (
-          <section className="dashboard-section">
-            <div className="dashboard-section-header">
-              <span className="settings-section-icon">
-                <Icon name="shield" size={18} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <h2 className="text-sm font-semibold text-foreground">Platform administration</h2>
-                <p className="mt-1 text-xs text-foreground-muted">
-                  Separate console for user management and system health.
-                </p>
-              </div>
-            </div>
-            <div className="settings-panel-body">
-              <p className="text-sm leading-relaxed text-foreground-secondary">
-                Manage users, review audit logs, and monitor platform health. This is not part of
-                the engineer workflow.
-              </p>
-              <Link href="/app/admin" className="btn-ghost mt-4 inline-flex gap-2">
-                Open platform admin
-                <Icon name="arrow-right" size={14} />
-              </Link>
-            </div>
-          </section>
-        )}
       </div>
     </div>
   );

@@ -18,7 +18,6 @@ function resolvePageMeta(pathname: string): AppPageMeta {
     "/app/history": { title: "History", subtitle: "Past calculations" },
     "/app/reports": { title: "Reports", subtitle: "Exports & downloads" },
     "/app/rules": { title: "Rules", subtitle: "Calculation engine" },
-    "/app/admin": { title: "Admin", subtitle: "Platform administration" },
     "/app/profile": { title: "Profile", subtitle: "Your account" },
     "/app/settings": { title: "Settings", subtitle: "Preferences" },
   };

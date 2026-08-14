@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       { source: "/calculations/:id", destination: "/app/history/:id", permanent: true },
       { source: "/rules", destination: "/app/rules", permanent: true },
       { source: "/settings", destination: "/app/settings", permanent: true },
-      { source: "/admin", destination: "/app/admin", permanent: true },
+      { source: "/admin", destination: "/app", permanent: true },
     ];
   },
   async rewrites() {

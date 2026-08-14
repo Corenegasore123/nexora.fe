@@ -2179,23 +2179,27 @@ body {
   }
 
   .marketing-footer-wrap {
-    @apply bg-[#3d4f5c] py-10 sm:py-12 md:py-14;
+    @apply bg-[#3d4f5c] px-4 py-10 sm:px-6 sm:py-12 lg:py-14;
   }
 
   .marketing-footer-shell {
-    @apply w-full rounded-2xl border border-black/20 bg-[#2a3844] px-5 py-8 text-white shadow-modal sm:rounded-3xl sm:px-8 sm:py-10 md:px-12 md:py-14;
+    @apply w-full rounded-2xl border border-black/20 bg-[#2a3844] px-5 py-8 text-white shadow-modal sm:rounded-3xl sm:px-8 sm:py-10 lg:px-12 lg:py-12;
   }
 
   .marketing-footer-grid {
-    @apply grid gap-8 sm:grid-cols-2 sm:gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] md:items-start;
+    @apply grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-start lg:gap-12;
   }
 
   .marketing-footer-brand {
-    @apply sm:col-span-2 md:col-span-1;
+    @apply text-center lg:text-left;
   }
 
   .marketing-footer-logo {
-    @apply flex items-center justify-center gap-2.5 md:justify-start;
+    @apply inline-flex items-center justify-center gap-2.5 lg:justify-start;
+  }
+
+  .marketing-footer-logo-text {
+    @apply text-lg font-bold text-white;
   }
 
   .marketing-footer-logo-mark {
@@ -2203,15 +2207,23 @@ body {
   }
 
   .marketing-footer-desc {
-    @apply mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-white/65 md:mx-0 md:max-w-sm md:text-left;
+    @apply mx-auto mt-4 max-w-lg text-sm leading-relaxed text-white/65 lg:mx-0 lg:max-w-md;
   }
 
-  .marketing-footer-tagline {
-    @apply mt-3 text-center text-[10px] font-bold uppercase tracking-widest text-white/35 sm:text-xs md:text-left;
+  .marketing-footer-tags {
+    @apply mt-5 flex flex-wrap justify-center gap-2 lg:justify-start;
+  }
+
+  .marketing-footer-tags span {
+    @apply rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/55;
+  }
+
+  .marketing-footer-nav {
+    @apply grid max-w-md grid-cols-1 gap-8 mx-auto sm:max-w-none sm:grid-cols-2 sm:gap-10 lg:mx-0 lg:gap-12;
   }
 
   .marketing-footer-col {
-    @apply text-left;
+    @apply min-w-0 text-center sm:text-left;
   }
 
   .marketing-footer-heading {
@@ -2219,15 +2231,139 @@ body {
   }
 
   .marketing-footer-links {
-    @apply mt-4 space-y-2.5 sm:space-y-3;
+    @apply mt-4 space-y-3;
   }
 
   .marketing-footer-link {
-    @apply inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-accent;
+    @apply inline-flex items-center justify-center gap-2 text-sm text-white/70 transition-colors hover:text-accent sm:justify-start;
   }
 
   .marketing-footer-copy {
-    @apply mt-6 text-center text-xs text-white/40 sm:mt-8;
+    @apply mt-6 px-2 text-center text-xs leading-relaxed text-white/40 sm:mt-8;
+  }
+
+  .features-hero {
+    @apply pb-12 md:pb-16;
+  }
+
+  .features-highlight-grid {
+    @apply mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:mt-16 lg:grid-cols-4;
+  }
+
+  .features-highlight-card {
+    @apply relative overflow-hidden rounded-2xl border border-border bg-surface px-4 py-5 text-center shadow-sm;
+    background:
+      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+      linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 35%, transparent), color-mix(in srgb, var(--color-accent) 25%, transparent)) border-box;
+  }
+
+  .features-highlight-value {
+    @apply mt-3 text-2xl font-bold tabular-nums text-foreground sm:text-3xl;
+  }
+
+  .features-highlight-label {
+    @apply mt-1 text-[10px] font-semibold uppercase tracking-wide text-foreground-muted sm:text-xs;
+  }
+
+  .features-category-section {
+    @apply py-16 md:py-20;
+  }
+
+  .features-category-layout {
+    @apply grid gap-10 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] lg:gap-14 xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)];
+  }
+
+  .features-category-intro {
+    @apply border-l-4 pl-5 text-left lg:sticky lg:top-24 lg:self-start lg:pl-6;
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+
+  .features-category-step {
+    @apply font-mono text-xs font-bold uppercase tracking-widest text-primary;
+  }
+
+  .features-category-heading {
+    @apply mt-3 flex items-center gap-3;
+  }
+
+  .features-category-summary {
+    @apply mt-4 text-sm leading-relaxed text-foreground-secondary md:text-base;
+  }
+
+  .features-category-grid {
+    @apply grid gap-4 sm:grid-cols-2 sm:gap-5;
+  }
+
+  .features-card {
+    @apply h-full rounded-2xl border border-border bg-surface p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated;
+  }
+
+  .features-card:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+
+  .features-card-icon {
+    @apply mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary-soft text-primary;
+  }
+
+  .features-card-top {
+    @apply mb-2 flex items-center justify-between gap-2;
+  }
+
+  .features-card-tag {
+    @apply rounded-md bg-primary-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary;
+  }
+
+  .features-card-check {
+    @apply text-success;
+  }
+
+  .features-card-title {
+    @apply font-semibold text-foreground;
+  }
+
+  .features-card-desc {
+    @apply mt-2 text-sm leading-relaxed text-foreground-secondary;
+  }
+
+  .features-compare-section {
+    @apply border-t border-border bg-background py-16 md:py-20;
+  }
+
+  .features-compare-cards {
+    @apply mt-10 space-y-3;
+  }
+
+  .features-compare-card {
+    @apply rounded-xl border border-border bg-surface p-4;
+  }
+
+  .features-compare-card-title {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .features-compare-card-row {
+    @apply mt-2 flex items-center justify-between text-xs text-foreground-muted;
+  }
+
+  .features-compare-table-wrap {
+    @apply mt-12 overflow-hidden rounded-2xl border border-border bg-surface shadow-elevated;
+  }
+
+  .features-compare-table .features-compare-yes {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-soft text-primary;
+  }
+
+  .features-compare-yes {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-soft text-primary;
+  }
+
+  .features-compare-no {
+    @apply text-foreground-placeholder;
+  }
+
+  .features-compare-partial {
+    @apply text-xs font-medium text-foreground-muted;
   }
 
   .marketing-page-hero {

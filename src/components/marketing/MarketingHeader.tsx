@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/icons/Icon";
+import { BrandMark } from "@/components/BrandMark";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -48,7 +49,9 @@ export function MarketingHeader() {
         >
           {/* Logo */}
           <Link href="/" prefetch className="marketing-nav-logo">
-            <span className="marketing-nav-logo-mark">Qa</span>
+            <span className="marketing-nav-logo-mark">
+              <BrandMark size={18} />
+            </span>
             <span className="marketing-nav-logo-text">QuantaScope</span>
           </Link>
 

@@ -24,12 +24,10 @@ export async function proxy(request: NextRequest) {
   }
 
   const session = request.cookies.get("quantscope_session");
-  const role = request.cookies.get("quantscope_role")?.value;
   const isPublic = PUBLIC_PATHS.has(pathname);
   const isApp = pathname.startsWith("/app");
-  const isAdminRoute = pathname === "/app/admin" || pathname.startsWith("/app/admin/");
 
-  if (isAdminRoute && role !== "ADMIN") {
+  if (pathname === "/app/admin" || pathname.startsWith("/app/admin/")) {
     return NextResponse.redirect(new URL("/app", request.url));
   }
 

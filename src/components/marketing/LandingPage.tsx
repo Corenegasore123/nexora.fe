@@ -7,7 +7,7 @@ import { ScrollReveal, Tilt3D } from "@/components/marketing/lazy-motion";
 import { MarketingSectionHeader } from "./MarketingSectionHeader";
 
 const STATS = [
-  { label: "Workflow steps", value: "5", icon: "layers" as IconName },
+  { label: "Workflow steps", value: "5", icon: "route" as IconName },
   { label: "Report formats", value: "3+", icon: "file-text" as IconName },
   { label: "Audit coverage", value: "100%", icon: "clipboard-check" as IconName },
   { label: "Team roles", value: "3", icon: "users" as IconName },
@@ -89,7 +89,7 @@ export function LandingPage() {
               </ScrollReveal>
             </div>
             <ScrollReveal animation="fade-right" immediate delay={200} className="mx-auto hidden w-full max-w-sm lg:block lg:max-w-none">
-              <Tilt3D intensity={14} className="float-3d">
+              <Tilt3D intensity={14}>
                 <ProductFlowVisualLazy variant="light" drawingOnly />
               </Tilt3D>
             </ScrollReveal>
