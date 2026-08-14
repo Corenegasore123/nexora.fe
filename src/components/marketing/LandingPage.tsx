@@ -178,7 +178,7 @@ export function LandingPage() {
                   <div className="border-t border-white/10 bg-[#2a3844] p-5 text-center">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Sample output</p>
                     <p className="mt-1 text-lg font-bold text-white">Cut volume: 142.5 m³</p>
-                    <p className="text-sm text-white/60">Chapter 3 earthwork · Full audit trail attached</p>
+                    <p className="text-sm text-white/60">Earthwork quantities · Full audit trail attached</p>
                   </div>
                 </div>
               </Tilt3D>

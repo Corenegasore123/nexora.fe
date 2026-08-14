@@ -69,7 +69,7 @@ export function AppSidebar({
           {collapsed ? (
             <div className="app-sidebar-header-collapsed">
               <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="QuantaScope">
-                Qa
+                <Icon name="layers" size={16} />
               </Link>
               <button
                 type="button"
@@ -83,7 +83,9 @@ export function AppSidebar({
           ) : (
             <>
               <Link href="/app" className="app-sidebar-brand" onClick={onClose}>
-                <span className="app-sidebar-logo-mark">Qa</span>
+                <span className="app-sidebar-logo-mark">
+                  <Icon name="layers" size={16} />
+                </span>
                 <span className="app-sidebar-logo-text">QuantaScope</span>
               </Link>
               <button
@@ -129,7 +131,9 @@ export function AppSidebar({
         </nav>
 
         <div className="app-sidebar-footer">
-          {user && !collapsed && <p className="app-sidebar-user">{user.name}</p>}
+          {user && !collapsed && (
+            <p className="app-sidebar-user">{user.name}</p>
+          )}
           <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link" title={collapsed ? "Profile" : undefined}>
             <Icon name="user" size={18} className="text-white/50" />
             {!collapsed && "Profile"}

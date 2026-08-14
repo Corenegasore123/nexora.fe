@@ -215,11 +215,11 @@ body {
   }
 
   .app-sidebar-logo-mark {
-    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-[10px] font-bold text-[var(--color-on-accent)];
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-[var(--color-on-accent)];
   }
 
   .app-sidebar-logo-text {
-    @apply truncate text-sm font-bold text-white;
+    @apply truncate text-[15px] font-semibold tracking-tight text-white;
   }
 
   .app-nav-section {
@@ -265,7 +265,7 @@ body {
   }
 
   .app-sidebar-user {
-    @apply truncate px-2 text-xs font-medium text-white/90;
+    @apply mb-1 truncate px-3.5 text-xs text-white/50;
   }
 
   .app-topbar {
@@ -447,6 +447,47 @@ body {
     @apply space-y-5;
   }
 
+  .project-workspace-hero {
+    @apply flex flex-col gap-5 rounded-2xl border border-border p-6 sm:flex-row sm:items-start sm:justify-between;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary-soft) 45%, var(--color-surface)),
+      var(--color-surface)
+    );
+  }
+
+  .project-workspace-hero-main {
+    @apply min-w-0 space-y-2;
+  }
+
+  .project-workspace-hero-actions {
+    @apply flex shrink-0 flex-col items-end gap-3 sm:items-end;
+  }
+
+  .project-workspace-title-row {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .project-workspace-title {
+    @apply text-xl font-bold tracking-tight text-foreground sm:text-2xl;
+  }
+
+  .project-workspace-meta-sep {
+    @apply text-foreground-muted;
+  }
+
+  .project-workspace-avatars {
+    @apply flex items-center;
+  }
+
+  .project-workspace-avatar {
+    @apply -ml-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-surface bg-primary-soft text-[10px] font-bold text-primary first:ml-0;
+  }
+
+  .project-workspace-avatar-more {
+    @apply bg-background text-foreground-muted;
+  }
+
   .project-workspace-header {
     @apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
   }
@@ -464,11 +505,15 @@ body {
   }
 
   .project-workspace-metrics {
-    @apply grid grid-cols-3 gap-3 sm:gap-4;
+    @apply grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4;
   }
 
   .project-workspace-metric {
-    @apply rounded-xl border border-border bg-surface px-4 py-4 text-center;
+    @apply flex flex-col items-center rounded-xl border border-border bg-surface px-4 py-4 text-center transition-colors hover:border-border-strong hover:bg-background;
+  }
+
+  .project-workspace-metric-icon {
+    @apply mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary-soft text-primary;
   }
 
   .project-workspace-metric-value {
@@ -513,7 +558,7 @@ body {
   }
 
   .project-detail-panels {
-    @apply grid gap-6 lg:grid-cols-2;
+    @apply grid gap-8 lg:grid-cols-2;
   }
 
   .project-overview-collab {
@@ -524,12 +569,80 @@ body {
     @apply grid gap-3 px-6 pb-6 sm:grid-cols-2;
   }
 
+  .project-overview-collab-grid {
+    @apply grid gap-6 px-6 pb-6 pt-4 sm:gap-8 lg:grid-cols-2;
+  }
+
+  .project-overview-preview {
+    @apply rounded-xl border border-border bg-background p-5;
+  }
+
+  .project-overview-preview-title {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .project-overview-preview-empty {
+    @apply mt-4 text-sm text-foreground-muted;
+  }
+
+  .project-overview-preview-list {
+    @apply mt-4 space-y-3;
+  }
+
+  .project-overview-preview-item {
+    @apply border-b border-border pb-3 last:border-0 last:pb-0;
+  }
+
+  .project-overview-preview-author {
+    @apply text-xs font-semibold text-foreground;
+  }
+
+  .project-overview-preview-text {
+    @apply mt-0.5 line-clamp-2 text-sm text-foreground-secondary;
+  }
+
+  .project-overview-preview-task {
+    @apply flex items-center gap-2.5 text-sm;
+  }
+
+  .project-overview-preview-task-title {
+    @apply min-w-0 flex-1 truncate font-medium text-foreground;
+  }
+
+  .project-overview-preview-task-assignee {
+    @apply shrink-0 text-xs text-foreground-muted;
+  }
+
   .project-overview-collab-item {
     @apply flex items-center gap-2.5 rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground-secondary;
   }
 
+  .project-collab-layout {
+    @apply space-y-6;
+  }
+
+  .project-collab-intro {
+    @apply rounded-xl border border-border bg-background px-5 py-5;
+  }
+
+  .project-collab-intro-text {
+    @apply text-sm leading-relaxed text-foreground-secondary;
+  }
+
+  .project-collab-team-strip {
+    @apply mt-4 flex flex-wrap gap-2;
+  }
+
+  .project-collab-team-member {
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground-secondary;
+  }
+
+  .project-collab-team-avatar {
+    @apply flex h-5 w-5 items-center justify-center rounded-full bg-primary-soft text-[8px] font-bold text-primary;
+  }
+
   .project-collab-grid {
-    @apply grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-stretch;
+    @apply grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] xl:items-stretch;
   }
 
   .project-collab-panel {
@@ -557,7 +670,29 @@ body {
   }
 
   .project-collab-live {
-    @apply shrink-0 rounded-full bg-success-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success;
+    @apply inline-flex shrink-0 items-center gap-1.5 rounded-full bg-success-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success;
+  }
+
+  .project-collab-live-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-success;
+    animation: project-live-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes project-live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .project-collab-refresh {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground-muted transition-colors hover:border-border-strong hover:text-foreground;
+  }
+
+  .project-collab-spin {
+    animation: project-spin 0.8s linear infinite;
+  }
+
+  @keyframes project-spin {
+    to { transform: rotate(360deg); }
   }
 
   .project-collab-error {
@@ -568,20 +703,72 @@ body {
     @apply rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-semibold tabular-nums text-primary;
   }
 
+  .project-task-progress-wrap {
+    @apply space-y-2 border-b border-border px-4 py-3;
+  }
+
+  .project-task-progress-bar {
+    @apply h-1.5 overflow-hidden rounded-full bg-background;
+  }
+
+  .project-task-progress-fill {
+    @apply block h-full rounded-full bg-primary transition-all duration-500;
+  }
+
+  .project-task-stats {
+    @apply flex flex-wrap gap-x-4 gap-y-1;
+  }
+
+  .project-task-stat {
+    @apply inline-flex items-center gap-1.5 text-[10px] font-medium text-foreground-muted;
+  }
+
+  .project-task-stat-dot {
+    @apply h-1.5 w-1.5 rounded-full;
+  }
+
+  .project-task-stat-todo .project-task-stat-dot {
+    @apply bg-foreground-muted;
+  }
+
+  .project-task-stat-progress .project-task-stat-dot {
+    @apply bg-primary;
+  }
+
+  .project-task-stat-done .project-task-stat-dot {
+    @apply bg-success;
+  }
+
   .project-task-filters {
     @apply flex flex-wrap gap-1 border-b border-border px-4 py-3;
   }
 
   .project-task-filter {
-    @apply rounded-md px-2.5 py-1 text-xs font-medium text-foreground-muted transition-colors hover:bg-background hover:text-foreground;
+    @apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-foreground-muted transition-colors hover:bg-background hover:text-foreground;
+  }
+
+  .project-task-filter-count {
+    @apply rounded-full bg-background px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-foreground-muted;
   }
 
   .project-task-filter-active {
     @apply bg-primary-soft text-primary;
   }
 
+  .project-task-filter-active .project-task-filter-count {
+    @apply bg-surface text-primary;
+  }
+
   .project-task-form {
-    @apply space-y-2 border-b border-border px-4 py-4;
+    @apply border-b border-border px-4 py-4;
+  }
+
+  .project-task-form-inner {
+    @apply space-y-2;
+  }
+
+  .project-task-input {
+    @apply w-full;
   }
 
   .project-task-form-row {
@@ -593,11 +780,19 @@ body {
   }
 
   .project-task-add {
-    @apply shrink-0 px-4 py-3 text-xs;
+    @apply inline-flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs;
   }
 
   .project-task-list {
     @apply min-h-0 flex-1 divide-y divide-border overflow-y-auto;
+  }
+
+  .project-task-skeleton {
+    @apply space-y-3 px-4 py-4;
+  }
+
+  .project-task-skeleton-row {
+    @apply h-12 animate-pulse rounded-lg bg-background;
   }
 
   .project-task-empty {
@@ -613,11 +808,39 @@ body {
   }
 
   .project-task-item {
-    @apply flex items-start gap-3 px-4 py-3 transition-colors;
+    @apply flex items-center gap-3 px-4 py-3 transition-colors;
+  }
+
+  .project-task-item-done {
+    opacity: 0.75;
   }
 
   .project-task-item:hover {
     background-color: color-mix(in srgb, var(--color-background) 60%, transparent);
+  }
+
+  .project-task-check {
+    @apply flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors;
+  }
+
+  .project-task-check-todo {
+    @apply border-border bg-background;
+  }
+
+  .project-task-check-todo:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  }
+
+  .project-task-check-in-progress {
+    @apply border-primary bg-primary-soft;
+  }
+
+  .project-task-check-partial {
+    @apply h-2 w-2 rounded-full bg-primary;
+  }
+
+  .project-task-check-done {
+    @apply border-success bg-success text-white;
   }
 
   .project-task-status {
@@ -638,6 +861,22 @@ body {
     border-color: color-mix(in srgb, var(--color-success) 20%, transparent);
   }
 
+  .project-task-status-pill {
+    @apply hidden shrink-0 rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:inline-block;
+  }
+
+  .project-task-status-pill-todo {
+    @apply bg-background text-foreground-muted;
+  }
+
+  .project-task-status-pill-in-progress {
+    @apply bg-primary-soft text-primary;
+  }
+
+  .project-task-status-pill-done {
+    @apply bg-success-bg text-success;
+  }
+
   .project-task-main {
     @apply min-w-0 flex-1;
   }
@@ -650,16 +889,68 @@ body {
     @apply text-foreground-muted line-through;
   }
 
+  .project-task-meta {
+    @apply mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5;
+  }
+
+  .project-task-assignee-chip {
+    @apply inline-flex items-center gap-1.5 text-xs text-foreground-secondary;
+  }
+
+  .project-task-assignee-avatar {
+    @apply flex h-4 w-4 items-center justify-center rounded-full bg-primary-soft text-[7px] font-bold text-primary;
+  }
+
+  .project-task-time {
+    @apply text-[10px] text-foreground-muted;
+  }
+
+  .project-task-by {
+    @apply text-[10px] text-foreground-muted;
+  }
+
   .project-task-assignee {
     @apply mt-0.5 text-xs text-foreground-muted;
   }
 
   .project-task-remove {
-    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-error-bg hover:text-error;
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-foreground-muted opacity-0 transition-all hover:bg-error-bg hover:text-error;
+  }
+
+  .project-task-item:hover .project-task-remove {
+    @apply opacity-100;
   }
 
   .project-chat-feed {
-    @apply flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-5 py-4;
+    @apply flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-5 py-4;
+  }
+
+  .project-chat-day-group {
+    @apply space-y-2;
+  }
+
+  .project-chat-date-divider {
+    @apply relative my-3 flex items-center justify-center;
+  }
+
+  .project-chat-date-divider span {
+    @apply rounded-full border border-border bg-background px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
+  }
+
+  .project-chat-skeleton {
+    @apply space-y-4;
+  }
+
+  .project-chat-skeleton-row {
+    @apply flex gap-2.5;
+  }
+
+  .project-chat-skeleton-avatar {
+    @apply h-8 w-8 shrink-0 animate-pulse rounded-full bg-background;
+  }
+
+  .project-chat-skeleton-bubble {
+    @apply h-10 flex-1 animate-pulse rounded-2xl bg-background;
   }
 
   .project-chat-empty {
@@ -678,6 +969,10 @@ body {
     @apply flex gap-2.5;
   }
 
+  .project-chat-row-continued {
+    @apply mt-0;
+  }
+
   .project-chat-row-self {
     @apply flex-row-reverse;
   }
@@ -687,7 +982,7 @@ body {
   }
 
   .project-chat-avatar {
-    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-background text-[11px] font-semibold text-primary ring-1 ring-border;
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white ring-1 ring-border;
   }
 
   .project-chat-avatar-spacer {
@@ -695,11 +990,11 @@ body {
   }
 
   .project-chat-content {
-    @apply flex min-w-0 max-w-[85%] flex-col gap-1;
+    @apply flex min-w-0 max-w-[85%] flex-col gap-0.5;
   }
 
   .project-chat-meta {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-2 px-1;
   }
 
   .project-chat-name {
@@ -711,7 +1006,7 @@ body {
   }
 
   .project-chat-text {
-    @apply rounded-2xl rounded-tl-md border border-border bg-background px-3 py-2 text-sm text-foreground;
+    @apply rounded-2xl rounded-tl-md border border-border bg-background px-3.5 py-2 text-sm leading-relaxed text-foreground;
   }
 
   .project-chat-row-self .project-chat-text {
@@ -719,16 +1014,33 @@ body {
     border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
 
+  .project-chat-row-continued .project-chat-text {
+    @apply rounded-tl-2xl;
+  }
+
   .project-chat-compose {
-    @apply flex gap-2 border-t border-border p-4;
+    @apply border-t border-border p-4;
+  }
+
+  .project-chat-compose-inner {
+    @apply flex items-end gap-2 rounded-xl border border-border bg-background p-1.5 focus-within:border-border-strong;
   }
 
   .project-chat-input {
-    @apply min-w-0 flex-1;
+    @apply min-h-[2.25rem] min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-1.5 text-sm text-foreground outline-none placeholder:text-foreground-placeholder;
   }
 
   .project-chat-send {
-    @apply shrink-0 px-4 py-3 text-xs;
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40;
+    color: var(--color-on-accent);
+  }
+
+  .project-chat-compose-hint {
+    @apply mt-2 flex items-center justify-between px-1 text-[10px] text-foreground-muted;
+  }
+
+  .project-chat-char-count {
+    @apply tabular-nums;
   }
 
   .project-detail-back {
@@ -739,17 +1051,33 @@ body {
     @apply text-sm leading-relaxed text-foreground-secondary;
   }
 
+  .project-detail-tabs-wrap {
+    @apply rounded-t-2xl border border-b-0 border-border bg-surface px-2 pt-2;
+  }
+
   .project-detail-tabs {
-    @apply flex flex-wrap gap-1 border-b border-border pb-px;
+    @apply flex flex-wrap gap-1;
+  }
+
+  .project-detail-content {
+    @apply rounded-b-2xl border border-border bg-surface p-4 sm:p-6;
   }
 
   .project-detail-tab {
-    @apply rounded-t-lg border border-transparent px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground;
+    @apply inline-flex items-center gap-1.5 rounded-t-lg border border-transparent px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted transition-colors hover:text-foreground sm:px-4;
+  }
+
+  .project-detail-tab-count {
+    @apply rounded-full bg-background px-1.5 py-0.5 text-[10px] font-bold tabular-nums;
   }
 
   .project-detail-tab-active {
-    @apply border-border border-b-surface bg-surface text-primary;
+    @apply border-border border-b-surface bg-background text-primary;
     margin-bottom: -1px;
+  }
+
+  .project-detail-tab-active .project-detail-tab-count {
+    @apply bg-primary-soft text-primary;
   }
 
   .project-detail-overview {
@@ -769,7 +1097,27 @@ body {
   }
 
   .project-detail-export-bar {
-    @apply flex flex-wrap gap-2 border-b border-border px-6 py-4;
+    @apply flex flex-wrap gap-2 border-b border-border px-6 pb-5 pt-5;
+  }
+
+  .project-activity-list {
+    @apply divide-y divide-border pb-6 pt-4;
+  }
+
+  .project-activity-item {
+    @apply flex items-start gap-4 px-6 py-4;
+  }
+
+  .project-activity-marker {
+    @apply mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary;
+  }
+
+  .project-activity-body {
+    @apply min-w-0 flex-1;
+  }
+
+  .project-activity-time {
+    @apply shrink-0 text-xs text-foreground-muted;
   }
 
   .projects-toolbar {
@@ -944,8 +1292,16 @@ body {
     @apply shrink-0 border-0 bg-transparent p-0 text-xs font-semibold uppercase tracking-wide text-primary transition-colors hover:text-primary-hover;
   }
 
+  .dashboard-section-body {
+    @apply px-6 pb-6 pt-4;
+  }
+
   .dashboard-table-wrap {
     @apply overflow-x-auto;
+  }
+
+  .dashboard-section .dashboard-table-wrap {
+    @apply px-6 pb-6 pt-4;
   }
 
   .dashboard-table-wrap .data-table thead {
@@ -957,19 +1313,19 @@ body {
   }
 
   .dashboard-empty {
-    @apply px-6 py-8;
+    @apply px-6 pb-8 pt-5;
   }
 
   .dashboard-empty-text {
-    @apply px-6 py-5 text-sm text-foreground-muted;
+    @apply px-6 pb-5 pt-4 text-sm text-foreground-muted;
   }
 
   .dashboard-queue {
-    @apply divide-y divide-border px-6 py-2;
+    @apply divide-y divide-border px-6 pb-6 pt-4;
   }
 
   .dashboard-queue-item {
-    @apply py-4 first:pt-3 last:pb-3;
+    @apply py-4;
   }
 
   .app-icon-btn {
@@ -1037,7 +1393,7 @@ body {
   }
 
   .settings-panel-body {
-    @apply space-y-0 px-6 pb-6;
+    @apply space-y-6 px-6 pb-6 pt-5;
   }
 
   .settings-section {
@@ -1181,11 +1537,13 @@ body {
   }
 
   .calc-workflow-step-active .calc-workflow-num {
-    @apply border-primary bg-primary text-[var(--color-on-accent)];
+    @apply border-primary bg-primary;
+    color: var(--color-on-accent);
   }
 
   .calc-workflow-step-done .calc-workflow-num {
-    @apply border-success bg-success text-[var(--color-on-accent)];
+    @apply border-success bg-success;
+    color: var(--color-on-accent);
   }
 
   .calc-workflow-label {
@@ -1351,11 +1709,13 @@ body {
   }
 
   .calc-pipeline-item-done .calc-pipeline-dot {
-    @apply border-success bg-success text-[var(--color-on-accent)];
+    @apply border-success bg-success;
+    color: var(--color-on-accent);
   }
 
   .calc-pipeline-item-active .calc-pipeline-dot {
     @apply border-primary bg-primary;
+    color: var(--color-on-accent);
   }
 
   .calc-pipeline-pulse {

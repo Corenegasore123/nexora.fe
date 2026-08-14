@@ -35,7 +35,7 @@ const STEPS = [
     summary: "Deterministic rules engine runs verified formulas.",
     details: [
       "Methodology rules are versioned and auditable — no LLM arithmetic.",
-      "Chapter 3 earthwork formulas included out of the box.",
+      "Standard earthwork formulas included out of the box.",
       "Every intermediate step is recorded with inputs and outputs.",
       "Custom rule sets can be configured per project or organization.",
     ],

@@ -9,6 +9,8 @@ import {
   getProjectCalculations,
   getProjectActivity,
   getProjectMembers,
+  getProjectMessages,
+  getProjectTasks,
   getMe,
   uploadProjectDocument,
   deleteDocument,
@@ -16,6 +18,8 @@ import {
   Document,
   ActivityEntry,
   ProjectMember,
+  ProjectMessage,
+  ProjectTask,
   AuthUser,
   apiUrl,
 } from "@/lib/api";
@@ -28,13 +32,13 @@ import { SkeletonTable } from "@/components/ui/Skeleton";
 
 type Tab = "overview" | "documents" | "calculations" | "collaboration" | "team" | "activity";
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "documents", label: "Documents" },
-  { id: "calculations", label: "Calculations" },
-  { id: "collaboration", label: "Collaboration" },
-  { id: "team", label: "Team" },
-  { id: "activity", label: "Activity" },
+const TABS: { id: Tab; label: string; icon: "layout-dashboard" | "file-text" | "history" | "users" | "clipboard-check" | "mail" }[] = [
+  { id: "overview", label: "Overview", icon: "layout-dashboard" },
+  { id: "documents", label: "Documents", icon: "file-text" },
+  { id: "calculations", label: "Calculations", icon: "history" },
+  { id: "collaboration", label: "Collaboration", icon: "mail" },
+  { id: "team", label: "Team", icon: "users" },
+  { id: "activity", label: "Activity", icon: "clipboard-check" },
 ];
 
 function formatBytes(n: number) {
@@ -58,6 +62,14 @@ function formatDateTime(iso: string) {
     hour: "numeric",
     minute: "2-digit",
   });
+}
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
 function projectStatusClass(status: Project["status"]) {
@@ -96,6 +108,8 @@ export default function ProjectDetailPage() {
     Awaited<ReturnType<typeof getProjectCalculations>>["calculations"]
   >([]);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [messages, setMessages] = useState<ProjectMessage[]>([]);
+  const [tasks, setTasks] = useState<ProjectTask[]>([]);
   const [team, setTeam] = useState<{
     owner: ProjectMember | null;
     members: ProjectMember[];
@@ -106,18 +120,22 @@ export default function ProjectDetailPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
-    const [p, docs, calcs, act, members] = await Promise.all([
+    const [p, docs, calcs, act, members, msgs, tks] = await Promise.all([
       getProject(projectId),
       getProjectDocuments(projectId),
       getProjectCalculations(projectId),
       getProjectActivity(projectId),
       getProjectMembers(projectId),
+      getProjectMessages(projectId),
+      getProjectTasks(projectId),
     ]);
     setProject(p.project);
     setDocuments(docs.documents);
     setCalculations(calcs.calculations);
     setActivity(act.activity);
     setTeam(members);
+    setMessages(msgs.messages);
+    setTasks(tks.tasks);
   }, [projectId]);
 
   useEffect(() => {
@@ -126,13 +144,26 @@ export default function ProjectDetailPage() {
 
   const assignees = useMemo<TaskAssignee[]>(() => {
     if (!team) return [];
-    const list: TaskAssignee[] = [];
-    if (team.owner) list.push({ id: team.owner.userId, name: team.owner.name });
+    const byId = new Map<string, TaskAssignee>();
+    if (team.owner) byId.set(team.owner.userId, { id: team.owner.userId, name: team.owner.name });
     for (const member of team.members) {
-      list.push({ id: member.userId, name: member.name });
+      byId.set(member.userId, { id: member.userId, name: member.name });
     }
-    return list;
+    return Array.from(byId.values());
   }, [team]);
+
+  const openTasks = useMemo(() => tasks.filter((t) => t.status !== "DONE"), [tasks]);
+
+  const tabCounts = useMemo(
+    () => ({
+      documents: documents.length,
+      calculations: calculations.length,
+      collaboration: openTasks.length + (messages.length > 0 ? 1 : 0),
+      team: assignees.length,
+      activity: activity.length,
+    }),
+    [documents.length, calculations.length, openTasks.length, messages.length, assignees.length, activity.length]
+  );
 
   const pageSubtitle = useMemo(() => {
     if (!project) return "Loading workspace…";
@@ -177,73 +208,134 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="dashboard-shell project-workspace">
-      <header className="project-workspace-header">
-        <div className="project-workspace-header-main">
+      <header className="project-workspace-hero">
+        <div className="project-workspace-hero-main">
           <Link href="/app/projects" className="project-detail-back">
             <Icon name="arrow-right" size={14} className="rotate-180" />
             All projects
           </Link>
-          <div className="project-workspace-meta">
+          <div className="project-workspace-title-row">
+            <h1 className="project-workspace-title">{project.name}</h1>
             <span className={projectStatusClass(project.status)}>{project.status}</span>
+          </div>
+          <div className="project-workspace-meta">
             <span className="project-detail-role">{roleLabel(project.role)}</span>
+            <span className="project-workspace-meta-sep" aria-hidden>·</span>
+            <span className="text-xs text-foreground-muted">Updated {formatDate(project.updatedAt)}</span>
             {project.owner && !project.isOwner && (
-              <span className="project-workspace-shared">Shared by {project.owner.name}</span>
+              <>
+                <span className="project-workspace-meta-sep" aria-hidden>·</span>
+                <span className="project-workspace-shared">Shared by {project.owner.name}</span>
+              </>
             )}
           </div>
           {project.description && (
             <p className="project-detail-description">{project.description}</p>
           )}
         </div>
-        {canEdit && (
-          <Link href={`/app/calculator?project=${projectId}`} className="btn-primary shrink-0">
-            <Icon name="upload" size={16} />
-            Upload &amp; analyze
-          </Link>
-        )}
+        <div className="project-workspace-hero-actions">
+          {assignees.length > 0 && (
+            <div className="project-workspace-avatars" aria-label={`${assignees.length} team members`}>
+              {assignees.slice(0, 5).map((m) => (
+                <span key={m.id} className="project-workspace-avatar" title={m.name}>
+                  {initials(m.name)}
+                </span>
+              ))}
+              {assignees.length > 5 && (
+                <span className="project-workspace-avatar project-workspace-avatar-more">
+                  +{assignees.length - 5}
+                </span>
+              )}
+            </div>
+          )}
+          {canEdit && (
+            <Link href={`/app/calculator?project=${projectId}`} className="btn-primary shrink-0">
+              <Icon name="upload" size={16} />
+              Upload &amp; analyze
+            </Link>
+          )}
+        </div>
       </header>
 
       <div className="project-workspace-metrics">
-        <div className="project-workspace-metric">
+        <button type="button" onClick={() => setTab("documents")} className="project-workspace-metric">
+          <span className="project-workspace-metric-icon">
+            <Icon name="file-text" size={18} />
+          </span>
           <span className="project-workspace-metric-value">{project._count?.images ?? 0}</span>
           <span className="project-workspace-metric-label">Documents</span>
-        </div>
-        <div className="project-workspace-metric">
+        </button>
+        <button type="button" onClick={() => setTab("calculations")} className="project-workspace-metric">
+          <span className="project-workspace-metric-icon">
+            <Icon name="history" size={18} />
+          </span>
           <span className="project-workspace-metric-value">{project._count?.calculationJobs ?? 0}</span>
           <span className="project-workspace-metric-label">Calculations</span>
-        </div>
-        <div className="project-workspace-metric">
+        </button>
+        <button type="button" onClick={() => setTab("collaboration")} className="project-workspace-metric">
+          <span className="project-workspace-metric-icon">
+            <Icon name="clipboard-check" size={18} />
+          </span>
+          <span className="project-workspace-metric-value">{openTasks.length}</span>
+          <span className="project-workspace-metric-label">Open tasks</span>
+        </button>
+        <button type="button" onClick={() => setTab("team")} className="project-workspace-metric">
+          <span className="project-workspace-metric-icon">
+            <Icon name="users" size={18} />
+          </span>
           <span className="project-workspace-metric-value">{assignees.length}</span>
           <span className="project-workspace-metric-label">Members</span>
-        </div>
+        </button>
       </div>
 
       <div className="project-detail-main">
-        <nav className="project-detail-tabs" role="tablist" aria-label="Project sections">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-              className={`project-detail-tab ${tab === t.id ? "project-detail-tab-active" : ""}`}
-            >
-              {t.label}
-            </button>
-          ))}
+        <nav className="project-detail-tabs-wrap" role="tablist" aria-label="Project sections">
+          <div className="project-detail-tabs">
+            {TABS.map((t) => {
+              const count =
+                t.id === "documents"
+                  ? tabCounts.documents
+                  : t.id === "calculations"
+                    ? tabCounts.calculations
+                    : t.id === "collaboration"
+                      ? openTasks.length
+                      : t.id === "team"
+                        ? tabCounts.team
+                        : t.id === "activity"
+                          ? tabCounts.activity
+                          : null;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`project-detail-tab ${tab === t.id ? "project-detail-tab-active" : ""}`}
+                >
+                  <Icon name={t.icon} size={14} />
+                  {t.label}
+                  {count !== null && count > 0 && t.id !== "overview" && (
+                    <span className="project-detail-tab-count">{count}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </nav>
 
+        <div className="project-detail-content">
           {tab === "overview" && (
             <div className="project-detail-panels">
               <section className="dashboard-section project-overview-collab">
                 <div className="dashboard-section-header">
                   <span className="settings-section-icon">
-                    <Icon name="users" size={18} />
+                    <Icon name="mail" size={18} />
                   </span>
                   <div className="min-w-0 flex-1">
                     <h2 className="text-sm font-semibold text-foreground">Collaboration</h2>
                     <p className="mt-1 text-xs text-foreground-muted">
-                      Chat with your team and track assigned tasks.
+                      {messages.length} messages · {openTasks.length} open tasks
                     </p>
                   </div>
                   <button
@@ -254,14 +346,39 @@ export default function ProjectDetailPage() {
                     Open workspace
                   </button>
                 </div>
-                <div className="project-overview-collab-preview">
-                  <div className="project-overview-collab-item">
-                    <Icon name="mail" size={16} />
-                    <span>Team chat synced to the server</span>
+                <div className="project-overview-collab-grid">
+                  <div className="project-overview-preview">
+                    <h3 className="project-overview-preview-title">Recent messages</h3>
+                    {messages.length === 0 ? (
+                      <p className="project-overview-preview-empty">No messages yet — start the conversation.</p>
+                    ) : (
+                      <ul className="project-overview-preview-list">
+                        {messages.slice(-3).map((msg) => (
+                          <li key={msg.id} className="project-overview-preview-item">
+                            <span className="project-overview-preview-author">{msg.author.name}</span>
+                            <p className="project-overview-preview-text">{msg.body}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <div className="project-overview-collab-item">
-                    <Icon name="clipboard-check" size={16} />
-                    <span>Tasks with assignees and status tracking</span>
+                  <div className="project-overview-preview">
+                    <h3 className="project-overview-preview-title">Open tasks</h3>
+                    {openTasks.length === 0 ? (
+                      <p className="project-overview-preview-empty">All caught up — no open tasks.</p>
+                    ) : (
+                      <ul className="project-overview-preview-list">
+                        {openTasks.slice(0, 4).map((task) => (
+                          <li key={task.id} className="project-overview-preview-task">
+                            <span className={`project-task-check project-task-check-${task.status.toLowerCase().replace("_", "-")}`} aria-hidden>
+                              {task.status === "DONE" && <Icon name="check" size={10} />}
+                            </span>
+                            <span className="project-overview-preview-task-title">{task.title}</span>
+                            <span className="project-overview-preview-task-assignee">{task.assignee.name}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </section>
@@ -501,17 +618,35 @@ export default function ProjectDetailPage() {
           )}
 
           {tab === "collaboration" && (
-            <div className="project-collab-grid">
-              <ProjectChat
-                projectId={projectId}
-                currentUser={currentUser ? { id: currentUser.id, name: currentUser.name } : null}
-              />
-              <ProjectTasks
-                projectId={projectId}
-                assignees={assignees}
-                canAssign={canEdit}
-                currentUserId={currentUser?.id}
-              />
+            <div className="project-collab-layout">
+              <div className="project-collab-intro">
+                <p className="project-collab-intro-text">
+                  Coordinate with your team in real time. Messages and tasks are stored on the server and sync across all members.
+                </p>
+                {assignees.length > 0 && (
+                  <div className="project-collab-team-strip">
+                    {assignees.map((m) => (
+                      <span key={m.id} className="project-collab-team-member">
+                        <span className="project-collab-team-avatar">{initials(m.name)}</span>
+                        {m.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="project-collab-grid">
+                <ProjectChat
+                  projectId={projectId}
+                  currentUser={currentUser ? { id: currentUser.id, name: currentUser.name } : null}
+                  memberCount={assignees.length}
+                />
+                <ProjectTasks
+                  projectId={projectId}
+                  assignees={assignees}
+                  canAssign={canEdit}
+                  currentUserId={currentUser?.id}
+                />
+              </div>
             </div>
           )}
 
@@ -526,7 +661,7 @@ export default function ProjectDetailPage() {
                   <p className="mt-1 text-xs text-foreground-muted">Manage members and permissions.</p>
                 </div>
               </div>
-              <div className="px-6 pb-6">
+              <div className="dashboard-section-body">
                 <ProjectTeam
                   projectId={projectId}
                   currentRole={team.currentRole}
@@ -554,25 +689,27 @@ export default function ProjectDetailPage() {
                   <p className="text-sm text-foreground-muted">No activity recorded yet.</p>
                 </div>
               ) : (
-                <ul className="dashboard-queue">
+                <ul className="project-activity-list">
                   {activity.map((entry) => (
-                    <li key={entry.id} className="dashboard-queue-item">
-                      <p className="text-sm font-medium text-foreground">
-                        {entry.user?.name ?? "System"}
-                      </p>
-                      <p className="mt-0.5 text-sm text-foreground-secondary">
-                        {entry.action.replace(/\./g, " ")}
-                      </p>
-                      <p className="mt-1 text-xs text-foreground-muted">{entry.resource}</p>
-                      <time className="mt-2 block text-xs text-foreground-muted">
-                        {formatDateTime(entry.createdAt)}
-                      </time>
+                    <li key={entry.id} className="project-activity-item">
+                      <span className="project-activity-marker" aria-hidden />
+                      <div className="project-activity-body">
+                        <p className="text-sm font-medium text-foreground">
+                          {entry.user?.name ?? "System"}
+                        </p>
+                        <p className="mt-0.5 text-sm text-foreground-secondary">
+                          {entry.action.replace(/\./g, " ")}
+                        </p>
+                        <p className="mt-1 text-xs text-foreground-muted">{entry.resource}</p>
+                      </div>
+                      <time className="project-activity-time">{formatDateTime(entry.createdAt)}</time>
                     </li>
                   ))}
                 </ul>
               )}
             </section>
           )}
+        </div>
       </div>
     </div>
   );

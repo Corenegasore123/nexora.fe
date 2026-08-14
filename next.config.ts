@@ -35,6 +35,10 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Turbopack (default in next dev) hot-reloads TSX/CSS; restart only after config/env changes.
+  turbopack: {
+    root: path.join(process.cwd()),
+  },
 };
 
 export default nextConfig;

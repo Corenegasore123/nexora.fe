@@ -7,3 +7,5 @@ storage/
 .DS_Store
 coverage/
 tsconfig.tsbuildinfo
+.tmp-*.css
+NUL

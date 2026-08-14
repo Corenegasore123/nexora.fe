@@ -15,11 +15,7 @@ export type TaskAssignee = {
   name: string;
 };
 
-function taskStatusClass(status: ProjectTask["status"]) {
-  if (status === "DONE") return "project-task-status project-task-status-done";
-  if (status === "IN_PROGRESS") return "project-task-status project-task-status-progress";
-  return "project-task-status project-task-status-todo";
-}
+const STATUS_ORDER: ProjectTask["status"][] = ["TODO", "IN_PROGRESS", "DONE"];
 
 function taskStatusLabel(status: ProjectTask["status"]) {
   if (status === "IN_PROGRESS") return "In progress";
@@ -27,13 +23,32 @@ function taskStatusLabel(status: ProjectTask["status"]) {
   return "To do";
 }
 
-const STATUS_ORDER: ProjectTask["status"][] = ["TODO", "IN_PROGRESS", "DONE"];
+function relativeTime(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 type ProjectTasksProps = {
   projectId: string;
   assignees: TaskAssignee[];
   canAssign: boolean;
   currentUserId?: string;
+  compact?: boolean;
 };
 
 export function ProjectTasks({
@@ -41,6 +56,7 @@ export function ProjectTasks({
   assignees,
   canAssign,
   currentUserId,
+  compact,
 }: ProjectTasksProps) {
   const [tasks, setTasks] = useState<ProjectTask[]>([]);
   const [title, setTitle] = useState("");
@@ -65,6 +81,8 @@ export function ProjectTasks({
   useEffect(() => {
     setLoading(true);
     load();
+    const interval = setInterval(load, 20_000);
+    return () => clearInterval(interval);
   }, [load]);
 
   useEffect(() => {
@@ -73,10 +91,15 @@ export function ProjectTasks({
     }
   }, [assignees, assigneeId, currentUserId]);
 
-  const openCount = useMemo(
-    () => tasks.filter((t) => t.status !== "DONE").length,
-    [tasks]
-  );
+  const stats = useMemo(() => {
+    const todo = tasks.filter((t) => t.status === "TODO").length;
+    const inProgress = tasks.filter((t) => t.status === "IN_PROGRESS").length;
+    const done = tasks.filter((t) => t.status === "DONE").length;
+    const open = todo + inProgress;
+    const total = tasks.length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    return { todo, inProgress, done, open, total, pct };
+  }, [tasks]);
 
   const visibleTasks = useMemo(() => {
     if (filter === "open") return tasks.filter((t) => t.status !== "DONE");
@@ -135,7 +158,7 @@ export function ProjectTasks({
   };
 
   return (
-    <div className="project-collab-panel">
+    <div className={`project-collab-panel ${compact ? "project-collab-panel-compact" : ""}`}>
       <header className="project-collab-panel-header">
         <div className="project-collab-panel-icon">
           <Icon name="clipboard-check" size={18} />
@@ -143,11 +166,37 @@ export function ProjectTasks({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h3 className="project-collab-panel-title">Tasks</h3>
-            {openCount > 0 && <span className="project-task-badge">{openCount} open</span>}
+            {stats.open > 0 && <span className="project-task-badge">{stats.open} open</span>}
           </div>
-          <p className="project-collab-panel-desc">Track assignments and progress.</p>
+          <p className="project-collab-panel-desc">
+            {stats.total > 0
+              ? `${stats.pct}% complete · ${stats.done} of ${stats.total} done`
+              : "Track assignments and progress across the team."}
+          </p>
         </div>
       </header>
+
+      {stats.total > 0 && (
+        <div className="project-task-progress-wrap">
+          <div className="project-task-progress-bar" role="progressbar" aria-valuenow={stats.pct} aria-valuemin={0} aria-valuemax={100}>
+            <span className="project-task-progress-fill" style={{ width: `${stats.pct}%` }} />
+          </div>
+          <div className="project-task-stats">
+            <span className="project-task-stat project-task-stat-todo">
+              <span className="project-task-stat-dot" />
+              {stats.todo} to do
+            </span>
+            <span className="project-task-stat project-task-stat-progress">
+              <span className="project-task-stat-dot" />
+              {stats.inProgress} active
+            </span>
+            <span className="project-task-stat project-task-stat-done">
+              <span className="project-task-stat-dot" />
+              {stats.done} done
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="project-task-filters">
         {(["all", "open", "mine"] as const).map((key) => (
@@ -157,42 +206,49 @@ export function ProjectTasks({
             onClick={() => setFilter(key)}
             className={`project-task-filter ${filter === key ? "project-task-filter-active" : ""}`}
           >
-            {key === "all" ? "All" : key === "open" ? "Open" : "Assigned to me"}
+            {key === "all" ? "All" : key === "open" ? "Open" : "Mine"}
+            {key === "open" && stats.open > 0 && (
+              <span className="project-task-filter-count">{stats.open}</span>
+            )}
           </button>
         ))}
       </div>
 
-      {canAssign && assignees.length > 0 && (
+      {canAssign && assignees.length > 0 && !compact && (
         <form onSubmit={handleCreate} className="project-task-form">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="What needs to be done?"
-            className="project-form-input"
-            maxLength={200}
-            disabled={submitting}
-          />
-          <div className="project-task-form-row">
-            <select
-              value={assigneeId}
-              onChange={(e) => setAssigneeId(e.target.value)}
-              className="project-form-input project-task-select"
+          <div className="project-task-form-inner">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Add a task…"
+              className="project-form-input project-task-input"
+              maxLength={200}
               disabled={submitting}
-            >
-              {assignees.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-            <button
-              type="submit"
-              disabled={!title.trim() || submitting}
-              className="btn-primary project-task-add"
-            >
-              {submitting ? "…" : "Add task"}
-            </button>
+            />
+            <div className="project-task-form-row">
+              <select
+                value={assigneeId}
+                onChange={(e) => setAssigneeId(e.target.value)}
+                className="project-form-input project-task-select"
+                disabled={submitting}
+                aria-label="Assign to"
+              >
+                {assignees.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                disabled={!title.trim() || submitting}
+                className="btn-primary project-task-add"
+              >
+                <Icon name="plus" size={14} />
+                Add
+              </button>
+            </div>
           </div>
         </form>
       )}
@@ -201,16 +257,22 @@ export function ProjectTasks({
 
       <ul className="project-task-list">
         {loading && tasks.length === 0 ? (
-          <li className="project-task-empty">Loading tasks…</li>
+          <li className="project-task-skeleton">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="project-task-skeleton-row" />
+            ))}
+          </li>
         ) : visibleTasks.length === 0 ? (
           <li className="project-task-empty-state">
             <span className="project-task-empty-icon">
               <Icon name="clipboard-check" size={22} />
             </span>
-            <p className="text-sm font-medium text-foreground">No tasks yet</p>
-            <p className="mt-1 text-xs text-foreground-muted">
+            <p className="text-sm font-semibold text-foreground">
+              {filter === "mine" ? "Nothing assigned to you" : "No tasks yet"}
+            </p>
+            <p className="mt-1 max-w-[14rem] text-xs leading-relaxed text-foreground-muted">
               {canAssign
-                ? "Create a task and assign it to a team member."
+                ? "Create a task and assign it to keep the team aligned."
                 : "Tasks assigned to the team will appear here."}
             </p>
           </li>
@@ -219,15 +281,20 @@ export function ProjectTasks({
             const canUpdate =
               canAssign || (currentUserId && task.assigneeId === currentUserId);
             return (
-              <li key={task.id} className="project-task-item">
+              <li
+                key={task.id}
+                className={`project-task-item ${task.status === "DONE" ? "project-task-item-done" : ""}`}
+              >
                 <button
                   type="button"
                   onClick={() => canUpdate && cycleStatus(task)}
                   disabled={!canUpdate}
-                  className={taskStatusClass(task.status)}
-                  title={canUpdate ? "Click to update status" : undefined}
+                  className={`project-task-check project-task-check-${task.status.toLowerCase().replace("_", "-")}`}
+                  title={canUpdate ? `Status: ${taskStatusLabel(task.status)} — click to update` : taskStatusLabel(task.status)}
+                  aria-label={`Status: ${taskStatusLabel(task.status)}`}
                 >
-                  {taskStatusLabel(task.status)}
+                  {task.status === "DONE" && <Icon name="check" size={12} />}
+                  {task.status === "IN_PROGRESS" && <span className="project-task-check-partial" />}
                 </button>
                 <div className="project-task-main">
                   <p
@@ -235,16 +302,22 @@ export function ProjectTasks({
                   >
                     {task.title}
                   </p>
-                  <p className="project-task-assignee">
-                    {task.assignee.name}
-                    {task.createdBy.id !== task.assignee.id && (
-                      <span className="text-foreground-muted">
-                        {" "}
-                        · added by {task.createdBy.name}
+                  <div className="project-task-meta">
+                    <span className="project-task-assignee-chip">
+                      <span className="project-task-assignee-avatar" aria-hidden>
+                        {initials(task.assignee.name)}
                       </span>
+                      {task.assignee.name}
+                    </span>
+                    <span className="project-task-time">{relativeTime(task.updatedAt)}</span>
+                    {task.createdBy.id !== task.assignee.id && (
+                      <span className="project-task-by">by {task.createdBy.name}</span>
                     )}
-                  </p>
+                  </div>
                 </div>
+                <span className={`project-task-status-pill project-task-status-pill-${task.status.toLowerCase().replace("_", "-")}`}>
+                  {taskStatusLabel(task.status)}
+                </span>
                 {canAssign && (
                   <button
                     type="button"

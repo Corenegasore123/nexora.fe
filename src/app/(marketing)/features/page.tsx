@@ -21,7 +21,7 @@ const CATEGORIES = [
     features: [
       { title: "Deterministic rules engine", desc: "Verified formulas with no LLM-generated arithmetic — every step is reproducible." },
       { title: "Methodology versioning", desc: "Rules are versioned so you always know which formula set produced a result." },
-      { title: "Chapter 3 earthwork", desc: "Built-in support for cut/fill volume, area, and related quantity formulas." },
+      { title: "Earthwork quantities", desc: "Built-in support for cut/fill volume, area, and related quantity formulas." },
       { title: "Scenario comparison", desc: "Compare baselines, revisions, and what-if scenarios with delta reporting." },
     ],
   },
