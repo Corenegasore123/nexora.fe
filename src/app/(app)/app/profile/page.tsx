@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getMe, AuthUser } from "@/lib/api";
+import { displayRole, isAdmin } from "@/lib/roles";
 import { Icon } from "@/components/icons/Icon";
 import { useSetAppPageMeta } from "@/components/app/AppPageContext";
 import { SkeletonTable } from "@/components/ui/Skeleton";
@@ -25,7 +26,7 @@ function formatDate(value: string) {
 }
 
 function roleLabel(role: AuthUser["role"]) {
-  return role === "ADMIN" ? "Administrator" : "Workspace member";
+  return displayRole(role);
 }
 
 export default function ProfilePage() {
@@ -68,7 +69,7 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold text-foreground sm:text-2xl">{user.name}</h2>
             <span
               className={
-                user.role === "ADMIN" ? "status-badge status-processing" : "status-badge status-pending"
+                isAdmin(user.role) ? "status-badge status-processing" : "status-badge status-completed"
               }
             >
               {roleLabel(user.role)}
@@ -142,29 +143,48 @@ export default function ProfilePage() {
         <section className="dashboard-section">
           <div className="dashboard-section-header">
             <span className="settings-section-icon">
-              <Icon name="shield" size={18} />
+              <Icon name="hard-hat" size={18} />
             </span>
             <div className="min-w-0 flex-1">
-              <h2 className="text-sm font-semibold text-foreground">Workspace access</h2>
+              <h2 className="text-sm font-semibold text-foreground">Engineering workspace</h2>
               <p className="mt-1 text-xs text-foreground-muted">
-                Permissions and capabilities for your account.
+                What you can do in QuantaScope as an engineer.
               </p>
             </div>
           </div>
           <div className="settings-panel-body">
             <p className="text-sm leading-relaxed text-foreground-secondary">
-              {user.role === "ADMIN"
-                ? "You can manage platform settings, users, and all workspace data across the organization."
-                : "You can create projects, run calculations, collaborate with your team, and export reports within your workspace."}
+              Run quantity takeoffs from drawings, manage projects, collaborate with your team,
+              review calculation history, and export client-ready reports.
             </p>
-            {user.role === "ADMIN" && (
-              <Link href="/app/admin" className="btn-ghost mt-4 inline-flex gap-2">
-                Open admin console
-                <Icon name="arrow-right" size={14} />
-              </Link>
-            )}
           </div>
         </section>
+
+        {isAdmin(user.role) && (
+          <section className="dashboard-section">
+            <div className="dashboard-section-header">
+              <span className="settings-section-icon">
+                <Icon name="shield" size={18} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-sm font-semibold text-foreground">Platform administration</h2>
+                <p className="mt-1 text-xs text-foreground-muted">
+                  Separate console for user management and system health.
+                </p>
+              </div>
+            </div>
+            <div className="settings-panel-body">
+              <p className="text-sm leading-relaxed text-foreground-secondary">
+                Manage users, review audit logs, and monitor platform health. This is not part of
+                the engineer workflow.
+              </p>
+              <Link href="/app/admin" className="btn-ghost mt-4 inline-flex gap-2">
+                Open platform admin
+                <Icon name="arrow-right" size={14} />
+              </Link>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

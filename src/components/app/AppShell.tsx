@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AuthUser, getMe, logout } from "@/lib/api";
+import { isAdmin } from "@/lib/roles";
 import { NotificationBell } from "@/components/NotificationBell";
 import { Icon, type IconName } from "@/components/icons/Icon";
 import { AppPageProvider, useAppPageMeta } from "@/components/app/AppPageContext";
@@ -13,17 +14,21 @@ type NavItem = {
   label: string;
   icon: IconName;
   section?: string;
-  adminOnly?: boolean;
 };
 
-const NAV: NavItem[] = [
+/** Engineer workspace navigation — no platform admin entries. */
+const ENGINEER_NAV: NavItem[] = [
   { href: "/app", label: "Dashboard", icon: "layout-dashboard", section: "Overview" },
   { href: "/app/projects", label: "Projects", icon: "folder", section: "Overview" },
   { href: "/app/calculator", label: "New Calculation", icon: "plus-circle", section: "Analysis" },
   { href: "/app/history", label: "History", icon: "history", section: "Analysis" },
   { href: "/app/reports", label: "Reports", icon: "file-text", section: "Output" },
-  { href: "/app/rules", label: "Rules", icon: "book-open", section: "System" },
-  { href: "/app/admin", label: "Admin", icon: "shield", section: "System", adminOnly: true },
+  { href: "/app/rules", label: "Rules", icon: "book-open", section: "Resources" },
+];
+
+/** Shown only to administrators — separate from the engineer workspace. */
+const ADMIN_NAV: NavItem[] = [
+  { href: "/app/admin", label: "Platform Admin", icon: "shield", section: "Administration" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -43,6 +48,11 @@ export function AppSidebar({
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+
+  const navItems = useMemo(
+    () => (user && isAdmin(user.role) ? [...ENGINEER_NAV, ...ADMIN_NAV] : ENGINEER_NAV),
+    [user]
+  );
 
   const handleLogout = async () => {
     await logout();
@@ -109,7 +119,7 @@ export function AppSidebar({
         </div>
 
         <nav className="app-nav-body">
-          {NAV.filter((item) => !item.adminOnly || user?.role === "ADMIN").map((item) => {
+          {navItems.map((item) => {
             const showSection = item.section && item.section !== lastSection;
             if (item.section) lastSection = item.section;
             const active = isActive(pathname, item.href);
@@ -131,9 +141,7 @@ export function AppSidebar({
         </nav>
 
         <div className="app-sidebar-footer">
-          {user && !collapsed && (
-            <p className="app-sidebar-user">{user.name}</p>
-          )}
+          {user && !collapsed && <p className="app-sidebar-user">{user.name}</p>}
           <Link href="/app/profile" onClick={onClose} className="app-sidebar-footer-link" title={collapsed ? "Profile" : undefined}>
             <Icon name="user" size={18} className="text-white/50" />
             {!collapsed && "Profile"}
