@@ -1,27 +1,30 @@
 export const CONSENT_COOKIE = "quantscope_cookie_consent";
 export const CONSENT_STORAGE_KEY = "quantscope_cookie_consent";
 
-export type CookieConsentStatus = "accepted" | "declined";
-
-export function readStoredConsent(): CookieConsentStatus | null {
-  if (typeof window === "undefined") return null;
+export function hasCookieConsent(): boolean {
+  if (typeof window === "undefined") return false;
   try {
-    const value = localStorage.getItem(CONSENT_STORAGE_KEY);
-    if (value === "accepted" || value === "declined") return value;
-    return null;
+    return localStorage.getItem(CONSENT_STORAGE_KEY) === "accepted";
   } catch {
-    return null;
+    return false;
   }
 }
 
-export function storeConsent(status: CookieConsentStatus) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(CONSENT_STORAGE_KEY, status);
-  window.dispatchEvent(new CustomEvent("cookie-consent-change", { detail: status }));
+/** Banner stays until the user accepts — decline does not persist. */
+export function shouldShowConsentBanner(): boolean {
+  return !hasCookieConsent();
 }
 
-export function hasCookieConsent(): boolean {
-  return readStoredConsent() === "accepted";
+export function storeConsentAccepted() {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CONSENT_STORAGE_KEY, "accepted");
+  window.dispatchEvent(new CustomEvent("cookie-consent-change"));
+}
+
+export function clearStoredConsent() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(CONSENT_STORAGE_KEY);
+  window.dispatchEvent(new CustomEvent("cookie-consent-change"));
 }
 
 export async function syncCookieConsent(accepted: boolean): Promise<void> {
