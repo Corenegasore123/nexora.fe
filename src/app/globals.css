@@ -1156,99 +1156,221 @@ body {
     @apply inline-flex rounded-md border border-border bg-background px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary transition-colors hover:border-primary hover:bg-primary-soft;
   }
 
-  .calculator-page {
-    @apply space-y-6;
+  .calc-workspace {
+    @apply mx-auto w-full max-w-4xl space-y-6;
   }
 
-  .calculator-layout {
-    @apply grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start;
+  .calc-workflow {
+    @apply grid grid-cols-3 gap-2;
   }
 
-  .calculator-setup-body {
-    @apply space-y-5 px-6 pb-6;
+  .calc-workflow-step {
+    @apply flex flex-col items-center gap-2 rounded-xl border border-border bg-surface px-3 py-4 text-center;
   }
 
-  .calculator-field-label {
-    @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-foreground-muted;
-  }
-
-  .calculator-no-project {
-    @apply flex items-start gap-3 rounded-xl border border-dashed border-border bg-background px-4 py-3 text-sm text-foreground-secondary;
-  }
-
-  .calculator-tips {
-    @apply space-y-2.5 border-t border-border pt-5 text-xs text-foreground-muted;
-  }
-
-  .calculator-tips li {
-    @apply flex items-center gap-2;
-  }
-
-  .calculator-upload-body {
-    @apply space-y-4 px-6 pb-6;
-  }
-
-  .calculator-dropzone {
-    @apply flex min-h-[18rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-background p-8 transition-colors;
-  }
-
-  .calculator-dropzone-active {
+  .calc-workflow-step-active {
     @apply border-primary bg-primary-soft;
   }
 
-  .calculator-dropzone-has-file {
-    @apply border-border-strong;
+  .calc-workflow-step-done {
+    @apply border-success-border bg-success-bg;
   }
 
-  .calculator-dropzone-empty {
-    @apply text-center;
+  .calc-workflow-num {
+    @apply flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background text-xs font-bold text-foreground-muted;
   }
 
-  .calculator-dropzone-icon {
-    @apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted;
+  .calc-workflow-step-active .calc-workflow-num {
+    @apply border-primary bg-primary text-[var(--color-on-accent)];
   }
 
-  .calculator-preview {
-    @apply max-h-72 rounded-xl object-contain;
+  .calc-workflow-step-done .calc-workflow-num {
+    @apply border-success bg-success text-[var(--color-on-accent)];
   }
 
-  .calculator-filename {
-    @apply mt-4 text-xs font-medium uppercase tracking-wide text-foreground-muted;
+  .calc-workflow-label {
+    @apply text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
   }
 
-  .calculator-pipeline {
-    @apply rounded-xl border border-border bg-background px-4 py-4;
+  .calc-workflow-step-active .calc-workflow-label {
+    @apply text-primary;
   }
 
-  .calculator-pipeline-header {
-    @apply flex items-center gap-3;
+  .calc-main {
+    @apply overflow-hidden;
+  }
+
+  .calc-project-bar {
+    @apply flex flex-col gap-3 border-b border-border px-6 py-5 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .calc-project-bar-main {
+    @apply flex min-w-0 flex-1 items-start gap-3;
+  }
+
+  .calc-project-select {
+    @apply mt-1 w-full max-w-xs border-0 bg-transparent p-0 text-sm font-semibold text-foreground outline-none focus:ring-0;
+  }
+
+  .calc-upload-stage {
+    @apply space-y-6 p-6;
+  }
+
+  .calc-dropzone {
+    @apply flex min-h-[20rem] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-background px-8 py-12 text-center transition-colors;
+  }
+
+  .calc-dropzone-active {
+    @apply border-primary bg-primary-soft;
+  }
+
+  .calc-dropzone-icon {
+    @apply mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-surface text-primary;
+  }
+
+  .calc-dropzone-title {
+    @apply text-base font-semibold text-foreground;
+  }
+
+  .calc-dropzone-subtitle {
+    @apply mt-1 text-sm text-foreground-muted;
+  }
+
+  .calc-dropzone-btn {
+    @apply mt-6 inline-flex rounded-full border border-border-strong bg-surface px-5 py-2 text-xs font-semibold uppercase tracking-wide text-foreground-secondary;
+  }
+
+  .calc-upload-tips {
+    @apply grid gap-3 sm:grid-cols-3;
+  }
+
+  .calc-tip {
+    @apply flex gap-3 rounded-xl border border-border bg-background px-4 py-3 text-left;
+  }
+
+  .calc-tip-title {
+    @apply text-xs font-semibold text-foreground;
+  }
+
+  .calc-tip-desc {
+    @apply mt-0.5 text-[11px] leading-relaxed text-foreground-muted;
+  }
+
+  .calc-ready {
+    @apply grid gap-0 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)];
+  }
+
+  .calc-ready-preview {
+    @apply flex min-h-[18rem] items-center justify-center border-b border-border bg-background p-6 lg:border-b-0 lg:border-r;
+  }
+
+  .calc-ready-image {
+    @apply max-h-80 w-full rounded-xl object-contain;
+  }
+
+  .calc-ready-file-placeholder {
+    @apply flex flex-col items-center text-foreground-muted;
+  }
+
+  .calc-ready-panel {
+    @apply space-y-5 p-6;
+  }
+
+  .calc-ready-meta {
+    @apply grid gap-3 sm:grid-cols-2;
+  }
+
+  .calc-ready-meta div {
+    @apply rounded-lg border border-border bg-background px-3 py-2;
+  }
+
+  .calc-ready-meta dt {
+    @apply text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
+  }
+
+  .calc-ready-meta dd {
+    @apply mt-0.5 truncate text-sm font-medium text-foreground;
+  }
+
+  .calc-ready-checklist {
+    @apply space-y-2 text-xs text-foreground-secondary;
+  }
+
+  .calc-ready-checklist li {
+    @apply flex items-center gap-2;
+  }
+
+  .calc-ready-actions {
+    @apply flex flex-wrap gap-3 pt-2;
+  }
+
+  .calc-ready-run {
+    @apply gap-2;
+  }
+
+  .calc-processing {
+    @apply space-y-6 p-6;
+  }
+
+  .calc-processing-header {
+    @apply flex items-start gap-4 rounded-xl border border-border bg-background px-5 py-4;
   }
 
   .calculator-spinner {
-    @apply h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent;
+    @apply mt-0.5 h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-primary border-t-transparent;
   }
 
-  .calculator-pipeline-steps {
-    @apply mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6;
+  .calc-pipeline-list {
+    @apply space-y-0;
   }
 
-  .calculator-pipeline-step {
-    @apply space-y-1.5;
+  .calc-pipeline-item {
+    @apply flex gap-4 border-l-2 border-border py-4 pl-6;
+    margin-left: 0.65rem;
   }
 
-  .calculator-pipeline-bar {
-    @apply h-1 rounded-full bg-border;
+  .calc-pipeline-item:first-child {
+    @apply pt-0;
   }
 
-  .calculator-pipeline-bar-active {
-    @apply bg-primary;
+  .calc-pipeline-item:last-child {
+    @apply pb-0;
   }
 
-  .calculator-pipeline-label {
-    @apply block text-[10px] font-medium uppercase tracking-wide text-foreground-muted;
+  .calc-pipeline-item-done {
+    border-color: var(--color-success);
   }
 
-  .calculator-pipeline-label-active {
+  .calc-pipeline-item-active {
+    border-color: var(--color-primary);
+  }
+
+  .calc-pipeline-dot {
+    @apply relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-border bg-surface;
+    margin-left: -1.85rem;
+  }
+
+  .calc-pipeline-item-done .calc-pipeline-dot {
+    @apply border-success bg-success text-[var(--color-on-accent)];
+  }
+
+  .calc-pipeline-item-active .calc-pipeline-dot {
+    @apply border-primary bg-primary;
+  }
+
+  .calc-pipeline-pulse {
+    @apply h-2 w-2 rounded-full bg-[var(--color-on-accent)];
+  }
+
+  .calc-pipeline-title {
+    @apply text-sm font-semibold text-foreground;
+  }
+
+  .calc-pipeline-desc {
+    @apply mt-0.5 text-xs text-foreground-muted;
+  }
+
+  .calc-pipeline-item-active .calc-pipeline-title {
     @apply text-primary;
   }
 
@@ -1256,60 +1378,175 @@ body {
     @apply flex items-start gap-2 rounded-xl border border-error-border bg-error-bg px-4 py-3 text-sm text-error;
   }
 
-  .calculator-actions {
-    @apply flex flex-wrap items-center gap-3;
-  }
-
-  .calculator-submit {
-    @apply min-w-[10rem];
-  }
-
-  .history-detail {
+  .calc-detail {
     @apply space-y-6;
   }
 
-  .history-detail-header {
+  .calc-detail-header {
     @apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
   }
 
-  .history-detail-header-main {
+  .calc-detail-header-main {
     @apply min-w-0 space-y-2;
   }
 
-  .history-detail-meta {
+  .calc-detail-chips {
     @apply flex flex-wrap items-center gap-2;
   }
 
-  .history-detail-grid {
-    @apply grid gap-6 lg:grid-cols-2;
+  .calc-detail-chip {
+    @apply rounded-md border border-border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
   }
 
-  .history-detail-image-wrap {
+  .calc-detail-hero {
+    @apply grid gap-4 overflow-hidden rounded-2xl border border-border bg-surface lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)];
+  }
+
+  .calc-detail-hero-result {
+    @apply border-b border-border p-6 lg:border-b-0 lg:border-r;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary-soft) 40%, var(--color-surface)),
+      var(--color-surface)
+    );
+  }
+
+  .calc-detail-hero-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .calc-detail-hero-value {
+    @apply mt-2 text-5xl font-bold tracking-tight text-foreground sm:text-6xl;
+  }
+
+  .calc-detail-hero-unit {
+    @apply ml-2 text-2xl font-light text-foreground-secondary;
+  }
+
+  .calc-detail-formula {
+    @apply mt-4 block rounded-lg bg-background px-3 py-2 font-mono text-xs text-foreground-secondary;
+  }
+
+  .calc-detail-confidence {
+    @apply p-6;
+  }
+
+  .calc-detail-confidence-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-foreground-muted;
+  }
+
+  .calc-detail-confidence-value {
+    @apply mt-2 text-3xl font-bold tabular-nums text-foreground;
+  }
+
+  .calc-detail-confidence-bar {
+    @apply mt-4 h-2 overflow-hidden rounded-full bg-border;
+  }
+
+  .calc-detail-confidence-bar span {
+    @apply block h-full rounded-full bg-primary;
+  }
+
+  .calc-detail-confidence-high .calc-detail-confidence-bar span {
+    @apply bg-success;
+  }
+
+  .calc-detail-confidence-medium .calc-detail-confidence-bar span {
+    @apply bg-warning;
+  }
+
+  .calc-detail-confidence-low .calc-detail-confidence-bar span {
+    @apply bg-error;
+  }
+
+  .calc-detail-confidence-stats {
+    @apply mt-6 grid grid-cols-3 gap-3;
+  }
+
+  .calc-detail-confidence-stats dt {
+    @apply text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
+  }
+
+  .calc-detail-confidence-stats dd {
+    @apply mt-1 text-lg font-semibold tabular-nums text-foreground;
+  }
+
+  .calc-detail-overview {
+    @apply grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)];
+  }
+
+  .calc-detail-image-wrap {
     @apply p-4;
   }
 
-  .history-detail-result {
-    @apply px-6 pb-6;
+  .calc-detail-summary {
+    @apply grid gap-3 px-6 pb-4 sm:grid-cols-2;
   }
 
-  .history-detail-result-value {
-    @apply text-4xl font-bold tracking-tight text-foreground sm:text-5xl;
+  .calc-detail-summary-item {
+    @apply rounded-lg border border-border bg-background px-4 py-3;
   }
 
-  .history-detail-result-unit {
-    @apply ml-2 text-2xl font-light text-foreground-secondary;
+  .calc-detail-summary-wide {
+    @apply sm:col-span-2;
+  }
+
+  .calc-detail-summary-item dt {
+    @apply text-[10px] font-semibold uppercase tracking-wide text-foreground-muted;
+  }
+
+  .calc-detail-summary-item dd {
+    @apply mt-1 text-sm font-medium text-foreground;
+  }
+
+  .calc-detail-overview-actions {
+    @apply flex flex-wrap gap-2 border-t border-border px-6 py-4;
+  }
+
+  .calc-detail-calculation {
+    @apply space-y-6;
+  }
+
+  .calc-detail-timeline {
+    @apply space-y-0 px-6 pb-6;
+  }
+
+  .calc-detail-timeline-item {
+    @apply relative flex gap-4 border-l-2 border-border py-5 pl-8;
+    margin-left: 0.75rem;
+  }
+
+  .calc-detail-timeline-item:last-child {
+    @apply pb-0;
+  }
+
+  .calc-detail-timeline-marker {
+    @apply absolute flex h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-[10px] font-bold text-foreground-muted;
+    left: -0.85rem;
+  }
+
+  .calc-detail-timeline-body {
+    @apply min-w-0 flex-1 space-y-2;
+  }
+
+  .calc-detail-step-formula {
+    @apply block rounded-md bg-background px-2 py-1 font-mono text-xs text-foreground-secondary;
+  }
+
+  .calc-detail-step-inputs {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .calc-detail-input-chip {
+    @apply rounded-md border border-border bg-background px-2 py-0.5 font-mono text-[10px] text-foreground-muted;
+  }
+
+  .calc-detail-step-result {
+    @apply text-base font-bold text-foreground;
   }
 
   .history-detail-panel-body {
     @apply px-6 pb-6;
-  }
-
-  .history-detail-steps {
-    @apply divide-y divide-border;
-  }
-
-  .history-detail-step {
-    @apply px-6 py-5;
   }
 
   .history-detail-error-icon {
