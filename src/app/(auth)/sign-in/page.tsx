@@ -6,9 +6,11 @@ import { login, ApiError } from "@/lib/api";
 import { validateEmail, validateSignIn } from "@/lib/auth-validation";
 import { Icon } from "@/components/icons/Icon";
 import { AuthSplit, AuthField, AuthFormSuspense, useAuthRedirect } from "@/components/marketing/AuthLayout";
+import { useCookieConsentRequired } from "@/components/CookieConsent";
 
 function SignInForm() {
   const { redirect, router } = useAuthRedirect();
+  const cookieConsented = useCookieConsentRequired();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
@@ -93,7 +95,12 @@ function SignInForm() {
           error={errors.password}
         />
         {error && <div className="alert-error text-sm font-medium">{error}</div>}
-        <button type="submit" disabled={loading} className="btn-auth-submit">
+        {!cookieConsented && (
+          <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground-secondary">
+            Accept essential cookies using the banner below before signing in.
+          </p>
+        )}
+        <button type="submit" disabled={loading || !cookieConsented} className="btn-auth-submit">
           {loading ? "Signing in…" : "Access workspace"}
           {!loading && <Icon name="arrow-right" size={16} />}
         </button>

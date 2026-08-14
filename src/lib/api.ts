@@ -96,6 +96,14 @@ export async function getMe(): Promise<AuthUser | null> {
 }
 
 export async function login(email: string, password: string) {
+  const { hasCookieConsent } = await import("./cookie-consent");
+  if (!hasCookieConsent()) {
+    throw new ApiError(
+      "Please accept essential cookies before signing in",
+      403,
+      "COOKIE_CONSENT_REQUIRED"
+    );
+  }
   return apiFetch<{ user: AuthUser }>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
@@ -103,6 +111,14 @@ export async function login(email: string, password: string) {
 }
 
 export async function register(name: string, email: string, password: string, confirmPassword: string) {
+  const { hasCookieConsent } = await import("./cookie-consent");
+  if (!hasCookieConsent()) {
+    throw new ApiError(
+      "Please accept essential cookies before creating an account",
+      403,
+      "COOKIE_CONSENT_REQUIRED"
+    );
+  }
   return apiFetch<{ user: AuthUser }>("/api/auth/register", {
     method: "POST",
     body: JSON.stringify({ name, email, password, confirmPassword }),

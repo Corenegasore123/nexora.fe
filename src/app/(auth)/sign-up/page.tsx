@@ -12,9 +12,11 @@ import {
 } from "@/lib/auth-validation";
 import { Icon } from "@/components/icons/Icon";
 import { AuthSplit, AuthField, useAuthRedirect } from "@/components/marketing/AuthLayout";
+import { useCookieConsentRequired } from "@/components/CookieConsent";
 
 function SignUpForm() {
   const { redirect, router } = useAuthRedirect();
+  const cookieConsented = useCookieConsentRequired();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -139,7 +141,12 @@ function SignUpForm() {
           error={errors.confirmPassword}
         />
         {error && <div className="alert-error text-sm font-medium">{error}</div>}
-        <button type="submit" disabled={loading} className="btn-auth-submit">
+        {!cookieConsented && (
+          <p className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground-secondary">
+            Accept essential cookies using the banner below before creating an account.
+          </p>
+        )}
+        <button type="submit" disabled={loading || !cookieConsented} className="btn-auth-submit">
           {loading ? "Creating account…" : "Create account"}
           {!loading && <Icon name="arrow-right" size={16} />}
         </button>

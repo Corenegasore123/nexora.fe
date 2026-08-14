@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, JetBrains_Mono } from "next/font/google";
 import { ThemeScript } from "@/components/ThemeScript";
+import { CookieConsent } from "@/components/CookieConsent";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {children}
+        <CookieConsent />
       </body>
     </html>
   );

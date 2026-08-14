@@ -11,6 +11,8 @@ const PUBLIC_PATHS = new Set([
   "/sign-up",
 ]);
 
+const CONSENT_COOKIE = "quantscope_cookie_consent";
+
 function apiOrigin() {
   return (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
 }
@@ -43,6 +45,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const sessionCookie = request.cookies.get("quantscope_session");
+  const consentCookie = request.cookies.get(CONSENT_COOKIE);
   const isPublic = PUBLIC_PATHS.has(pathname);
   const isApp = pathname.startsWith("/app");
 
@@ -50,13 +53,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/app", request.url));
   }
 
-  const hasValidSession = sessionCookie?.value ? await sessionIsValid(request) : false;
+  const hasConsent = consentCookie?.value === "accepted";
+  const hasValidSession = sessionCookie?.value && hasConsent ? await sessionIsValid(request) : false;
 
-  if (isApp && !hasValidSession) {
-    const signIn = new URL("/sign-in", request.url);
+  if (isApp && (!hasConsent || !hasValidSession)) {
+    const signIn = new URL(hasConsent ? "/sign-in" : "/sign-in", request.url);
     signIn.searchParams.set("from", pathname);
     const response = NextResponse.redirect(signIn);
-    if (sessionCookie?.value) {
+    if (sessionCookie?.value && !hasConsent) {
+      response.cookies.delete("quantscope_session");
+      response.cookies.delete("quantscope_role");
+    } else if (sessionCookie?.value && hasConsent && !hasValidSession) {
       response.cookies.delete("quantscope_session");
       response.cookies.delete("quantscope_role");
     }
