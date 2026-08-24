@@ -6,22 +6,22 @@ import {
   getNotifications,
   markNotificationRead,
   markAllNotificationsRead,
-  Notification,
+  AppNotification,
 } from "@/lib/api";
 
 import { Icon } from "@/components/icons/Icon";
 
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
   const load = () => {
     getNotifications()
       .then((data) => {
-        setNotifications(data.notifications);
-        setUnreadCount(data.unreadCount);
+        setNotifications(data);
+        setUnreadCount(data.filter((n) => !n.read).length);
       })
       .catch(() => undefined);
   };
@@ -42,7 +42,7 @@ export function NotificationBell() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  const handleRead = async (n: Notification) => {
+  const handleRead = async (n: AppNotification) => {
     if (!n.read) {
       await markNotificationRead(n.id);
       load();
@@ -92,7 +92,7 @@ export function NotificationBell() {
             {notifications.map((n) => (
               <Link
                 key={n.id}
-                href={n.link ?? "#"}
+                href="/app/notifications"
                 onClick={() => handleRead(n)}
                 className={`block border-b border-border px-4 py-3 transition-colors hover:bg-pending-bg ${
                   n.read ? "opacity-60" : ""

@@ -5,7 +5,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <>
       <MarketingHeader />
-      <main>{children}</main>
+      <main className="bg-background">{children}</main>
       <MarketingFooter />
     </>
   );

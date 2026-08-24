@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       { source: "/login", destination: "/sign-in", permanent: true },
       { source: "/register", destination: "/sign-up", permanent: true },
       { source: "/dashboard", destination: "/app", permanent: true },
+      { source: "/admin", destination: "/platform-admin", permanent: false },
+      { source: "/account/saved", destination: "/account/favorites", permanent: false },
     ];
   },
   async rewrites() {
@@ -21,6 +23,12 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: path.join(__dirname),
+  },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
+      { protocol: "https", hostname: "plus.unsplash.com", pathname: "/**" },
+    ],
   },
 };
 

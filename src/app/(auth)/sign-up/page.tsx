@@ -24,8 +24,8 @@ function SignUpForm() {
     setLoading(true);
     setError(null);
     try {
-      await register(name.trim(), email.trim(), password);
-      redirect();
+      const res = await register(name.trim(), email.trim(), password);
+      redirect(res.home);
       router.refresh();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Registration failed");
@@ -35,14 +35,14 @@ function SignUpForm() {
 
   return (
     <AuthSplit
-      badge="Get started"
-      brandTitle="Create account."
-      brandSubtitle="New accounts join as students. An administrator can later assign staff roles and departments."
-      brandTags={["Requests", "Approvals", "Notifications"]}
-      brandFooter="Nexora Campus · University operations"
+      badge="Join Nexora"
+      brandTitle="Save the places you love."
+      brandSubtitle="Create a diner account to book tables, keep favorites, and review restaurants you have visited."
+      brandTags={["Book a table", "Favorites", "Reviews"]}
+      brandFooter="Nexora · Discover where to eat. Book your table."
       formEyebrow="Register"
-      formTitle="Join campus"
-      formSubtitle="Use a strong password with mixed case and a number."
+      formTitle="Create your account"
+      formSubtitle="This is a diner account. Restaurant teams are invited by an owner."
       footer={
         <p className="text-center text-sm text-foreground-muted">
           Already registered?{" "}
@@ -55,8 +55,29 @@ function SignUpForm() {
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         <AuthField id="name" label="Full name" type="text" icon="user" value={name} onChange={setName} error={errors.name} />
         <AuthField id="email" label="Email" type="email" icon="mail" value={email} onChange={setEmail} error={errors.email} />
-        <AuthField id="password" label="Password" type="password" icon="lock" value={password} onChange={setPassword} error={errors.password} />
-        <AuthField id="confirm" label="Confirm password" type="password" icon="lock" value={confirmPassword} onChange={setConfirmPassword} error={errors.confirmPassword} />
+        <AuthField
+          id="password"
+          label="Password"
+          type="password"
+          icon="lock"
+          password
+          autoComplete="new-password"
+          showStrength
+          value={password}
+          onChange={setPassword}
+          error={errors.password}
+        />
+        <AuthField
+          id="confirm"
+          label="Confirm password"
+          type="password"
+          icon="lock"
+          password
+          autoComplete="new-password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          error={errors.confirmPassword}
+        />
         {error && <p className="text-sm text-error">{error}</p>}
         <button type="submit" className="btn-primary w-full" disabled={loading}>
           {loading ? "Creating…" : "Create account"}

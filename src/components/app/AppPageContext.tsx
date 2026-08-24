@@ -11,28 +11,25 @@ export type AppPageMeta = {
 
 function resolvePageMeta(pathname: string): AppPageMeta {
   const routes: Record<string, AppPageMeta> = {
-    "/app": { title: "Dashboard", subtitle: "Campus operations" },
-    "/app/requests": { title: "Requests", subtitle: "Workflow-backed cases" },
-    "/app/requests/new": { title: "New Request", subtitle: "Start a campus process" },
-    "/app/inbox": { title: "My Work", subtitle: "Approvals, tasks, and overdue items" },
-    "/app/documents": { title: "Documents", subtitle: "Generated and uploaded files" },
-    "/app/notifications": { title: "Notifications", subtitle: "Activity that needs your attention" },
+    "/app": { title: "Command Center", subtitle: "What is happening in my restaurant right now?" },
+    "/app/floor": { title: "Floor", subtitle: "Interactive table status" },
+    "/app/reservations": { title: "Reservations", subtitle: "Bookings, seating, and guest flow" },
+    "/app/pos": { title: "Point of Sale", subtitle: "Orders and payments" },
+    "/app/kitchen": { title: "Kitchen Display", subtitle: "Live preparation board" },
+    "/app/menu": { title: "Menu Engineering", subtitle: "Sales, cost, and classification" },
+    "/app/inventory": { title: "Inventory", subtitle: "Stock, recipes, and alerts" },
+    "/app/procurement": { title: "Procurement", subtitle: "Purchase recommendations and suppliers" },
+    "/app/waste": { title: "Waste", subtitle: "Where money is disappearing" },
+    "/app/staff": { title: "Staff", subtitle: "People, shifts, and attendance" },
+    "/app/setup": { title: "Setup", subtitle: "Restaurant launch checklist" },
+    "/app/customers": { title: "Customers", subtitle: "Profiles, loyalty, and visits" },
+    "/app/delivery": { title: "Delivery", subtitle: "Internal delivery queue" },
+    "/app/analytics": { title: "Analytics", subtitle: "Revenue, margins, and branches" },
+    "/app/notifications": { title: "Notifications", subtitle: "Operational alerts" },
     "/app/profile": { title: "Profile", subtitle: "Your account" },
-    "/app/settings": { title: "Settings", subtitle: "Preferences" },
-    "/app/assets": { title: "Assets", subtitle: "Campus equipment" },
-    "/app/search": { title: "Search", subtitle: "Requests, people, and assets" },
-    "/app/admin/users": { title: "Users", subtitle: "People and roles" },
-    "/app/admin/departments": { title: "Departments", subtitle: "Campus units" },
-    "/app/admin/workflows": { title: "Workflows", subtitle: "Configurable approval paths" },
-    "/app/admin/request-types": { title: "Request Types", subtitle: "What students and staff can submit" },
-    "/app/admin/assets": { title: "Assets", subtitle: "Lifecycle register" },
-    "/app/admin/reports": { title: "Reports", subtitle: "Live operational analytics" },
-    "/app/admin/audit": { title: "Audit Logs", subtitle: "Immutable activity trail" },
+    "/app/settings": { title: "Settings", subtitle: "Appearance and preferences" },
   };
-  if (routes[pathname]) return routes[pathname];
-  if (/^\/app\/requests\/[^/]+$/.test(pathname)) return { title: "Request", subtitle: "Workflow, SLA, and audit trail" };
-  if (/^\/app\/admin\/workflows\/[^/]+$/.test(pathname)) return { title: "Workflow", subtitle: "Steps and transitions" };
-  return { title: "Nexora Campus" };
+  return routes[pathname] ?? { title: "Nexora" };
 }
 
 type AppPageContextValue = {

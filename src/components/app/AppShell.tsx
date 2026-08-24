@@ -13,35 +13,39 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 type NavItem = { href: string; label: string; icon: IconName; section?: string };
 
 function navFor(role: AuthUser["role"] | undefined): NavItem[] {
-  const student: NavItem[] = [
-    { href: "/app", label: "Dashboard", icon: "layout-dashboard", section: "Overview" },
-    { href: "/app/requests", label: "My Requests", icon: "file-text", section: "Work" },
-    { href: "/app/inbox", label: "My Work", icon: "inbox", section: "Work" },
-    { href: "/app/documents", label: "Documents", icon: "clipboard", section: "Work" },
-    { href: "/app/notifications", label: "Notifications", icon: "bell", section: "Work" },
+  const ops: NavItem[] = [
+    { href: "/app", label: "Command Center", icon: "layout-dashboard", section: "Live" },
+    { href: "/app/floor", label: "Floor", icon: "map-pin", section: "Front of house" },
+    { href: "/app/reservations", label: "Reservations", icon: "clock", section: "Front of house" },
+    { href: "/app/pos", label: "POS", icon: "calculator", section: "Front of house" },
+    { href: "/app/kitchen", label: "Kitchen", icon: "clipboard", section: "Kitchen" },
+    { href: "/app/menu", label: "Menu", icon: "book-open", section: "Kitchen" },
+    { href: "/app/inventory", label: "Inventory", icon: "package", section: "Back office" },
+    { href: "/app/procurement", label: "Procurement", icon: "clipboard-check", section: "Back office" },
+    { href: "/app/waste", label: "Waste", icon: "alert-triangle", section: "Back office" },
+    { href: "/app/staff", label: "Staff", icon: "users", section: "Back office" },
+    { href: "/app/setup", label: "Setup", icon: "clipboard-check", section: "Back office" },
+    { href: "/app/customers", label: "Customers", icon: "user", section: "Back office" },
+    { href: "/app/delivery", label: "Delivery", icon: "route", section: "Back office" },
+    { href: "/app/analytics", label: "Analytics", icon: "target", section: "Intelligence" },
+    { href: "/app/notifications", label: "Notifications", icon: "bell", section: "Intelligence" },
   ];
-  const staff: NavItem[] = [
-    { href: "/app", label: "Dashboard", icon: "layout-dashboard", section: "Overview" },
-    { href: "/app/inbox", label: "Inbox", icon: "inbox", section: "Operations" },
-    { href: "/app/requests", label: "Requests", icon: "file-text", section: "Operations" },
-    { href: "/app/assets", label: "Assets", icon: "package", section: "Operations" },
-    { href: "/app/notifications", label: "Notifications", icon: "bell", section: "Operations" },
-  ];
-  const admin: NavItem[] = [
-    { href: "/app", label: "Dashboard", icon: "layout-dashboard", section: "Overview" },
-    { href: "/app/inbox", label: "Inbox", icon: "inbox", section: "Operations" },
-    { href: "/app/requests", label: "Requests", icon: "file-text", section: "Operations" },
-    { href: "/app/admin/users", label: "Users", icon: "users", section: "Administration" },
-    { href: "/app/admin/departments", label: "Departments", icon: "building", section: "Administration" },
-    { href: "/app/admin/workflows", label: "Workflows", icon: "git-branch", section: "Administration" },
-    { href: "/app/admin/request-types", label: "Request Types", icon: "layers", section: "Administration" },
-    { href: "/app/admin/assets", label: "Assets", icon: "package", section: "Administration" },
-    { href: "/app/admin/reports", label: "Reports", icon: "target", section: "Administration" },
-    { href: "/app/admin/audit", label: "Audit Logs", icon: "shield", section: "Administration" },
-  ];
-  if (role === "ADMIN") return admin;
-  if (role === "STAFF") return staff;
-  return student;
+  if (role === "CHEF" || role === "KITCHEN") {
+    return ops.filter((i) => ["/app", "/app/kitchen", "/app/menu", "/app/notifications"].includes(i.href));
+  }
+  if (role === "WAITER") {
+    return ops.filter((i) => ["/app", "/app/floor", "/app/reservations", "/app/pos", "/app/kitchen", "/app/notifications"].includes(i.href));
+  }
+  if (role === "CASHIER") {
+    return ops.filter((i) => ["/app", "/app/floor", "/app/pos", "/app/notifications"].includes(i.href));
+  }
+  if (role === "INVENTORY_MANAGER") {
+    return ops.filter((i) => ["/app", "/app/inventory", "/app/procurement", "/app/waste", "/app/menu", "/app/notifications"].includes(i.href));
+  }
+  if (role !== "OWNER" && role !== "ADMIN") {
+    return ops.filter((i) => i.href !== "/app/setup");
+  }
+  return ops;
 }
 
 function isActive(pathname: string, href: string) {
@@ -80,7 +84,7 @@ export function AppSidebar({
         <div className="app-sidebar-header">
           {collapsed ? (
             <div className="app-sidebar-header-collapsed">
-              <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="Nexora Campus">
+              <Link href="/app" className="app-sidebar-logo-mark" onClick={onClose} title="Nexora">
                 <BrandMark size={16} />
               </Link>
               <button type="button" onClick={() => setCollapsed(false)} className="app-sidebar-icon-btn hidden lg:inline-flex" aria-label="Expand sidebar">
@@ -93,7 +97,7 @@ export function AppSidebar({
                 <span className="app-sidebar-logo-mark">
                   <BrandMark size={16} />
                 </span>
-                <span className="app-sidebar-logo-text">Nexora Campus</span>
+                <span className="app-sidebar-logo-text">Nexora</span>
               </Link>
               <button type="button" onClick={onClose} className="app-sidebar-icon-btn lg:hidden" aria-label="Close menu">
                 <Icon name="x" size={18} />
@@ -162,9 +166,6 @@ export function AppTopBar({ onMenuClick, mobileOpen }: { onMenuClick: () => void
       </div>
       <div className="app-topbar-actions">
         {actions}
-        <Link href="/app/search" className="app-icon-btn" aria-label="Search">
-          <Icon name="search" size={18} />
-        </Link>
         <ThemeToggle variant="header" />
         <NotificationBell />
       </div>

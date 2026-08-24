@@ -5,23 +5,27 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/icons/Icon";
 import { BrandMark } from "@/components/BrandMark";
+import { AccountMenu } from "@/components/marketing/AccountMenu";
 
 const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/how-it-works", label: "How It Works" },
-  { href: "/features", label: "Features" },
+  { href: "/", label: "Discover" },
+  { href: "/restaurants", label: "Restaurants" },
+  { href: "/cities", label: "Cities" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
 ];
 
+type Session = { ok: boolean; role?: string; home?: string };
+
 function isNavActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname === href;
+  if (href === "/") return pathname === "/" || pathname.startsWith("/discover") || pathname.startsWith("/search");
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function MarketingHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -41,13 +45,25 @@ export function MarketingHeader() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/auth/check", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (alive) setSession(data?.ok ? data : null);
+      })
+      .catch(() => {
+        if (alive) setSession(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
     <header className="marketing-header fixed inset-x-0 top-0 z-50">
       <div className="marketing-header-wrap">
-        <div
-          className={`marketing-nav-shell ${scrolled || menuOpen ? "marketing-nav-shell-raised" : ""}`}
-        >
-          {/* Logo */}
+        <div className={`marketing-nav-shell ${scrolled || menuOpen ? "marketing-nav-shell-raised" : ""}`}>
           <Link href="/" prefetch className="marketing-nav-logo">
             <span className="marketing-nav-logo-mark">
               <BrandMark size={18} />
@@ -55,7 +71,6 @@ export function MarketingHeader() {
             <span className="marketing-nav-logo-text">Nexora</span>
           </Link>
 
-          {/* Desktop nav — centered */}
           <nav className="marketing-nav-desktop" aria-label="Main navigation">
             {NAV.map((item) => (
               <Link
@@ -69,11 +84,14 @@ export function MarketingHeader() {
             ))}
           </nav>
 
-          {/* Actions — far right */}
           <div className="marketing-nav-actions">
-            <Link href="/sign-in" prefetch className="btn-marketing-signin marketing-nav-signin-full">
-              Sign In
-            </Link>
+            {session ? (
+              <AccountMenu session={session} />
+            ) : (
+              <Link href="/sign-in" prefetch className="btn-marketing-signin">
+                Sign In
+              </Link>
+            )}
             <button
               type="button"
               className="marketing-nav-menu-btn"
@@ -87,26 +105,12 @@ export function MarketingHeader() {
         </div>
       </div>
 
-      {/* Mobile / tablet menu */}
-      <div
-        className={`marketing-mobile-nav ${menuOpen ? "marketing-mobile-nav-open" : ""}`}
-        aria-hidden={!menuOpen}
-      >
-        <button
-          type="button"
-          className="marketing-mobile-nav-backdrop"
-          aria-label="Close menu"
-          onClick={() => setMenuOpen(false)}
-        />
+      <div className={`marketing-mobile-nav ${menuOpen ? "marketing-mobile-nav-open" : ""}`} aria-hidden={!menuOpen}>
+        <button type="button" className="marketing-mobile-nav-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} />
         <nav className="marketing-mobile-nav-panel" aria-label="Mobile navigation">
           <div className="marketing-mobile-nav-header">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/45">Navigation</p>
-            <button
-              type="button"
-              className="marketing-nav-menu-btn"
-              aria-label="Close menu"
-              onClick={() => setMenuOpen(false)}
-            >
+            <p className="text-xs font-semibold uppercase tracking-widest text-foreground-muted">Navigation</p>
+            <button type="button" className="marketing-nav-menu-btn" aria-label="Close menu" onClick={() => setMenuOpen(false)}>
               <Icon name="x" size={18} />
             </button>
           </div>
@@ -124,14 +128,16 @@ export function MarketingHeader() {
               </li>
             ))}
           </ul>
-          <div className="marketing-mobile-nav-cta">
-            <Link href="/sign-in" prefetch className="btn-marketing-primary w-full justify-center">
-              Sign In
-            </Link>
-            <Link href="/sign-up" prefetch className="marketing-mobile-nav-secondary">
-              Create account
-            </Link>
-          </div>
+          {!session && (
+            <div className="marketing-mobile-nav-cta">
+              <Link href="/sign-in" prefetch className="btn-marketing-primary w-full justify-center">
+                Sign In
+              </Link>
+              <Link href="/sign-up" prefetch className="marketing-mobile-nav-secondary">
+                Create account
+              </Link>
+            </div>
+          )}
         </nav>
       </div>
     </header>

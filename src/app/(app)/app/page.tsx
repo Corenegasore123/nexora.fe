@@ -1,22 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { AuthUser, formatProcessing, getMe, getOverview, getTasks } from "@/lib/api";
+import { getCommandCenter, rwf, type CommandCenter } from "@/lib/api";
 import { SkeletonCard } from "@/components/ui/Skeleton";
 
-export default function DashboardPage() {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [overview, setOverview] = useState<Awaited<ReturnType<typeof getOverview>> | null>(null);
-  const [inbox, setInbox] = useState<Awaited<ReturnType<typeof getTasks>> | null>(null);
+export default function CommandCenterPage() {
+  const [data, setData] = useState<CommandCenter | null>(null);
 
   useEffect(() => {
-    getMe().then(setUser).catch(() => setUser(null));
-    getOverview().then(setOverview).catch(() => setOverview(null));
-    getTasks().then(setInbox).catch(() => setInbox(null));
+    const load = () => getCommandCenter().then(setData).catch(() => undefined);
+    load();
+    const t = setInterval(load, 8000);
+    return () => clearInterval(t);
   }, []);
 
-  if (!overview) {
+  if (!data) {
     return (
       <div className="page-shell grid gap-4 md:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -26,81 +24,77 @@ export default function DashboardPage() {
     );
   }
 
-  const greeting = user?.role === "ADMIN" ? "Operations overview" : user?.role === "STAFF" ? "Staff dashboard" : "Student dashboard";
+  const max = Math.max(data.today.revenue, data.today.orders * 6000, data.today.customers * 4000, 1);
 
   return (
-    <div className="page-shell space-y-8">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="eyebrow">{greeting}</p>
-          <h2 className="mt-1 text-2xl font-bold">Hello{user ? `, ${user.name.split(" ")[0]}` : ""}</h2>
-        </div>
-        {user?.role === "STUDENT" && (
-          <Link href="/app/requests/new" className="btn-primary">
-            + New Request
-          </Link>
-        )}
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat label={user?.role === "STAFF" ? "Pending approvals" : "Requests"} value={user?.role === "STAFF" ? inbox?.counts.approvals ?? 0 : overview.totals.total} />
-        <Stat label={user?.role === "STAFF" ? "Assigned tasks" : "Pending"} value={user?.role === "STAFF" ? inbox?.counts.tasks ?? 0 : overview.totals.pending} />
-        <Stat label="Overdue" value={overview.totals.overdue} warn={overview.totals.overdue > 0} />
-        <Stat label="Completed" value={overview.totals.completed} />
+    <div className="page-shell space-y-6">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <Stat label="Revenue" value={rwf(data.today.revenue)} />
+        <Stat label="Orders" value={String(data.today.orders)} />
+        <Stat label="Customers" value={String(data.today.customers)} />
+        <Stat label="Avg. Order Value" value={rwf(data.today.avgOrderValue)} />
+        <Stat label="Tables Occupied" value={`${data.today.tablesOccupiedPct}%`} />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <article className="card">
-          <p className="eyebrow">Average processing time</p>
-          <p className="mt-3 text-3xl font-bold">{formatProcessing(overview.avgProcessingMs)}</p>
+          <p className="eyebrow">Live operations</p>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>🟢 {data.live.occupied} tables occupied</li>
+            <li>🟡 {data.live.preparing} orders preparing</li>
+            <li>🔵 {data.live.ready} orders ready</li>
+            <li>🔴 {data.live.delayed} delayed orders</li>
+          </ul>
         </article>
         <article className="card">
-          <p className="eyebrow">SLA compliance</p>
-          <p className="mt-3 text-3xl font-bold">{overview.slaCompliance}%</p>
+          <p className="eyebrow">Inventory alerts</p>
+          <ul className="mt-4 space-y-2 text-sm">
+            {data.inventory.slice(0, 8).map((i) => (
+              <li key={i.name}>
+                {i.status === "Healthy" ? "✓" : "⚠"} {i.name}
+                <span className="ml-2 text-foreground-muted">{i.status}</span>
+              </li>
+            ))}
+          </ul>
         </article>
         <article className="card">
-          <p className="eyebrow">Top bottleneck</p>
-          <p className="mt-3 text-3xl font-bold">{overview.topBottleneck}</p>
+          <p className="eyebrow">Staff</p>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>{data.staff.active} active</li>
+            <li>{data.staff.late} late</li>
+            <li>{data.staff.absent} absent</li>
+          </ul>
         </article>
       </div>
 
       <article className="card">
-        <p className="eyebrow">Request volume · 14 days</p>
-        <div className="mt-6 flex h-40 items-end gap-2">
-          {overview.volume.map((d) => {
-            const max = Math.max(1, ...overview.volume.map((v) => v.count));
-            return (
-              <div key={d.date} className="flex flex-1 flex-col items-center gap-2">
-                <div className="w-full rounded-t bg-primary" style={{ height: `${(d.count / max) * 100}%`, minHeight: d.count ? 6 : 2 }} />
-                <span className="text-[10px] text-foreground-muted">{d.date.slice(5)}</span>
-              </div>
-            );
-          })}
+        <p className="eyebrow">Today&apos;s performance</p>
+        <div className="mt-4 space-y-3">
+          <Bar label="Revenue" pct={(data.today.revenue / max) * 100} />
+          <Bar label="Orders" pct={(data.today.orders * 6000) / max * 100} />
+          <Bar label="Customers" pct={(data.today.customers * 4000) / max * 100} />
         </div>
       </article>
-
-      {inbox && (
-        <article className="card">
-          <div className="flex items-center justify-between">
-            <p className="eyebrow">My work</p>
-            <Link href="/app/inbox" className="text-sm font-medium text-primary">
-              Open inbox
-            </Link>
-          </div>
-          <p className="mt-3 text-sm text-foreground-secondary">
-            {inbox.counts.approvals} approvals · {inbox.counts.tasks} tasks · {inbox.counts.overdue} overdue
-          </p>
-        </article>
-      )}
     </div>
   );
 }
 
-function Stat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
+function Stat({ label, value }: { label: string; value: string }) {
   return (
     <article className="card">
       <p className="eyebrow">{label}</p>
-      <p className={`mt-3 text-3xl font-bold ${warn ? "text-error" : ""}`}>{value}</p>
+      <p className="mt-3 text-2xl font-bold">{value}</p>
     </article>
+  );
+}
+
+function Bar({ label, pct }: { label: string; pct: number }) {
+  return (
+    <div className="flex items-center gap-3 text-sm">
+      <span className="w-24 shrink-0 text-foreground-muted">{label}</span>
+      <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-pending-bg">
+        <span className="block h-full rounded-full bg-accent" style={{ width: `${Math.min(100, Math.max(6, pct))}%` }} />
+      </span>
+    </div>
   );
 }

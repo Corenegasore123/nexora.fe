@@ -6,8 +6,19 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)", "Inter", "-apple-system", "Segoe UI", "sans-serif"],
+        display: ["var(--font-display)", "Fraunces", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "IBM Plex Mono", "ui-monospace", "monospace"],
+      },
+      fontSize: {
+        xs: ["var(--nx-text-xs)", { lineHeight: "var(--nx-leading-normal)" }],
+        sm: ["var(--nx-text-sm)", { lineHeight: "var(--nx-leading-normal)" }],
+        base: ["var(--nx-text-md)", { lineHeight: "var(--nx-leading-normal)" }],
+        lg: ["var(--nx-text-lg)", { lineHeight: "var(--nx-leading-snug)" }],
+        xl: ["var(--nx-text-xl)", { lineHeight: "var(--nx-leading-snug)" }],
+        "2xl": ["var(--nx-text-2xl)", { lineHeight: "var(--nx-leading-tight)" }],
+        "3xl": ["var(--nx-text-3xl)", { lineHeight: "var(--nx-leading-tight)" }],
+        "4xl": ["var(--nx-text-4xl)", { lineHeight: "var(--nx-leading-tight)" }],
       },
       colors: {
         background: "var(--color-background)",
@@ -87,8 +98,24 @@ const config: Config = {
           8: "var(--chart-8)",
         },
         ink: {
-          DEFAULT: "#354554",
-          deep: "#2a3844",
+          DEFAULT: "var(--nx-ink-900)",
+          muted: "var(--nx-ink-700)",
+          faint: "var(--nx-ink-400)",
+        },
+        coral: {
+          DEFAULT: "var(--nx-coral-500)",
+          hover: "var(--nx-coral-600)",
+          soft: "var(--nx-coral-50)",
+        },
+        teal: {
+          DEFAULT: "var(--nx-teal-500)",
+          soft: "var(--nx-teal-50)",
+        },
+        violet: {
+          DEFAULT: "var(--nx-violet-500)",
+        },
+        gold: {
+          DEFAULT: "var(--nx-gold-500)",
         },
       },
       ringColor: {

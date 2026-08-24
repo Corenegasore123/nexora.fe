@@ -8,8 +8,8 @@ import { AuthSplit, AuthField, useAuthRedirect } from "@/components/marketing/Au
 
 function SignInForm() {
   const { redirect, router } = useAuthRedirect();
-  const [email, setEmail] = useState("student@nexora.campus");
-  const [password, setPassword] = useState("Campus#2026");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,8 +22,8 @@ function SignInForm() {
     setLoading(true);
     setError(null);
     try {
-      await login(email.trim(), password);
-      redirect();
+      const res = await login(email.trim(), password);
+      redirect(res.home);
       router.refresh();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Login failed");
@@ -33,14 +33,14 @@ function SignInForm() {
 
   return (
     <AuthSplit
-      badge="Campus access"
-      brandTitle="Sign in."
-      brandSubtitle="Students submit requests. Staff approve them. Administrators configure the workflow."
-      brandTags={["Workflows", "SLA", "Audit trail"]}
-      brandFooter="Nexora Campus · Configurable operations"
+      badge="Welcome back"
+      brandTitle="Your next table is waiting."
+      brandSubtitle="Sign in to save restaurants, manage reservations, and pick up where you left off."
+      brandTags={["Find a table", "Save favorites", "Reservations"]}
+      brandFooter="Nexora · Discover where to eat. Book your table."
       formEyebrow="Sign in"
-      formTitle="Welcome back"
-      formSubtitle="Demo password is Campus#2026."
+      formTitle="Sign in"
+      formSubtitle="Enter your email and password to continue."
       footer={
         <p className="text-center text-sm text-foreground-muted">
           No account?{" "}
@@ -65,6 +65,8 @@ function SignInForm() {
           label="Password"
           type="password"
           icon="lock"
+          password
+          autoComplete="current-password"
           value={password}
           onChange={(v) => setPassword(v)}
           error={errors.password}
