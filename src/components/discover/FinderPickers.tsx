@@ -48,14 +48,28 @@ function useDismissible(open: boolean, onClose: () => void) {
   return ref;
 }
 
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
+const MONTHS_LONG = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
 function formatDateLabel(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   if (!y || !m || !d) return iso;
-  return new Intl.DateTimeFormat("en-GB", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  }).format(new Date(y, m - 1, d));
+  const date = new Date(y, m - 1, d);
+  return `${WEEKDAYS[date.getDay()]} ${d} ${MONTHS[m - 1]}`;
 }
 
 function parseTime(value: string) {
@@ -215,10 +229,7 @@ export function DatePicker({
   const blanks = Array.from({ length: firstWeekday }, (_, i) => i);
   const days = Array.from({ length: total }, (_, i) => i + 1);
 
-  const title = new Intl.DateTimeFormat("en-GB", {
-    month: "long",
-    year: "numeric",
-  }).format(new Date(cursor.year, cursor.month, 1));
+  const title = `${MONTHS_LONG[cursor.month]} ${cursor.year}`;
 
   const canPrev =
     cursor.year > minYear || (cursor.year === minYear && cursor.month > minMonth);
