@@ -4,7 +4,6 @@ import { ArrowRight, MapPin, UtensilsCrossed } from "lucide-react";
 import { fetchCities, type CitySummary } from "@/lib/public";
 import { isPlaceLive } from "@/lib/rwanda-coverage";
 import { Photo } from "@/components/discover/Photo";
-import { RwandaCoverageMap } from "@/components/discover/RwandaCoverageMap";
 
 export const metadata: Metadata = {
   title: "Cities | Nexora",
@@ -45,7 +44,6 @@ export default async function CitiesPage() {
   }, 0);
   const liveDistricts = cities.filter((c) => c.featured && isPlaceLive(c.restaurantCount)).length;
   const regions = groupByRegion(cities);
-  const counts = Object.fromEntries(cities.map((c) => [c.name, c.restaurantCount]));
 
   return (
     <div className="nx-cities">
@@ -54,7 +52,7 @@ export default async function CitiesPage() {
         <p className="eyebrow">Nexora · Rwanda</p>
         <h1 className="nx-cities-title">Cities &amp; districts.</h1>
         <p className="nx-cities-lead">
-          Coral dots are live on Nexora today. The map shows Rwanda&apos;s district layout - open any district to explore.
+          Browse Rwanda&apos;s cities and districts, see what&apos;s already live, and open any place to explore restaurants.
         </p>
         <div className="nx-cities-meta">
           <span>
@@ -68,15 +66,11 @@ export default async function CitiesPage() {
         </div>
       </section>
 
-      <section className="nx-cities-map-section">
-        <RwandaCoverageMap counts={counts} />
-      </section>
-
       {featured.length > 0 && (
         <section className="nx-cities-section">
           <div className="nx-cities-section-head">
             <h2 className="nx-section-title">Live destinations</h2>
-            <p className="nx-cities-section-sub">Same places highlighted on the map - bookable tonight.</p>
+            <p className="nx-cities-section-sub">Places already live on Nexora and bookable tonight.</p>
           </div>
           <div className="nx-cities-featured">
             {featured.map((city, i) => (
@@ -125,7 +119,7 @@ export default async function CitiesPage() {
       <section className="nx-cities-section">
         <div className="nx-cities-section-head">
           <h2 className="nx-section-title">Browse by province</h2>
-            <p className="nx-cities-section-sub">All districts - live ones match the coral dots on the map.</p>
+          <p className="nx-cities-section-sub">All districts, grouped by province.</p>
         </div>
         <div className="nx-cities-regions">
           {regions.map(({ region, cities: rows }) => (

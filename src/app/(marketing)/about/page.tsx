@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { fetchCities } from "@/lib/public";
-import { RwandaCoverageMap } from "@/components/discover/RwandaCoverageMap";
 
 export const metadata: Metadata = {
   title: "About Nexora",
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const cities = await fetchCities().catch(() => []);
   const liveFeatured = cities.filter((c) => c.featured && c.restaurantCount > 0);
-  const counts = Object.fromEntries(cities.map((c) => [c.name, c.restaurantCount]));
 
   return (
     <div className="nx-about">
@@ -43,8 +41,8 @@ export default async function AboutPage() {
           <p className="eyebrow">Coverage</p>
           <h2 className="nx-section-title">Where Nexora works today</h2>
           <p>
-            Coral dots show districts with restaurants in the live catalog. The base map shows Rwanda&apos;s district
-            layout, and it updates when venues are added or removed.
+            Browse the places where Nexora is already live today. As restaurants are added or removed, this list updates
+            from the same catalog data used across the app.
           </p>
           <ul className="nx-about-live-list">
             {liveFeatured.map((city) => (
@@ -60,7 +58,6 @@ export default async function AboutPage() {
             Browse all cities
           </Link>
         </div>
-        <RwandaCoverageMap counts={counts} />
       </section>
     </div>
   );
