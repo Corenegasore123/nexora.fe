@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <DiscoverHome city="Kigali" />;
+  return <DiscoverHome />;
 }

@@ -2,8 +2,10 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@/components/icons/Icon";
+import { Minus, Plus, Search } from "lucide-react";
+import { DatePicker, PlacePicker, TimePicker } from "@/components/discover/FinderPickers";
 import { clampDateToToday, todayKigali } from "@/lib/dates";
+import { cityToPlace, placeToCityFilter } from "@/lib/rwanda-places";
 
 export function SearchWidget({
   defaults,
@@ -15,7 +17,7 @@ export function SearchWidget({
   action?: string;
 }) {
   const router = useRouter();
-  const [city, setCity] = useState(defaults?.city ?? "Kigali");
+  const [place, setPlace] = useState(() => cityToPlace(defaults?.city));
   const [date, setDate] = useState(() => clampDateToToday(defaults?.date ?? todayKigali()));
   const [time, setTime] = useState(defaults?.time ?? "19:00");
   const [guests, setGuests] = useState(() => {
@@ -31,6 +33,7 @@ export function SearchWidget({
   const go = (e?: FormEvent) => {
     e?.preventDefault();
     const params = new URLSearchParams();
+    const city = placeToCityFilter(place);
     if (city.trim()) params.set("city", city.trim());
     params.set("date", clampDateToToday(date));
     params.set("time", time);
@@ -41,40 +44,28 @@ export function SearchWidget({
 
   return (
     <form onSubmit={go} className={`nx-finder ${variant === "hero" ? "nx-finder-hero" : "nx-finder-compact"}`}>
-      <label className="nx-finder-field flex flex-col">
+      <div className="nx-finder-field flex flex-col">
         <span>Where</span>
-        <span className="nx-finder-control">
-          <Icon name="map-pin" size={16} />
-          <input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City or neighborhood" />
-        </span>
-      </label>
+        <PlacePicker value={place} onChange={setPlace} />
+      </div>
       <span className="nx-finder-rule" aria-hidden />
       <label className="nx-finder-field nx-finder-grow flex flex-col">
         <span>Search</span>
         <span className="nx-finder-control">
-          <Icon name="search" size={16} />
+          <Search size={16} strokeWidth={1.85} />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cuisine, dish, restaurant" />
         </span>
       </label>
       <span className="nx-finder-rule" aria-hidden />
-      <label className="nx-finder-field flex flex-col">
+      <div className="nx-finder-field flex flex-col">
         <span>Date</span>
-        <span className="nx-finder-control">
-          <input
-            type="date"
-            min={todayKigali()}
-            value={date}
-            onChange={(e) => setDate(clampDateToToday(e.target.value))}
-          />
-        </span>
-      </label>
+        <DatePicker value={date} onChange={(next) => setDate(clampDateToToday(next))} />
+      </div>
       <span className="nx-finder-rule hidden md:block" aria-hidden />
-      <label className="nx-finder-field hidden md:flex md:flex-col">
+      <div className="nx-finder-field hidden md:flex md:flex-col">
         <span>Time</span>
-        <span className="nx-finder-control">
-          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-        </span>
-      </label>
+        <TimePicker value={time} onChange={setTime} />
+      </div>
       <span className="nx-finder-rule" aria-hidden />
       <div className="nx-finder-field nx-finder-guests flex flex-col">
         <span>Guests</span>
@@ -86,7 +77,7 @@ export function SearchWidget({
             disabled={guests <= 1}
             onClick={() => bumpGuests(-1)}
           >
-            <Icon name="minus" size={14} />
+            <Minus size={14} strokeWidth={2} />
           </button>
           <span className="nx-stepper-value" aria-live="polite">
             {guests}
@@ -98,7 +89,7 @@ export function SearchWidget({
             disabled={guests >= 20}
             onClick={() => bumpGuests(1)}
           >
-            <Icon name="plus" size={14} />
+            <Plus size={14} strokeWidth={2} />
           </button>
         </span>
       </div>
