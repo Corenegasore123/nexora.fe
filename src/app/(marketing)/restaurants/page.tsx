@@ -29,7 +29,7 @@ export default async function RestaurantsIndexPage({
       <p className="eyebrow">Catalog</p>
       <h1 className="nx-page-title">All restaurants</h1>
       <p className="mt-3 max-w-xl text-foreground-secondary">
-        Every published venue on Nexora. Filter by city, cuisine, or what’s open — then book a table.
+        Every published venue on Nexora. Filter by city, cuisine, or what’s open - then book a table.
       </p>
       <div className="nx-finder-dock mt-8">
         <SearchWidget defaults={{ city: sp.city || "", q: sp.q, date: sp.date, time: sp.time, guests: sp.guests }} action="/restaurants" variant="compact" />

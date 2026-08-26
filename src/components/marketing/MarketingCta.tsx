@@ -17,7 +17,7 @@ export function MarketingCta() {
                     Start managing your restaurant.
                   </h2>
                   <p className="mt-4 text-sm leading-relaxed text-white/60">
-                    One platform for reservations, tables, POS, kitchen, inventory, staff, and analytics — across every
+                    One platform for reservations, tables, POS, kitchen, inventory, staff, and analytics - across every
                     branch.
                   </p>
                   <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-white/50">

@@ -5,7 +5,7 @@ export default function HowItWorksPage() {
         <h1 className="page-title">Nexora has three products.</h1>
         <p className="page-subtitle">
           Platform admins create restaurant owners. Owners set up restaurants and staff. Guests discover and book tables
-          — then the reservation becomes a live service flow.
+          - then the reservation becomes a live service flow.
         </p>
       <pre className="card overflow-x-auto text-sm leading-7">
 {`CUSTOMER

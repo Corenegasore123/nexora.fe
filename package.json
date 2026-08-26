@@ -2,7 +2,7 @@
   "name": "nexora-web",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexora — the operating system for modern restaurants",
+  "description": "Nexora - the operating system for modern restaurants",
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",

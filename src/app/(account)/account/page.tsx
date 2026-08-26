@@ -25,7 +25,7 @@ export default function AccountPage() {
   return (
     <AccountShell
       title={`Hello, ${firstName}.`}
-      subtitle="Your tables, saved restaurants, and reviews — the same Nexora you use to discover where to eat."
+      subtitle="Your tables, saved restaurants, and reviews - the same Nexora you use to discover where to eat."
     >
       <section>
         <h2 className="nx-section-title">Upcoming Reservations</h2>

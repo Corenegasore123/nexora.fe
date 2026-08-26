@@ -22,9 +22,9 @@ function initials(name: string) {
 }
 
 function joined(iso?: string) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   return d.toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "Africa/Kigali" });
 }
 
@@ -82,7 +82,7 @@ export default function AccountProfilePage() {
           {initials(user?.name ?? name)}
         </div>
         <div className="min-w-0">
-          <h2 className="font-display text-3xl font-medium tracking-tight text-ink">{user?.name ?? "—"}</h2>
+          <h2 className="font-display text-3xl font-medium tracking-tight text-ink">{user?.name ?? "-"}</h2>
           <p className="mt-1 text-sm text-foreground-secondary">{user?.email}</p>
           <p className="mt-2 flex flex-wrap gap-1.5">
             <span className="nx-chip nx-chip-featured">Diner</span>

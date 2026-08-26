@@ -3,7 +3,7 @@ export const ALL_PLACES_LABEL = "All";
 
 export const RWANDA_PLACES = [
   { name: "Kigali", region: "City of Kigali", city: "Kigali" },
-  // City of Kigali — 3 districts
+  // City of Kigali - 3 districts
   { name: "Gasabo", region: "City of Kigali", city: "Kigali" },
   { name: "Kicukiro", region: "City of Kigali", city: "Kigali" },
   { name: "Nyarugenge", region: "City of Kigali", city: "Kigali" },

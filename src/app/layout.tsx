@@ -26,7 +26,7 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nexora — Discover where to eat. Book your table.",
+    default: "Nexora - Discover where to eat. Book your table.",
     template: "%s | Nexora",
   },
   description: "Discover restaurants across Rwanda and book a table.",

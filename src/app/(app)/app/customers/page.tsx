@@ -21,10 +21,10 @@ export default function CustomersPage() {
           <p className="text-sm">Visits {c.visits}</p>
           <p className="text-sm">Total spent {rwf(c.totalSpent)}</p>
           <p className="text-sm">Average order {rwf(c.visits ? c.totalSpent / c.visits : 0)}</p>
-          <p className="text-sm">Favorite {c.favorite ?? "—"}</p>
+          <p className="text-sm">Favorite {c.favorite ?? "-"}</p>
           <p className="text-sm">Points {c.points}</p>
           <p className="text-sm text-foreground-muted">
-            Last visit {c.lastVisit ? new Date(c.lastVisit).toLocaleDateString() : "—"}
+            Last visit {c.lastVisit ? new Date(c.lastVisit).toLocaleDateString() : "-"}
           </p>
         </article>
       ))}

@@ -121,7 +121,7 @@ export function BookingWidget({ restaurant }: { restaurant: PublicProfile }) {
       </div>
       {time && (
         <form onSubmit={book} className="mt-4 space-y-3 border-t border-border pt-4">
-          <p className="text-sm font-medium">{me ? "Confirm as your diner account" : "Guest details — no account required"}</p>
+          <p className="text-sm font-medium">{me ? "Confirm as your diner account" : "Guest details - no account required"}</p>
           {!me && (
             <>
               <input

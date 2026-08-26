@@ -40,9 +40,9 @@ export default function AnalyticsPage() {
         </article>
         <article className="card">
           <p className="eyebrow">Highlights</p>
-          <p className="mt-3 text-sm">Best branch {best?.name ?? "—"}</p>
-          <p className="text-sm">Best product {data.bestProduct?.name ?? "—"}</p>
-          <p className="text-sm">Highest waste {worstWaste?.branch ?? "—"}</p>
+          <p className="mt-3 text-sm">Best branch {best?.name ?? "-"}</p>
+          <p className="text-sm">Best product {data.bestProduct?.name ?? "-"}</p>
+          <p className="text-sm">Highest waste {worstWaste?.branch ?? "-"}</p>
         </article>
       </section>
 

@@ -35,7 +35,7 @@ export default function InventoryPage() {
                   <td className="px-5 py-3">
                     {i.minStock} {i.unit}
                   </td>
-                  <td className="px-5 py-3 text-foreground-secondary">{i.supplier?.name ?? "—"}</td>
+                  <td className="px-5 py-3 text-foreground-secondary">{i.supplier?.name ?? "-"}</td>
                   <td className="px-5 py-3">
                     <StatusBadge status={status} />
                   </td>

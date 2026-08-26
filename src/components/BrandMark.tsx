@@ -1,6 +1,6 @@
 import { UtensilsCrossed } from "lucide-react";
 
-/** Nexora brand mark — crossed fork & knife (plate service). */
+/** Nexora brand mark - crossed fork & knife (plate service). */
 export function BrandMark({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <UtensilsCrossed

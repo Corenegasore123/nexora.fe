@@ -5,7 +5,7 @@ import { Photo } from "@/components/discover/Photo";
 
 export const metadata: Metadata = {
   title: "Cities | Nexora",
-  description: "Discover restaurants in Kigali, Musanze, Rubavu, and Huye — then book a table.",
+  description: "Discover restaurants in Kigali, Musanze, Rubavu, and Huye - then book a table.",
 };
 
 export default async function CitiesPage() {
@@ -16,7 +16,7 @@ export default async function CitiesPage() {
       <p className="eyebrow">Rwanda</p>
       <h1 className="nx-page-title">Eat your way through the city.</h1>
       <p className="mt-3 max-w-xl text-foreground-secondary">
-        Neighborhoods, cuisines, and tables available tonight. Start with a city — every page is built from the live catalog.
+        Neighborhoods, cuisines, and tables available tonight. Start with a city - every page is built from the live catalog.
       </p>
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2">

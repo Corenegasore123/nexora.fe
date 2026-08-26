@@ -84,7 +84,7 @@ export default function StaffPage() {
                 <tr key={u.id} className="border-b border-border last:border-0">
                   <td className="px-5 py-3 font-medium">{u.name}</td>
                   <td className="px-5 py-3">{displayRole(u.role)}</td>
-                  <td className="px-5 py-3 text-foreground-secondary">{u.title ?? "—"}</td>
+                  <td className="px-5 py-3 text-foreground-secondary">{u.title ?? "-"}</td>
                 </tr>
               ))}
             </tbody>

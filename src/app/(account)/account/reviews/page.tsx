@@ -16,7 +16,7 @@ export default function AccountReviewsPage() {
   }, []);
 
   return (
-    <AccountShell title="Reviews." subtitle="What you told other diners — the same stars and scores you see on a restaurant page.">
+    <AccountShell title="Reviews." subtitle="What you told other diners - the same stars and scores you see on a restaurant page.">
       {rows === null && <p className="text-sm text-foreground-muted">Loading reviews…</p>}
       {rows && rows.length > 0 && (
         <div className="space-y-3">

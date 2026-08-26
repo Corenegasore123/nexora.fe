@@ -63,7 +63,7 @@ export default function OnboardingPage() {
 
       {step === 1 && (
         <form onSubmit={saveProfile} className="card mt-8 space-y-3">
-          <p className="font-semibold">Step 1 — Restaurant profile</p>
+          <p className="font-semibold">Step 1 - Restaurant profile</p>
           {Object.entries({
             name: "Restaurant name",
             description: "Description",

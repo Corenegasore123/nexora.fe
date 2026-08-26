@@ -172,7 +172,7 @@ body {
     @apply text-accent underline decoration-2 underline-offset-4;
   }
 
-  /* App shell — matches marketing navy + amber */
+  /* App shell - matches marketing navy + amber */
   .app-shell-bg {
     background:
       radial-gradient(ellipse 80% 50% at 50% -10%, var(--color-primary-soft), transparent),
@@ -2065,7 +2065,7 @@ body {
     @apply text-primary-active underline underline-offset-4 hover:text-primary;
   }
 
-  /* Marketing — premium public site */
+  /* Marketing - premium public site */
   .marketing-hero {
     @apply relative overflow-hidden bg-background text-foreground;
   }
@@ -2712,7 +2712,7 @@ body {
     }
   }
 
-  /* Auth — split panel modal */
+  /* Auth - split panel modal */
   .auth-page-bg {
     background:
       radial-gradient(ellipse 80% 60% at 50% -10%, var(--color-primary-soft), transparent),

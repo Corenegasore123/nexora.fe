@@ -118,7 +118,7 @@ export default function PosPage() {
       </div>
 
       <article className="card space-y-4">
-        <p className="eyebrow">Table {tableCode ?? "—"}</p>
+        <p className="eyebrow">Table {tableCode ?? "-"}</p>
         {lines.map((l) => (
           <div key={l.name} className="flex justify-between text-sm">
             <span>

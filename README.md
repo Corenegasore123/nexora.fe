@@ -1,6 +1,6 @@
 # Nexora Web
 
-Next.js frontend for the restaurant operating system — command center, floor, reservations, POS, kitchen, inventory, staff, and analytics.
+Next.js frontend for the restaurant operating system - command center, floor, reservations, POS, kitchen, inventory, staff, and analytics.
 
 Backend: [nexora.be](https://github.com/Corenegasore123/nexora.be)
 

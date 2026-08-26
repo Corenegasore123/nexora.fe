@@ -13,7 +13,7 @@ export default function DeliveryPage() {
   return (
     <div className="page-shell space-y-3">
       <p className="text-sm text-foreground-secondary">
-        Internal delivery queue — order, assigned, picked up, on the way, delivered.
+        Internal delivery queue - order, assigned, picked up, on the way, delivered.
       </p>
       {rows.map((d) => (
         <article key={d.id} className="card flex items-center justify-between">

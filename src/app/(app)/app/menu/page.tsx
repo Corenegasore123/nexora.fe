@@ -6,10 +6,10 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { Photo } from "@/components/discover/Photo";
 
 const LABELS: Record<string, string> = {
-  STAR: "Stars — high sales + high margin",
-  PLOW_HORSE: "Plow Horses — high sales + low margin",
-  PUZZLE: "Puzzles — low sales + high margin",
-  DOG: "Dogs — low sales + low margin",
+  STAR: "Stars - high sales + high margin",
+  PLOW_HORSE: "Plow Horses - high sales + low margin",
+  PUZZLE: "Puzzles - low sales + high margin",
+  DOG: "Dogs - low sales + low margin",
 };
 
 const MIN_PX = 800;

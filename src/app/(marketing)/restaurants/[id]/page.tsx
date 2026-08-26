@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
     const r = await fetchRestaurant(id);
-    const title = `${r.name} — ${r.cuisine.split(/[•,]/)[0].trim()} Restaurant in ${r.city}`;
+    const title = `${r.name} - ${r.cuisine.split(/[•,]/)[0].trim()} Restaurant in ${r.city}`;
     return {
       title,
       description: r.description,

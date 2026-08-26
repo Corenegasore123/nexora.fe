@@ -128,7 +128,7 @@ export function WriteReview({
       <div className="nx-review mt-6">
         <p className="font-display text-lg font-medium tracking-tight">Reviews open after your visit</p>
         <p className="mt-2 text-sm text-foreground-secondary">
-          Book a table, dine, then come back here — or use <span className="font-medium text-ink">Write a review</span> on a past reservation.
+          Book a table, dine, then come back here - or use <span className="font-medium text-ink">Write a review</span> on a past reservation.
         </p>
       </div>
     );

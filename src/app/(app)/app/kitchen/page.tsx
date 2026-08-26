@@ -31,7 +31,7 @@ export default function KitchenPage() {
               <article key={ticket.id} className="card space-y-3">
                 <div className="flex items-baseline justify-between">
                   <p className="text-xl font-bold">#{ticket.order.number}</p>
-                  <p className="text-sm text-foreground-muted">{ticket.order.table?.code ?? "—"}</p>
+                  <p className="text-sm text-foreground-muted">{ticket.order.table?.code ?? "-"}</p>
                 </div>
                 <ul className="text-sm">
                   {ticket.order.lines.map((l, i) => (
