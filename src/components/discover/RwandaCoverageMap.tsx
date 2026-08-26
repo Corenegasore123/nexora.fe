@@ -28,12 +28,12 @@ export function RwandaCoverageMap({
           aria-label="Map of Rwanda districts with live Nexora coverage"
         >
           <image
-            href="/rwanda-districts-reference.png"
+            href="/rwanda-provinces.svg"
             x="0"
             y="0"
             width="1000"
             height="873"
-            preserveAspectRatio="none"
+            preserveAspectRatio="xMidYMid meet"
           />
 
           <g className="nx-map-district-markers">
