@@ -43,8 +43,8 @@ export default async function AboutPage() {
           <p className="eyebrow">Coverage</p>
           <h2 className="nx-section-title">Where Nexora works today</h2>
           <p>
-            Glowing markers are districts with restaurants in the live catalog. When a venue is added or removed, the map
-            updates from the same cities API Cities uses.
+            Coral provinces have restaurants in the live catalog. Soft green means coming soon. The map uses Rwanda&apos;s
+            five provinces and updates when venues are added or removed.
           </p>
           <ul className="nx-about-live-list">
             {liveFeatured.map((city) => (
