@@ -1,6 +1,6 @@
 import { fetchHome } from "@/lib/public";
 import { SearchWidget } from "@/components/discover/SearchWidget";
-import { RestaurantRail } from "@/components/discover/RestaurantCard";
+import { RestaurantRail } from "@/components/discover/RestaurantRail";
 
 export async function DiscoverHome({ city }: { city?: string } = {}) {
   const data = await fetchHome(city || undefined).catch(() => ({

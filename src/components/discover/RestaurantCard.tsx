@@ -68,21 +68,3 @@ export function RestaurantCard({ restaurant, hrefQuery = "" }: { restaurant: Pub
     </article>
   );
 }
-
-export function RestaurantRail({ title, items }: { title: string; items: PublicCard[] }) {
-  if (!items.length) return null;
-  return (
-    <section className="nx-rail">
-      <div className="mb-4 flex items-end justify-between gap-4">
-        <h2 className="nx-section-title">{title}</h2>
-      </div>
-      <div className="nx-rail-track">
-        {items.map((r) => (
-          <div key={r.id} className="nx-rail-item">
-            <RestaurantCard restaurant={r} />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}

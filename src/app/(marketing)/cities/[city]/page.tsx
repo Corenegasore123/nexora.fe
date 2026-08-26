@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchCity } from "@/lib/public";
-import { RestaurantRail } from "@/components/discover/RestaurantCard";
+import { RestaurantRail } from "@/components/discover/RestaurantRail";
 import { DiscoverResults } from "@/components/discover/DiscoverResults";
 import { SearchWidget } from "@/components/discover/SearchWidget";
 import { Photo } from "@/components/discover/Photo";

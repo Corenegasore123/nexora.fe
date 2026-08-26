@@ -3478,12 +3478,56 @@ body {
   margin: 2.5rem 0;
 }
 
+.nx-rail-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nx-rail-nav {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nx-rail-nav-btn {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--nx-ink-900);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.nx-rail-nav-btn:hover {
+  border-color: var(--nx-coral-500);
+  background: var(--nx-coral-50);
+  color: var(--nx-coral-600);
+  box-shadow: 0 6px 14px rgba(255, 90, 60, 0.12);
+}
+
+.nx-rail-nav-btn:active {
+  transform: scale(0.96);
+}
+
 .nx-rail-track {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
