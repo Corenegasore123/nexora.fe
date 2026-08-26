@@ -34,12 +34,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
-      { url: "/icon", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon.png", type: "image/png", sizes: "64x64" },
     ],
-    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
-    shortcut: ["/favicon.svg"],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "64x64" }],
+    shortcut: ["/favicon-32.png"],
   },
 };
 

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, MapPin, UtensilsCrossed } from "lucide-react";
 import { fetchCities, type CitySummary } from "@/lib/public";
+import { isNexoraLivePlace } from "@/lib/rwanda-coverage";
 import { Photo } from "@/components/discover/Photo";
+import { RwandaCoverageMap } from "@/components/discover/RwandaCoverageMap";
 
 export const metadata: Metadata = {
   title: "Cities | Nexora",
@@ -41,7 +43,9 @@ export default async function CitiesPage() {
     }
     return sum;
   }, 0);
+  const liveDistricts = cities.filter((c) => isNexoraLivePlace(c.name) && c.name !== "Kigali").length;
   const regions = groupByRegion(cities);
+  const counts = Object.fromEntries(cities.map((c) => [c.name, c.restaurantCount]));
 
   return (
     <div className="nx-cities">
@@ -50,13 +54,12 @@ export default async function CitiesPage() {
         <p className="eyebrow">Nexora · Rwanda</p>
         <h1 className="nx-cities-title">Cities &amp; districts.</h1>
         <p className="nx-cities-lead">
-          Start with a destination, then narrow to a neighborhood. Live tables, cuisines, and availability across the
-          country.
+          Coral markers are live on Nexora today. Grey markers are on the roadmap - open any place to explore.
         </p>
         <div className="nx-cities-meta">
           <span>
             <MapPin size={15} strokeWidth={2} />
-            {cities.length} places
+            {liveDistricts} live districts
           </span>
           <span>
             <UtensilsCrossed size={15} strokeWidth={2} />
@@ -65,11 +68,15 @@ export default async function CitiesPage() {
         </div>
       </section>
 
+      <section className="nx-cities-map-section">
+        <RwandaCoverageMap counts={counts} />
+      </section>
+
       {featured.length > 0 && (
         <section className="nx-cities-section">
           <div className="nx-cities-section-head">
-            <h2 className="nx-section-title">Featured destinations</h2>
-            <p className="nx-cities-section-sub">Places with restaurants you can book tonight.</p>
+            <h2 className="nx-section-title">Live destinations</h2>
+            <p className="nx-cities-section-sub">Same places highlighted on the map - bookable tonight.</p>
           </div>
           <div className="nx-cities-featured">
             {featured.map((city, i) => (
@@ -90,6 +97,7 @@ export default async function CitiesPage() {
                 )}
                 <span className="nx-city-card-fade" />
                 <span className="nx-city-card-body">
+                  <span className="nx-city-live-pill">Live</span>
                   <span className="nx-city-card-region">{city.region}</span>
                   <span className="nx-city-card-name">{city.name}</span>
                   <span className="nx-city-card-stats">
@@ -117,28 +125,32 @@ export default async function CitiesPage() {
       <section className="nx-cities-section">
         <div className="nx-cities-section-head">
           <h2 className="nx-section-title">Browse by province</h2>
-          <p className="nx-cities-section-sub">All 30 districts plus Kigali city - open a place to see tables nearby.</p>
+          <p className="nx-cities-section-sub">All districts - live ones match the coral markers on the map.</p>
         </div>
         <div className="nx-cities-regions">
           {regions.map(({ region, cities: rows }) => (
             <div key={region} className="nx-cities-region">
               <h3 className="nx-cities-region-title">{region}</h3>
               <ul className="nx-cities-district-grid">
-                {rows.map((city) => (
-                  <li key={city.slug}>
-                    <Link href={`/cities/${city.slug}`} className="nx-district-card">
-                      <span className="nx-district-card-main">
-                        <span className="nx-district-card-name">{city.name}</span>
-                        <span className="nx-district-card-count">
-                          {city.restaurantCount > 0
-                            ? `${city.restaurantCount} open on Nexora`
-                            : "Coming soon"}
+                {rows.map((city) => {
+                  const live = isNexoraLivePlace(city.name) && city.restaurantCount > 0;
+                  return (
+                    <li key={city.slug}>
+                      <Link href={`/cities/${city.slug}`} className={`nx-district-card ${live ? "is-live" : ""}`}>
+                        <span className="nx-district-card-main">
+                          <span className="nx-district-card-name">
+                            {city.name}
+                            {live && <span className="nx-district-live-dot" aria-label="Live" />}
+                          </span>
+                          <span className="nx-district-card-count">
+                            {live ? `${city.restaurantCount} open on Nexora` : "Coming soon"}
+                          </span>
                         </span>
-                      </span>
-                      <ArrowRight size={16} strokeWidth={2} className="nx-district-card-arrow" />
-                    </Link>
-                  </li>
-                ))}
+                        <ArrowRight size={16} strokeWidth={2} className="nx-district-card-arrow" />
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
