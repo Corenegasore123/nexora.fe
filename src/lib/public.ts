@@ -35,6 +35,7 @@ export type CitySummary = {
   coverUrl: string | null;
   cuisines: string[];
   neighborhoods: string[];
+  featured?: boolean;
 };
 
 export type CityPagePayload = {

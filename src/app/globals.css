@@ -3754,6 +3754,12 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   padding: 1.5rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nx-city-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(23, 23, 23, 0.16);
 }
 
 .nx-city-card img {
@@ -3762,12 +3768,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.nx-city-card:hover img {
+  transform: scale(1.04);
 }
 
 .nx-city-card-fade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(17, 17, 19, 0.1) 20%, rgba(17, 17, 19, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(17, 17, 19, 0.08) 15%, rgba(17, 17, 19, 0.78) 100%);
 }
 
 .nx-city-card-body {
@@ -3775,9 +3786,246 @@ body {
   z-index: 1;
 }
 
+.nx-city-card-fallback {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 90, 60, 0.55), transparent 45%),
+    linear-gradient(145deg, #1f1f22 0%, #111113 100%);
+}
+
+.nx-city-card-region {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.nx-city-card-name {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-display), Fraunces, Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.nx-city-card-stats {
+  display: block;
+  margin-top: 0.55rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.nx-city-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.nx-city-card-tags span {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 550;
+}
+
+.nx-city-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.nx-cities {
+  position: relative;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 6.5rem 1.25rem 4.5rem;
+}
+
+.nx-cities-hero {
+  position: relative;
+  max-width: 40rem;
+  padding-bottom: 0.5rem;
+}
+
+.nx-cities-hero-glow {
+  position: absolute;
+  top: -4rem;
+  left: -6rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 90, 60, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.nx-cities-title {
+  margin-top: 0.75rem;
+  font-family: var(--font-display), Fraunces, Georgia, serif;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: var(--nx-ink-900);
+}
+
+.nx-cities-lead {
+  margin-top: 1rem;
+  max-width: 34rem;
+  color: var(--color-foreground-secondary);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.nx-cities-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.35rem;
+  color: var(--nx-ink-700);
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+
+.nx-cities-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nx-cities-section {
+  margin-top: 3rem;
+}
+
+.nx-cities-section-head {
+  margin-bottom: 1.25rem;
+}
+
+.nx-cities-section-sub {
+  margin-top: 0.35rem;
+  max-width: 36rem;
+  color: var(--color-foreground-muted);
+  font-size: 0.95rem;
+}
+
+.nx-cities-featured {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .nx-cities-featured {
+    grid-template-columns: 1.35fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .nx-city-card-lead {
+    grid-row: span 2;
+    min-height: 100%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .nx-cities-featured {
+    grid-template-columns: 1.4fr repeat(2, minmax(0, 1fr));
+  }
+
+  .nx-city-card-lead {
+    grid-row: span 2;
+  }
+}
+
+.nx-cities-regions {
+  display: grid;
+  gap: 2rem;
+}
+
+.nx-cities-region-title {
+  margin: 0 0 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nx-ink-400);
+}
+
+.nx-cities-district-grid {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .nx-cities-district-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .nx-cities-district-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.nx-district-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 4.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.nx-district-card:hover {
+  border-color: color-mix(in srgb, var(--nx-coral-500) 45%, var(--color-border));
+  background: var(--nx-coral-50);
+  box-shadow: 0 10px 24px rgba(255, 90, 60, 0.08);
+}
+
+.nx-district-card-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--nx-ink-900);
+}
+
+.nx-district-card-count {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--color-foreground-muted);
+}
+
+.nx-district-card-arrow {
+  flex-shrink: 0;
+  color: var(--nx-ink-400);
+}
+
+.nx-district-card:hover .nx-district-card-arrow {
+  color: var(--nx-coral-600);
+}
+
 .nx-chip-link {
   display: inline-flex;
   align-items: center;
+  gap: 0.45rem;
   min-height: 2.5rem;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
@@ -3787,15 +4035,27 @@ body {
   font-size: 0.875rem;
 }
 
-.nx-chip-link:hover {
+.nx-chip-link span {
+  color: var(--color-foreground-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nx-chip-link:hover,
+.nx-chip-link.is-active {
   border-color: var(--nx-coral-500);
-  color: var(--nx-coral-500);
+  background: var(--nx-coral-50);
+  color: var(--nx-coral-600);
+}
+
+.nx-chip-link.is-active span,
+.nx-chip-link:hover span {
+  color: var(--nx-coral-600);
 }
 
 .nx-chip-featured {
-  background: color-mix(in srgb, var(--nx-violet-500) 14%, var(--nx-base-0));
+  background: var(--nx-coral-50);
   border-color: transparent;
-  color: var(--nx-violet-500);
+  color: var(--nx-coral-600);
 }
 
 .nx-discover.nx-profile {
@@ -3978,17 +4238,23 @@ body {
 
 .nx-city-hero {
   position: relative;
-  min-height: 22rem;
+  min-height: 26rem;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
   color: #fff;
 }
 
+.nx-city-hero-fallback {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 90, 60, 0.5), transparent 42%),
+    linear-gradient(160deg, #242428 0%, #111113 70%);
+}
+
 .nx-city-hero-fade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(17, 17, 19, 0.15) 10%, rgba(17, 17, 19, 0.78) 100%);
+  background: linear-gradient(180deg, rgba(17, 17, 19, 0.2) 8%, rgba(17, 17, 19, 0.82) 100%);
 }
 
 .nx-city-hero-inner {
@@ -3997,7 +4263,48 @@ body {
   width: 100%;
   max-width: 72rem;
   margin: 0 auto;
-  padding: 7.5rem 1.5rem 2.25rem;
+  padding: 7.5rem 1.5rem 2.5rem;
+}
+
+.nx-city-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.84rem;
+  font-weight: 550;
+}
+
+.nx-city-back:hover {
+  color: #fff;
+}
+
+.nx-city-hero-region {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nx-city-hero-title {
+  margin: 0.55rem 0 0;
+  font-family: var(--font-display), Fraunces, Georgia, serif;
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.nx-city-hero-lead {
+  margin-top: 0.85rem;
+  max-width: 36rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.02rem;
+  line-height: 1.5;
 }
 
 .nx-city-stats {
@@ -4022,7 +4329,49 @@ body {
 }
 
 .nx-city-body {
-  padding-top: 2rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 4rem;
+}
+
+.nx-city-browse {
+  margin-top: 2rem;
+}
+
+.nx-city-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nx-city-empty {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at top right, rgba(255, 90, 60, 0.08), transparent 40%),
+    var(--nx-base-50);
+  color: var(--color-foreground-secondary);
+}
+
+.nx-city-empty p {
+  max-width: 34rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.nx-city-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
 }
 
 .auth-split-photo {

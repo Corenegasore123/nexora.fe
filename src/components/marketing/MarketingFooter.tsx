@@ -53,14 +53,17 @@ export async function MarketingFooter() {
               <div className="marketing-footer-col">
                 <p className="marketing-footer-heading">Cities</p>
                 <ul className="marketing-footer-links">
-                  {cities.map((city) => (
+                  {cities
+                    .filter((city) => city.featured && city.restaurantCount > 0)
+                    .slice(0, 6)
+                    .map((city) => (
                     <li key={city.slug}>
                       <Link href={`/cities/${city.slug}`} className="marketing-footer-link">
                         {city.name}
                       </Link>
                     </li>
                   ))}
-                  {!cities.length && (
+                  {!cities.some((c) => c.featured && c.restaurantCount > 0) && (
                     <li>
                       <Link href="/cities" className="marketing-footer-link">
                         Browse cities
