@@ -6,25 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { ApiError, eligibleReviews, writeReview, type EligibleReviewVisit } from "@/lib/api";
 import { Icon } from "@/components/icons/Icon";
 
-const MIN_PX = 800;
-
-async function squareCrop(file: File) {
-  const bmp = await createImageBitmap(file);
-  if (Math.min(bmp.width, bmp.height) < MIN_PX) {
-    throw new Error(`Photos must be at least ${MIN_PX}×${MIN_PX}.`);
-  }
-  const size = Math.min(bmp.width, bmp.height);
-  const canvas = document.createElement("canvas");
-  canvas.width = MIN_PX;
-  canvas.height = MIN_PX;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Could not crop photo");
-  ctx.drawImage(bmp, (bmp.width - size) / 2, (bmp.height - size) / 2, size, size, 0, 0, MIN_PX, MIN_PX);
-  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.88));
-  if (!blob) throw new Error("Could not encode photo");
-  return blob;
-}
-
 function StarPicker({
   value,
   onChange,
@@ -74,7 +55,6 @@ export function WriteReview({
   const [service, setService] = useState(5);
   const [ambience, setAmbience] = useState(5);
   const [comment, setComment] = useState("");
-  const [photos, setPhotos] = useState<Blob[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -141,15 +121,14 @@ export function WriteReview({
     setError(null);
     setSaved(false);
     try {
-      const body = new FormData();
-      body.append("reservationId", reservationId);
-      body.append("rating", String(rating));
-      body.append("food", String(food));
-      body.append("service", String(service));
-      body.append("ambience", String(ambience));
-      if (comment.trim()) body.append("comment", comment.trim());
-      for (const blob of photos) body.append("photos", blob, "review.jpg");
-      await writeReview(body);
+      await writeReview({
+        reservationId,
+        rating,
+        food,
+        service,
+        ambience,
+        comment: comment.trim() || undefined,
+      });
       setSaved(true);
       setVisits((v) => v.filter((row) => row.reservationId !== reservationId));
       router.refresh();
@@ -197,27 +176,6 @@ export function WriteReview({
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-      </label>
-      <label className="block text-sm">
-        <span className="mb-1.5 block font-medium">Photos (optional, square, min 800px)</span>
-        <input
-          type="file"
-          accept="image/jpeg,image/png"
-          multiple
-          className="block w-full text-sm"
-          onChange={async (e) => {
-            const files = [...(e.target.files ?? [])].slice(0, 4);
-            e.target.value = "";
-            try {
-              const cropped = await Promise.all(files.map(squareCrop));
-              setPhotos(cropped);
-              setError(null);
-            } catch (err) {
-              setError(err instanceof Error ? err.message : "Could not process photos");
-            }
-          }}
-        />
-        {photos.length > 0 && <p className="mt-1 text-xs text-foreground-muted">{photos.length} photo{photos.length === 1 ? "" : "s"} ready</p>}
       </label>
       {error && <p className="text-sm text-error">{error}</p>}
       {saved && (

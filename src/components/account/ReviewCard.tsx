@@ -51,15 +51,6 @@ export function ReviewCard({ review }: { review: CustomerReview }) {
           )}
           {review.comment && <p className="mt-3 text-sm leading-relaxed text-foreground-secondary">{review.comment}</p>}
           {review.rejectReason && <p className="mt-2 text-sm text-error">{review.rejectReason}</p>}
-          {!!review.images?.length && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {review.images.map((img) => (
-                <div key={img.url} className="relative h-16 w-16 overflow-hidden rounded-lg">
-                  <Photo src={img.url} alt={img.alt || ""} className="absolute inset-0 h-full w-full object-cover" sizes="64px" />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </article>

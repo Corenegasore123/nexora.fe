@@ -3212,7 +3212,6 @@ body {
   color: var(--nx-ink-400);
 }
 
-.nx-place-option.is-active .nx-place-option-copy em,
 .nx-place-option:hover .nx-place-option-copy em {
   color: color-mix(in srgb, var(--nx-coral-600) 70%, var(--nx-ink-400));
 }
@@ -4150,17 +4149,30 @@ body {
   padding: 1.25rem;
 }
 
+#nx-book-confirm {
+  scroll-margin-bottom: 6rem;
+}
+
 .nx-sticky-book {
-  position: sticky;
+  position: fixed;
+  left: 0;
+  right: 0;
   bottom: 0;
+  z-index: 40;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin: 2rem -1.5rem -1rem;
   padding: 0.85rem 1.5rem calc(0.85rem + env(safe-area-inset-bottom));
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
+  box-shadow: 0 -10px 30px rgba(17, 17, 19, 0.06);
+}
+
+@media (max-width: 1023px) {
+  .nx-discover.nx-profile {
+    padding-bottom: 5.75rem;
+  }
 }
 
 .nx-star-fill {

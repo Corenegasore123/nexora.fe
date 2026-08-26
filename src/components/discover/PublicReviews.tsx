@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { getPublicReviews, type CustomerReview } from "@/lib/api";
-import { Photo } from "@/components/discover/Photo";
 import { RatingStars } from "@/components/discover/RatingStars";
 
 function ReviewItem({ r }: { r: CustomerReview }) {
@@ -24,15 +23,6 @@ function ReviewItem({ r }: { r: CustomerReview }) {
         </p>
       )}
       {r.comment && <p className="mt-2 text-sm leading-relaxed text-foreground-secondary">{r.comment}</p>}
-      {!!r.images?.length && (
-        <div className="mt-3 flex flex-wrap gap-2">
-          {r.images.map((img) => (
-            <div key={img.url} className="relative h-16 w-16 overflow-hidden rounded-lg">
-              <Photo src={img.url} alt={img.alt || ""} className="absolute inset-0 h-full w-full object-cover" sizes="64px" />
-            </div>
-          ))}
-        </div>
-      )}
       <p className="mt-2 text-xs text-foreground-muted">{String(r.createdAt).slice(0, 10)}</p>
     </article>
   );

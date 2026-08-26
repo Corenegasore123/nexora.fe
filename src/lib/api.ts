@@ -29,7 +29,17 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
       ...(init?.headers ?? {}),
     },
   });
-  if (res.status === 401 && typeof window !== "undefined" && !path.includes("/auth/check")) {
+  const isPublicMutation =
+    path.includes("/discover/book") ||
+    path.includes("/discover/lookup") ||
+    path.includes("/auth/login") ||
+    path.includes("/auth/register");
+  if (
+    res.status === 401 &&
+    typeof window !== "undefined" &&
+    !path.includes("/auth/check") &&
+    !isPublicMutation
+  ) {
     const from = encodeURIComponent(window.location.pathname);
     window.location.href = `/sign-in?from=${from}`;
   }
@@ -166,8 +176,14 @@ export const eligibleReviews = (restaurantId?: string) => {
   const q = restaurantId ? `?restaurantId=${encodeURIComponent(restaurantId)}` : "";
   return apiFetch<EligibleReviewVisit[]>(`/api/customer/reviews/eligible${q}`);
 };
-export const writeReview = (body: FormData) =>
-  apiFetch<CustomerReview>("/api/customer/reviews", { method: "POST", body });
+export const writeReview = (body: {
+  reservationId: string;
+  rating: number;
+  food: number;
+  service: number;
+  ambience: number;
+  comment?: string;
+}) => apiFetch<CustomerReview>("/api/customer/reviews", { method: "POST", body: JSON.stringify(body) });
 export const getPublicReviews = (slug: string, page = 1) =>
   apiFetch<PublicReviewsPayload>(`/api/public/restaurants/${slug}/reviews?page=${page}&pageSize=8`);
 export const getModerationQueue = (status = "pending") =>

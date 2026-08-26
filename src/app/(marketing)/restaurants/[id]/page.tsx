@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchRestaurant } from "@/lib/public";
-import { BookingWidget, StickyBookBar } from "@/components/discover/BookingWidget";
+import { BookingWidget } from "@/components/discover/BookingWidget";
 import { Photo } from "@/components/discover/Photo";
 import { Icon } from "@/components/icons/Icon";
 import { RatingStars } from "@/components/discover/RatingStars";
@@ -158,11 +158,10 @@ export default async function RestaurantProfilePage({ params }: Props) {
             </ul>
           </section>
         </div>
-        <aside id="book" className="nx-profile-book">
+        <div id="book" className="nx-profile-book">
           <BookingWidget restaurant={data} />
-        </aside>
+        </div>
       </div>
-      <StickyBookBar restaurant={data} />
     </div>
   );
 }

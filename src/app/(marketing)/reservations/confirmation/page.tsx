@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function ConfirmationBody() {
   const sp = useSearchParams();
@@ -14,6 +14,19 @@ function ConfirmationBody() {
   const guests = sp.get("guests") ?? "";
   const email = sp.get("email");
   const phone = sp.get("phone");
+  const accountFlag = sp.get("account") === "1";
+  const [signedIn, setSignedIn] = useState(accountFlag);
+
+  useEffect(() => {
+    if (accountFlag) {
+      setSignedIn(true);
+      return;
+    }
+    fetch("/api/auth/check", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((session) => setSignedIn(Boolean(session?.ok)))
+      .catch(() => setSignedIn(false));
+  }, [accountFlag]);
 
   return (
     <div className="nx-discover mx-auto max-w-xl px-4 py-16">
@@ -24,21 +37,24 @@ function ConfirmationBody() {
       </p>
       <p className="mt-6 font-mono text-lg tracking-wide">{number}</p>
       <p className="mt-2 text-sm text-foreground-muted">
-        Keep this reference. You can look it up later with your email or phone
-        {email || phone ? ` (${[email, phone].filter(Boolean).join(" · ")})` : ""}.
+        {signedIn
+          ? "Saved to your account. You can manage it anytime under Reservations."
+          : `Keep this reference. You can look it up later with your email or phone${email || phone ? ` (${[email, phone].filter(Boolean).join(" · ")})` : ""}.`}
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/account/reservations" className="btn-primary min-h-11">
-          View reservation
+        <Link href={signedIn ? "/account/reservations" : "/reservations/lookup"} className="btn-primary min-h-11">
+          {signedIn ? "View reservation" : "Look up later"}
         </Link>
         {slug && (
           <Link href={`/restaurants/${slug}`} className="btn-secondary min-h-11">
             Back to restaurant
           </Link>
         )}
-        <Link href="/reservations/lookup" className="btn-ghost min-h-11">
-          Look up later
-        </Link>
+        {!signedIn && (
+          <Link href="/sign-up" className="btn-ghost min-h-11">
+            Create an account
+          </Link>
+        )}
       </div>
     </div>
   );

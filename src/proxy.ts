@@ -54,7 +54,16 @@ async function sessionInfo(request: NextRequest) {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname === "/health" || pathname === "/favicon.ico") {
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname === "/health" ||
+    pathname === "/favicon.ico" ||
+    pathname === "/favicon.svg" ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/rwanda-") ||
+    /\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|webmanifest)$/i.test(pathname)
+  ) {
     return NextResponse.next();
   }
 
