@@ -43,20 +43,19 @@ export default async function CitiesPage() {
     }
     return sum;
   }, 0);
-  const liveDistricts = cities.filter((c) => c.featured && isPlaceLive(c.restaurantCount)).length;
+  const liveDistricts = liveCities.length;
   const regions = groupByRegion(cities);
 
   return (
     <div className="nx-cities">
       <section className="nx-cities-hero">
-        <div className="nx-cities-hero-grid">
-          <div className="nx-cities-hero-copy">
+        <div className="nx-cities-hero-copy">
           <div className="nx-cities-hero-glow" aria-hidden />
           <p className="eyebrow">Nexora · Rwanda</p>
           <h1 className="nx-cities-title">Cities &amp; districts.</h1>
           <p className="nx-cities-lead">
-            Discover where Nexora is already live, browse every district by province, and jump straight into the best
-            places to book tonight.
+            Discover where Nexora is already live, browse every district by province, and go straight to the places
+            worth booking.
           </p>
           <div className="nx-cities-meta">
             <span>
@@ -67,36 +66,8 @@ export default async function CitiesPage() {
               <UtensilsCrossed size={15} strokeWidth={2} />
               {totalRestaurants} restaurants on Nexora
             </span>
+            <span>{regions.length} provinces covered</span>
           </div>
-          </div>
-
-          <aside className="nx-cities-summary">
-            <p className="nx-cities-summary-label">At a glance</p>
-            <div className="nx-cities-summary-stats">
-              <div className="nx-cities-summary-stat">
-                <strong>{liveCities.length}</strong>
-                <span>places live now</span>
-              </div>
-              <div className="nx-cities-summary-stat">
-                <strong>{regions.length}</strong>
-                <span>provinces covered</span>
-              </div>
-            </div>
-
-            {liveCities.length > 0 && (
-              <div className="nx-cities-summary-list">
-                <p className="nx-cities-summary-heading">Popular live places</p>
-                <div className="nx-cities-summary-links">
-                  {liveCities.slice(0, 4).map((city) => (
-                    <Link key={city.slug} href={`/cities/${city.slug}`} className="nx-cities-summary-link">
-                      <span>{city.name}</span>
-                      <em>{city.restaurantCount} restaurants</em>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </aside>
         </div>
       </section>
 
@@ -113,20 +84,23 @@ export default async function CitiesPage() {
                 href={`/cities/${city.slug}`}
                 className={`nx-city-card ${i === 0 ? "nx-city-card-lead" : ""}`}
               >
-                {city.coverUrl ? (
-                  <Photo
-                    src={city.coverUrl}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                ) : (
-                  <div className="absolute inset-0 nx-city-card-fallback" />
-                )}
-                <span className="nx-city-card-fade" />
+                <span className="nx-city-card-media">
+                  {city.coverUrl ? (
+                    <Photo
+                      src={city.coverUrl}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <span className="nx-city-card-fallback" />
+                  )}
+                </span>
                 <span className="nx-city-card-body">
-                  <span className="nx-city-live-pill">Live</span>
-                  <span className="nx-city-card-region">{city.region}</span>
+                  <span className="nx-city-card-top">
+                    <span className="nx-city-live-pill">Live</span>
+                    <span className="nx-city-card-region">{city.region}</span>
+                  </span>
                   <span className="nx-city-card-name">{city.name}</span>
                   <span className="nx-city-card-stats">
                     {city.restaurantCount} restaurant{city.restaurantCount === 1 ? "" : "s"}
