@@ -3850,19 +3850,6 @@ body {
   padding: 6.5rem 1.25rem 4.5rem;
 }
 
-.nx-cities-hero-shell {
-  display: grid;
-  gap: 1.25rem;
-  align-items: start;
-}
-
-@media (min-width: 980px) {
-  .nx-cities-hero-shell {
-    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-    gap: 1.5rem;
-  }
-}
-
 .nx-cities-hero {
   position: relative;
   overflow: hidden;
@@ -3873,6 +3860,24 @@ body {
     linear-gradient(180deg, #fff 0%, var(--nx-base-50) 100%);
   padding: 1.65rem;
   box-shadow: 0 18px 40px rgba(17, 17, 19, 0.06);
+}
+
+.nx-cities-hero-grid {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (min-width: 980px) {
+  .nx-cities-hero-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    gap: 1.5rem;
+  }
+}
+
+.nx-cities-hero-copy {
+  position: relative;
+  min-width: 0;
 }
 
 .nx-cities-hero-glow {
@@ -3887,11 +3892,12 @@ body {
 }
 
 .nx-cities-summary {
-  border: 1px solid var(--color-border);
-  border-radius: 1.5rem;
-  background: var(--color-surface);
-  padding: 1.2rem;
-  box-shadow: 0 18px 40px rgba(17, 17, 19, 0.05);
+  min-width: 0;
+  border: 1px solid rgba(17, 17, 19, 0.06);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 1.1rem;
+  backdrop-filter: blur(10px);
 }
 
 .nx-cities-summary-label,

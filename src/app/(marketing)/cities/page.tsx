@@ -48,8 +48,9 @@ export default async function CitiesPage() {
 
   return (
     <div className="nx-cities">
-      <section className="nx-cities-hero-shell">
-        <div className="nx-cities-hero">
+      <section className="nx-cities-hero">
+        <div className="nx-cities-hero-grid">
+          <div className="nx-cities-hero-copy">
           <div className="nx-cities-hero-glow" aria-hidden />
           <p className="eyebrow">Nexora · Rwanda</p>
           <h1 className="nx-cities-title">Cities &amp; districts.</h1>
@@ -67,35 +68,36 @@ export default async function CitiesPage() {
               {totalRestaurants} restaurants on Nexora
             </span>
           </div>
-        </div>
-
-        <aside className="nx-cities-summary">
-          <p className="nx-cities-summary-label">At a glance</p>
-          <div className="nx-cities-summary-stats">
-            <div className="nx-cities-summary-stat">
-              <strong>{liveCities.length}</strong>
-              <span>places live now</span>
-            </div>
-            <div className="nx-cities-summary-stat">
-              <strong>{regions.length}</strong>
-              <span>provinces covered</span>
-            </div>
           </div>
 
-          {liveCities.length > 0 && (
-            <div className="nx-cities-summary-list">
-              <p className="nx-cities-summary-heading">Popular live places</p>
-              <div className="nx-cities-summary-links">
-                {liveCities.slice(0, 4).map((city) => (
-                  <Link key={city.slug} href={`/cities/${city.slug}`} className="nx-cities-summary-link">
-                    <span>{city.name}</span>
-                    <em>{city.restaurantCount} restaurants</em>
-                  </Link>
-                ))}
+          <aside className="nx-cities-summary">
+            <p className="nx-cities-summary-label">At a glance</p>
+            <div className="nx-cities-summary-stats">
+              <div className="nx-cities-summary-stat">
+                <strong>{liveCities.length}</strong>
+                <span>places live now</span>
+              </div>
+              <div className="nx-cities-summary-stat">
+                <strong>{regions.length}</strong>
+                <span>provinces covered</span>
               </div>
             </div>
-          )}
-        </aside>
+
+            {liveCities.length > 0 && (
+              <div className="nx-cities-summary-list">
+                <p className="nx-cities-summary-heading">Popular live places</p>
+                <div className="nx-cities-summary-links">
+                  {liveCities.slice(0, 4).map((city) => (
+                    <Link key={city.slug} href={`/cities/${city.slug}`} className="nx-cities-summary-link">
+                      <span>{city.name}</span>
+                      <em>{city.restaurantCount} restaurants</em>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+        </div>
       </section>
 
       {featured.length > 0 && (
