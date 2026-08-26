@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, UtensilsCrossed } from "lucide-react";
 import { fetchCities, type CitySummary } from "@/lib/public";
 import { isPlaceLive } from "@/lib/rwanda-coverage";
+import { KIGALI_DISTRICT_NAMES } from "@/lib/rwanda-places";
 import { Photo } from "@/components/discover/Photo";
 
 export const metadata: Metadata = {
@@ -10,35 +11,56 @@ export const metadata: Metadata = {
   description: "Discover restaurants across Rwanda's cities and districts - then book a table.",
 };
 
-const REGION_ORDER = [
-  "City of Kigali",
-  "Northern Province",
-  "Southern Province",
-  "Eastern Province",
-  "Western Province",
-];
+const KIGALI_DISTRICT_SET = new Set<string>(KIGALI_DISTRICT_NAMES);
+
+function provinceRestaurantTotal(region: string, rows: CitySummary[], all: CitySummary[]) {
+  if (region === "City of Kigali") {
+    const metro = all.find((c) => c.name === "Kigali");
+    if (metro) return metro.restaurantCount;
+    return rows.reduce((sum, city) => sum + city.restaurantCount, 0);
+  }
+  return rows.reduce((sum, city) => sum + city.restaurantCount, 0);
+}
 
 function groupByRegion(cities: CitySummary[]) {
   const map = new Map<string, CitySummary[]>();
   for (const city of cities) {
+    // Cities page lists Gasabo / Nyarugenge / Kicukiro under Kigali — not a separate "Kigali" row.
+    if (city.name === "Kigali") continue;
     const region = city.region || "Rwanda";
     if (!map.has(region)) map.set(region, []);
     map.get(region)!.push(city);
   }
-  return REGION_ORDER.filter((r) => map.has(r))
-    .concat([...map.keys()].filter((r) => !REGION_ORDER.includes(r)))
-    .map((region) => ({
-      region,
-      cities: (map.get(region) ?? []).sort((a, b) => b.restaurantCount - a.restaurantCount || a.name.localeCompare(b.name)),
-    }));
+
+  return [...map.entries()]
+    .map(([region, rows]) => {
+      const sortedRows =
+        region === "City of Kigali"
+          ? [...rows].sort((a, b) => {
+              const ai = KIGALI_DISTRICT_NAMES.findIndex((n) => n === a.name);
+              const bi = KIGALI_DISTRICT_NAMES.findIndex((n) => n === b.name);
+              const aRank = ai === -1 ? 99 : ai;
+              const bRank = bi === -1 ? 99 : bi;
+              return aRank - bRank || a.name.localeCompare(b.name);
+            })
+          : [...rows].sort((a, b) => b.restaurantCount - a.restaurantCount || a.name.localeCompare(b.name));
+
+      return {
+        region,
+        cities: sortedRows,
+        restaurantTotal: provinceRestaurantTotal(region, sortedRows, cities),
+      };
+    })
+    .sort((a, b) => b.restaurantTotal - a.restaurantTotal || a.region.localeCompare(b.region));
 }
 
 export default async function CitiesPage() {
   const cities = await fetchCities().catch(() => [] as CitySummary[]);
   const featured = cities.filter((c) => c.featured && c.restaurantCount > 0).slice(0, 6);
-  const liveCities = cities.filter((c) => isPlaceLive(c.restaurantCount));
+  const browseCities = cities.filter((c) => c.name !== "Kigali");
+  const liveCities = browseCities.filter((c) => isPlaceLive(c.restaurantCount));
   const totalRestaurants = cities.reduce((sum, c) => {
-    if (c.name === "Kigali" || !["Gasabo", "Kicukiro", "Nyarugenge"].includes(c.name)) {
+    if (c.name === "Kigali" || !KIGALI_DISTRICT_SET.has(c.name)) {
       return sum + c.restaurantCount;
     }
     return sum;
@@ -127,16 +149,19 @@ export default async function CitiesPage() {
       <section className="nx-cities-section">
         <div className="nx-cities-section-head">
           <h2 className="nx-section-title">Browse by province</h2>
-          <p className="nx-cities-section-sub">All districts, grouped by province.</p>
+          <p className="nx-cities-section-sub">
+            Provinces with the most restaurants first. Kigali is listed as Gasabo, Nyarugenge, and Kicukiro.
+          </p>
         </div>
         <div className="nx-cities-regions">
-          {regions.map(({ region, cities: rows }) => (
+          {regions.map(({ region, cities: rows, restaurantTotal }) => (
             <div key={region} className="nx-cities-region-card">
               <div className="nx-cities-region-head">
                 <h3 className="nx-cities-region-title">{region}</h3>
                 <p className="nx-cities-region-meta">
-                  {rows.length} district{rows.length === 1 ? "" : "s"} ·{" "}
-                  {rows.filter((city) => isPlaceLive(city.restaurantCount)).length} live
+                  {restaurantTotal} restaurant{restaurantTotal === 1 ? "" : "s"} · {rows.length} district
+                  {rows.length === 1 ? "" : "s"} · {rows.filter((city) => isPlaceLive(city.restaurantCount)).length}{" "}
+                  live
                 </p>
               </div>
               <ul className="nx-cities-district-grid">

@@ -1,43 +1,46 @@
-/** Search places: All Rwanda, Kigali, plus all 30 districts. */
+/** Search places: All Rwanda, Kigali (all districts), plus all 30 districts. */
 export const ALL_PLACES_LABEL = "All";
 
+export const KIGALI_DISTRICT_NAMES = ["Gasabo", "Nyarugenge", "Kicukiro"] as const;
+
 export const RWANDA_PLACES = [
-  { name: "Kigali", region: "City of Kigali", city: "Kigali" },
-  // City of Kigali - 3 districts
-  { name: "Gasabo", region: "City of Kigali", city: "Kigali" },
-  { name: "Kicukiro", region: "City of Kigali", city: "Kigali" },
-  { name: "Nyarugenge", region: "City of Kigali", city: "Kigali" },
+  // Kigali metro groups Gasabo + Nyarugenge + Kicukiro in search.
+  { name: "Kigali", region: "City of Kigali", city: "Kigali", groupsDistricts: true },
+  // City of Kigali - 3 districts (catalog city is still often "Kigali" until venues are district-tagged)
+  { name: "Gasabo", region: "City of Kigali", city: "Kigali", groupsDistricts: false },
+  { name: "Nyarugenge", region: "City of Kigali", city: "Kigali", groupsDistricts: false },
+  { name: "Kicukiro", region: "City of Kigali", city: "Kigali", groupsDistricts: false },
   // Northern Province
-  { name: "Burera", region: "Northern Province", city: "Burera" },
-  { name: "Gakenke", region: "Northern Province", city: "Gakenke" },
-  { name: "Gicumbi", region: "Northern Province", city: "Gicumbi" },
-  { name: "Musanze", region: "Northern Province", city: "Musanze" },
-  { name: "Rulindo", region: "Northern Province", city: "Rulindo" },
+  { name: "Burera", region: "Northern Province", city: "Burera", groupsDistricts: false },
+  { name: "Gakenke", region: "Northern Province", city: "Gakenke", groupsDistricts: false },
+  { name: "Gicumbi", region: "Northern Province", city: "Gicumbi", groupsDistricts: false },
+  { name: "Musanze", region: "Northern Province", city: "Musanze", groupsDistricts: false },
+  { name: "Rulindo", region: "Northern Province", city: "Rulindo", groupsDistricts: false },
   // Southern Province
-  { name: "Gisagara", region: "Southern Province", city: "Gisagara" },
-  { name: "Huye", region: "Southern Province", city: "Huye" },
-  { name: "Kamonyi", region: "Southern Province", city: "Kamonyi" },
-  { name: "Muhanga", region: "Southern Province", city: "Muhanga" },
-  { name: "Nyamagabe", region: "Southern Province", city: "Nyamagabe" },
-  { name: "Nyanza", region: "Southern Province", city: "Nyanza" },
-  { name: "Nyaruguru", region: "Southern Province", city: "Nyaruguru" },
-  { name: "Ruhango", region: "Southern Province", city: "Ruhango" },
+  { name: "Gisagara", region: "Southern Province", city: "Gisagara", groupsDistricts: false },
+  { name: "Huye", region: "Southern Province", city: "Huye", groupsDistricts: false },
+  { name: "Kamonyi", region: "Southern Province", city: "Kamonyi", groupsDistricts: false },
+  { name: "Muhanga", region: "Southern Province", city: "Muhanga", groupsDistricts: false },
+  { name: "Nyamagabe", region: "Southern Province", city: "Nyamagabe", groupsDistricts: false },
+  { name: "Nyanza", region: "Southern Province", city: "Nyanza", groupsDistricts: false },
+  { name: "Nyaruguru", region: "Southern Province", city: "Nyaruguru", groupsDistricts: false },
+  { name: "Ruhango", region: "Southern Province", city: "Ruhango", groupsDistricts: false },
   // Eastern Province
-  { name: "Bugesera", region: "Eastern Province", city: "Bugesera" },
-  { name: "Gatsibo", region: "Eastern Province", city: "Gatsibo" },
-  { name: "Kayonza", region: "Eastern Province", city: "Kayonza" },
-  { name: "Kirehe", region: "Eastern Province", city: "Kirehe" },
-  { name: "Ngoma", region: "Eastern Province", city: "Ngoma" },
-  { name: "Nyagatare", region: "Eastern Province", city: "Nyagatare" },
-  { name: "Rwamagana", region: "Eastern Province", city: "Rwamagana" },
+  { name: "Bugesera", region: "Eastern Province", city: "Bugesera", groupsDistricts: false },
+  { name: "Gatsibo", region: "Eastern Province", city: "Gatsibo", groupsDistricts: false },
+  { name: "Kayonza", region: "Eastern Province", city: "Kayonza", groupsDistricts: false },
+  { name: "Kirehe", region: "Eastern Province", city: "Kirehe", groupsDistricts: false },
+  { name: "Ngoma", region: "Eastern Province", city: "Ngoma", groupsDistricts: false },
+  { name: "Nyagatare", region: "Eastern Province", city: "Nyagatare", groupsDistricts: false },
+  { name: "Rwamagana", region: "Eastern Province", city: "Rwamagana", groupsDistricts: false },
   // Western Province
-  { name: "Karongi", region: "Western Province", city: "Karongi" },
-  { name: "Ngororero", region: "Western Province", city: "Ngororero" },
-  { name: "Nyabihu", region: "Western Province", city: "Nyabihu" },
-  { name: "Nyamasheke", region: "Western Province", city: "Nyamasheke" },
-  { name: "Rubavu", region: "Western Province", city: "Rubavu" },
-  { name: "Rusizi", region: "Western Province", city: "Rusizi" },
-  { name: "Rutsiro", region: "Western Province", city: "Rutsiro" },
+  { name: "Karongi", region: "Western Province", city: "Karongi", groupsDistricts: false },
+  { name: "Ngororero", region: "Western Province", city: "Ngororero", groupsDistricts: false },
+  { name: "Nyabihu", region: "Western Province", city: "Nyabihu", groupsDistricts: false },
+  { name: "Nyamasheke", region: "Western Province", city: "Nyamasheke", groupsDistricts: false },
+  { name: "Rubavu", region: "Western Province", city: "Rubavu", groupsDistricts: false },
+  { name: "Rusizi", region: "Western Province", city: "Rusizi", groupsDistricts: false },
+  { name: "Rutsiro", region: "Western Province", city: "Rutsiro", groupsDistricts: false },
 ] as const;
 
 export type RwandaPlaceName = (typeof RWANDA_PLACES)[number]["name"] | typeof ALL_PLACES_LABEL;
@@ -46,6 +49,8 @@ export type RwandaPlaceName = (typeof RWANDA_PLACES)[number]["name"] | typeof AL
 export function placeToCityFilter(place: string) {
   if (!place.trim() || place.toLowerCase() === "all") return "";
   const row = RWANDA_PLACES.find((p) => p.name.toLowerCase() === place.toLowerCase());
+  // Kigali metro groups all City of Kigali districts on the API side.
+  if (row?.groupsDistricts) return "Kigali";
   return row?.city ?? place;
 }
 

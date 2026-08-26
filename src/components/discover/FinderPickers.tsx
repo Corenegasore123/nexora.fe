@@ -185,7 +185,12 @@ export function PlacePicker({
                       setQuery("");
                     }}
                   >
-                    <span>{p.name}</span>
+                    <span className="nx-place-option-copy">
+                      <span>{p.name}</span>
+                      {"groupsDistricts" in p && p.groupsDistricts ? (
+                        <em>All districts</em>
+                      ) : null}
+                    </span>
                     {p.name === value && <Check size={14} strokeWidth={2.2} />}
                   </button>
                 ))}

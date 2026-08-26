@@ -3198,6 +3198,25 @@ body {
   font-weight: 600;
 }
 
+.nx-place-option-copy {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.nx-place-option-copy em {
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 550;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nx-ink-400);
+}
+
+.nx-place-option.is-active .nx-place-option-copy em,
+.nx-place-option:hover .nx-place-option-copy em {
+  color: color-mix(in srgb, var(--nx-coral-600) 70%, var(--nx-ink-400));
+}
+
 .nx-picker-empty {
   margin: 1rem;
   text-align: center;
