@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { buildProvinceCoverage, RWANDA_MAP } from "@/lib/rwanda-coverage";
+import { buildDistrictCoverage } from "@/lib/rwanda-coverage";
 
 type Counts = Record<string, number>;
 
@@ -14,56 +14,54 @@ export function RwandaCoverageMap({
 }) {
   const [active, setActive] = useState<string | null>(null);
 
-  const provinces = useMemo(() => buildProvinceCoverage(counts), [counts]);
-  const liveCount = provinces.filter((p) => p.live).length;
-  const hovered = provinces.find((p) => p.id === active);
+  const districts = useMemo(() => buildDistrictCoverage(counts), [counts]);
+  const liveCount = districts.filter((d) => d.live).length;
+  const hovered = districts.find((d) => d.slug === active);
 
   return (
     <div className={`nx-map ${compact ? "is-compact" : ""}`}>
       <div className="nx-map-frame">
         <svg
-          viewBox={RWANDA_MAP.viewBox}
+          viewBox="0 0 1000 873"
           className="nx-map-svg"
           role="img"
-          aria-label="Map of Rwanda provinces with live Nexora coverage"
+          aria-label="Map of Rwanda districts with live Nexora coverage"
         >
-          <g className="nx-map-provinces">
-            {provinces.map((p) => (
+          <image
+            href="/rwanda-districts-reference.png"
+            x="0"
+            y="0"
+            width="1000"
+            height="873"
+            preserveAspectRatio="none"
+          />
+
+          <g className="nx-map-district-markers">
+            {districts.map((district) => (
               <a
-                key={p.id}
-                href={`/cities/${p.primarySlug}`}
+                key={district.slug}
+                href={`/cities/${district.slug}`}
                 aria-label={
-                  p.live
-                    ? `${p.name}, live on Nexora, ${p.count} restaurants`
-                    : `${p.name}, coming soon`
+                  district.live
+                    ? `${district.name}, live on Nexora, ${district.count} restaurants`
+                    : `${district.name}, coming soon`
                 }
               >
-                <path
-                  d={p.d}
-                  className={`nx-map-province ${p.live ? "is-live" : ""} ${active === p.id ? "is-active" : ""}`}
-                  onMouseEnter={() => setActive(p.id)}
+                <circle
+                  cx={district.x}
+                  cy={district.y}
+                  r={compact ? 10 : 13}
+                  className={`nx-map-district-marker ${district.live ? "is-live" : ""} ${
+                    active === district.slug ? "is-active" : ""
+                  }`}
+                  onMouseEnter={() => setActive(district.slug)}
                   onMouseLeave={() => setActive(null)}
-                  onFocus={() => setActive(p.id)}
+                  onFocus={() => setActive(district.slug)}
                   onBlur={() => setActive(null)}
                 />
               </a>
             ))}
           </g>
-
-          {!compact &&
-            provinces.map((p) => (
-              <text
-                key={`label-${p.id}`}
-                x={p.cx}
-                y={p.cy}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className={`nx-map-province-label ${p.live ? "is-live" : ""}`}
-                pointerEvents="none"
-              >
-                {p.name === "Kigali City" ? "Kigali" : p.name}
-              </text>
-            ))}
         </svg>
 
         <div className="nx-map-tooltip" aria-live="polite">
@@ -81,7 +79,7 @@ export function RwandaCoverageMap({
             <>
               <strong>Where Nexora is live</strong>
               <span>
-                {liveCount} of {provinces.length} provinces · updates with the catalog
+                {liveCount} live districts shown on the Rwanda district map
               </span>
             </>
           )}
@@ -91,7 +89,7 @@ export function RwandaCoverageMap({
       <div className="nx-map-legend">
         <span className="nx-map-legend-item">
           <i className="nx-map-swatch is-live" />
-          Live province
+          Live district
         </span>
         <span className="nx-map-legend-item">
           <i className="nx-map-swatch is-soon" />

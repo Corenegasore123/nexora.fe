@@ -4431,43 +4431,28 @@ body {
   height: auto;
 }
 
-.nx-map-province {
-  fill: #9bb8a0;
+.nx-map-district-marker {
+  fill: rgba(39, 39, 42, 0.18);
   stroke: #fff;
-  stroke-width: 2.5;
-  stroke-linejoin: round;
+  stroke-width: 4;
   cursor: pointer;
-  transition: fill 0.18s ease, filter 0.18s ease;
+  transition: transform 0.18s ease, fill 0.18s ease, opacity 0.18s ease;
 }
 
-.nx-map-province.is-live {
+.nx-map-district-marker.is-live {
   fill: var(--nx-coral-500);
 }
 
-.nx-map-province:hover,
-.nx-map-province.is-active {
-  filter: brightness(0.92);
+.nx-map-district-marker:hover,
+.nx-map-district-marker.is-active {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(1.08);
 }
 
-.nx-map-province.is-live:hover,
-.nx-map-province.is-live.is-active {
+.nx-map-district-marker.is-live:hover,
+.nx-map-district-marker.is-live.is-active {
   fill: var(--nx-coral-600);
-  filter: none;
-}
-
-.nx-map-province-label {
-  fill: var(--nx-ink-900);
-  font-size: 28px;
-  font-weight: 650;
-  letter-spacing: 0.01em;
-  paint-order: stroke;
-  stroke: rgba(255, 255, 255, 0.85);
-  stroke-width: 6px;
-}
-
-.nx-map-province-label.is-live {
-  fill: #fff;
-  stroke: rgba(232, 67, 31, 0.45);
 }
 
 .nx-map-tooltip {
@@ -4516,7 +4501,7 @@ body {
 }
 
 .nx-map-swatch.is-soon {
-  background: #9bb8a0;
+  background: rgba(39, 39, 42, 0.35);
 }
 
 .nx-about {

@@ -54,7 +54,7 @@ export default async function CitiesPage() {
         <p className="eyebrow">Nexora · Rwanda</p>
         <h1 className="nx-cities-title">Cities &amp; districts.</h1>
         <p className="nx-cities-lead">
-          Coral provinces are live on Nexora today. Soft green means coming soon - open any district to explore.
+          Coral dots are live on Nexora today. The map shows Rwanda&apos;s district layout - open any district to explore.
         </p>
         <div className="nx-cities-meta">
           <span>
@@ -125,7 +125,7 @@ export default async function CitiesPage() {
       <section className="nx-cities-section">
         <div className="nx-cities-section-head">
           <h2 className="nx-section-title">Browse by province</h2>
-          <p className="nx-cities-section-sub">All districts - live ones roll up into the coral provinces on the map.</p>
+            <p className="nx-cities-section-sub">All districts - live ones match the coral dots on the map.</p>
         </div>
         <div className="nx-cities-regions">
           {regions.map(({ region, cities: rows }) => (

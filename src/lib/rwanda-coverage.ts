@@ -8,6 +8,47 @@ export const RWANDA_MAP = mapPaths as {
   labels: { id: ProvinceId; label: string; cx: number; cy: number }[];
 };
 
+/** Approximate district centers aligned to the district reference map. */
+export const RWANDA_DISTRICT_POINTS: {
+  name: string;
+  slug: string;
+  region: string;
+  x: number;
+  y: number;
+}[] = [
+  { name: "Nyarugenge", slug: "nyarugenge", region: "City of Kigali", x: 638, y: 350 },
+  { name: "Kicukiro", slug: "kicukiro", region: "City of Kigali", x: 681, y: 385 },
+  { name: "Gasabo", slug: "gasabo", region: "City of Kigali", x: 662, y: 317 },
+  { name: "Kigali", slug: "kigali", region: "City of Kigali", x: 655, y: 353 },
+  { name: "Musanze", slug: "musanze", region: "Northern Province", x: 400, y: 181 },
+  { name: "Burera", slug: "burera", region: "Northern Province", x: 471, y: 133 },
+  { name: "Gakenke", slug: "gakenke", region: "Northern Province", x: 471, y: 250 },
+  { name: "Gicumbi", slug: "gicumbi", region: "Northern Province", x: 590, y: 224 },
+  { name: "Rulindo", slug: "rulindo", region: "Northern Province", x: 543, y: 297 },
+  { name: "Huye", slug: "huye", region: "Southern Province", x: 447, y: 741 },
+  { name: "Nyanza", slug: "nyanza", region: "Southern Province", x: 495, y: 647 },
+  { name: "Ruhango", slug: "ruhango", region: "Southern Province", x: 519, y: 575 },
+  { name: "Muhanga", slug: "muhanga", region: "Southern Province", x: 471, y: 499 },
+  { name: "Kamonyi", slug: "kamonyi", region: "Southern Province", x: 567, y: 478 },
+  { name: "Nyamagabe", slug: "nyamagabe", region: "Southern Province", x: 352, y: 716 },
+  { name: "Nyaruguru", slug: "nyaruguru", region: "Southern Province", x: 376, y: 811 },
+  { name: "Gisagara", slug: "gisagara", region: "Southern Province", x: 543, y: 784 },
+  { name: "Rwamagana", slug: "rwamagana", region: "Eastern Province", x: 757, y: 376 },
+  { name: "Kayonza", slug: "kayonza", region: "Eastern Province", x: 829, y: 399 },
+  { name: "Ngoma", slug: "ngoma", region: "Eastern Province", x: 805, y: 494 },
+  { name: "Bugesera", slug: "bugesera", region: "Eastern Province", x: 710, y: 504 },
+  { name: "Gatsibo", slug: "gatsibo", region: "Eastern Province", x: 829, y: 305 },
+  { name: "Nyagatare", slug: "nyagatare", region: "Eastern Province", x: 781, y: 166 },
+  { name: "Kirehe", slug: "kirehe", region: "Eastern Province", x: 876, y: 544 },
+  { name: "Rubavu", slug: "rubavu", region: "Western Province", x: 233, y: 247 },
+  { name: "Nyabihu", slug: "nyabihu", region: "Western Province", x: 305, y: 296 },
+  { name: "Ngororero", slug: "ngororero", region: "Western Province", x: 352, y: 385 },
+  { name: "Rutsiro", slug: "rutsiro", region: "Western Province", x: 257, y: 385 },
+  { name: "Karongi", slug: "karongi", region: "Western Province", x: 281, y: 504 },
+  { name: "Nyamasheke", slug: "nyamasheke", region: "Western Province", x: 257, y: 647 },
+  { name: "Rusizi", slug: "rusizi", region: "Western Province", x: 210, y: 782 },
+];
+
 /** Districts that roll up into each province on the official Rwanda map. */
 export const RWANDA_PROVINCES: {
   id: ProvinceId;
@@ -82,4 +123,12 @@ export function buildProvinceCoverage(counts: Record<string, number>) {
       live: isPlaceLive(count),
     };
   });
+}
+
+export function buildDistrictCoverage(counts: Record<string, number>) {
+  return RWANDA_DISTRICT_POINTS.filter((district) => district.name !== "Kigali").map((district) => ({
+    ...district,
+    count: counts[district.name] ?? 0,
+    live: isPlaceLive(counts[district.name]),
+  }));
 }

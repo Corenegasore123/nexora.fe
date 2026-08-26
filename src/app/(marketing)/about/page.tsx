@@ -43,8 +43,8 @@ export default async function AboutPage() {
           <p className="eyebrow">Coverage</p>
           <h2 className="nx-section-title">Where Nexora works today</h2>
           <p>
-            Coral provinces have restaurants in the live catalog. Soft green means coming soon. The map uses Rwanda&apos;s
-            five provinces and updates when venues are added or removed.
+            Coral dots show districts with restaurants in the live catalog. The base map shows Rwanda&apos;s district
+            layout, and it updates when venues are added or removed.
           </p>
           <ul className="nx-about-live-list">
             {liveFeatured.map((city) => (
