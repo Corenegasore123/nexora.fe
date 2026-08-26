@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, MapPin, UtensilsCrossed } from "lucide-react";
 import { fetchCities, type CitySummary } from "@/lib/public";
-import { isNexoraLivePlace } from "@/lib/rwanda-coverage";
+import { isPlaceLive } from "@/lib/rwanda-coverage";
 import { Photo } from "@/components/discover/Photo";
 import { RwandaCoverageMap } from "@/components/discover/RwandaCoverageMap";
 
@@ -43,7 +43,7 @@ export default async function CitiesPage() {
     }
     return sum;
   }, 0);
-  const liveDistricts = cities.filter((c) => isNexoraLivePlace(c.name) && c.name !== "Kigali").length;
+  const liveDistricts = cities.filter((c) => c.featured && isPlaceLive(c.restaurantCount)).length;
   const regions = groupByRegion(cities);
   const counts = Object.fromEntries(cities.map((c) => [c.name, c.restaurantCount]));
 
@@ -133,7 +133,7 @@ export default async function CitiesPage() {
               <h3 className="nx-cities-region-title">{region}</h3>
               <ul className="nx-cities-district-grid">
                 {rows.map((city) => {
-                  const live = isNexoraLivePlace(city.name) && city.restaurantCount > 0;
+                  const live = isPlaceLive(city.restaurantCount);
                   return (
                     <li key={city.slug}>
                       <Link href={`/cities/${city.slug}`} className={`nx-district-card ${live ? "is-live" : ""}`}>

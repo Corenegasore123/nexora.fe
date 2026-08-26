@@ -1,9 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { isNexoraLivePlace, RWANDA_DISTRICT_POINTS } from "@/lib/rwanda-coverage";
+import { useId, useMemo, useState } from "react";
+import {
+  buildRwandaLandDots,
+  isPlaceLive,
+  RWANDA_DISTRICT_POINTS,
+  RWANDA_OUTLINE,
+} from "@/lib/rwanda-coverage";
 
 type Counts = Record<string, number>;
+
+const LAND_DOTS = buildRwandaLandDots(7);
 
 export function RwandaCoverageMap({
   counts = {},
@@ -12,64 +19,107 @@ export function RwandaCoverageMap({
   counts?: Counts;
   compact?: boolean;
 }) {
+  const glowId = useId().replace(/:/g, "");
   const [active, setActive] = useState<string | null>(null);
-  const points = useMemo(
-    () =>
-      RWANDA_DISTRICT_POINTS.filter((p) => p.name !== "Kigali").map((p) => ({
-        ...p,
-        live: isNexoraLivePlace(p.name),
-        count: counts[p.name] ?? 0,
-      })),
-    [counts]
-  );
 
-  const liveCount = points.filter((p) => p.live).length;
+  const points = useMemo(() => {
+    const districts = RWANDA_DISTRICT_POINTS.filter((p) => p.name !== "Kigali").map((p) => {
+      const count = counts[p.name] ?? 0;
+      return { ...p, count, live: isPlaceLive(count) };
+    });
+
+    // Prefer a single Kigali glow when the capital metro is live, instead of three identical markers.
+    const kigaliCount = Math.max(
+      counts.Kigali ?? 0,
+      counts.Gasabo ?? 0,
+      counts.Kicukiro ?? 0,
+      counts.Nyarugenge ?? 0
+    );
+    const kigaliMeta = RWANDA_DISTRICT_POINTS.find((p) => p.name === "Kigali")!;
+    const withoutKigaliDistricts = districts.filter(
+      (p) => !["Gasabo", "Kicukiro", "Nyarugenge"].includes(p.name)
+    );
+
+    return [
+      ...withoutKigaliDistricts,
+      {
+        ...kigaliMeta,
+        count: kigaliCount,
+        live: isPlaceLive(kigaliCount),
+      },
+    ];
+  }, [counts]);
+
+  const livePoints = points.filter((p) => p.live);
+  const liveCount = livePoints.length;
   const hovered = points.find((p) => p.name === active);
+
+  const outline = RWANDA_OUTLINE.map(([x, y]) => `${x},${y}`).join(" ");
 
   return (
     <div className={`nx-map ${compact ? "is-compact" : ""}`}>
-      <div className="nx-map-frame">
-        <svg viewBox="0 0 420 420" className="nx-map-svg" role="img" aria-label="Map of Rwanda districts">
+      <div className="nx-map-frame nx-map-frame-dark">
+        <svg viewBox="0 0 420 420" className="nx-map-svg" role="img" aria-label="Dotted map of Rwanda with live Nexora districts">
           <defs>
-            <linearGradient id="nx-map-land" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#f7f7f5" />
-              <stop offset="100%" stopColor="#ebebe7" />
-            </linearGradient>
-            <filter id="nx-map-soft" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#171717" floodOpacity="0.08" />
+            <radialGradient id={`nx-live-core-${glowId}`} cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+              <stop offset="45%" stopColor="#ffebe6" stopOpacity="1" />
+              <stop offset="100%" stopColor="#ff5a3c" stopOpacity="0.95" />
+            </radialGradient>
+            <filter id={`nx-live-glow-${glowId}`} x="-120%" y="-120%" width="340%" height="340%">
+              <feGaussianBlur stdDeviation="4.5" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
 
-          <path
-            d="M118 46c42-18 96-24 148-10 38 10 72 34 88 68 18 38 22 84 10 126-10 36-34 72-66 98-34 28-74 48-118 52-46 4-92-8-124-38-30-28-48-70-46-112 2-44 22-86 54-114 28-24 44-50 54-70z"
-            fill="url(#nx-map-land)"
-            stroke="#d4d4cf"
-            strokeWidth="2"
-            filter="url(#nx-map-soft)"
-          />
-          <path
-            d="M132 78c34-16 78-22 118-12 28 8 54 28 66 54 16 34 18 74 8 108-8 28-28 56-54 76-30 24-66 40-104 42-40 2-78-12-104-38-24-24-38-60-36-96 2-36 18-70 44-92 20-18 36-32 62-42z"
-            fill="none"
-            stroke="#c4c4be"
-            strokeWidth="1"
-            strokeDasharray="3 5"
-            opacity="0.7"
-          />
+          <rect x="0" y="0" width="420" height="420" rx="28" fill="#0b0b0c" />
 
-          {points.map((p) => (
-            <a key={p.slug} href={`/cities/${p.slug}`} aria-label={`${p.name}${p.live ? ", live on Nexora" : ""}`}>
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r={p.live ? (compact ? 9 : 11) : compact ? 5.5 : 6.5}
-                className={`nx-map-dot ${p.live ? "is-live" : ""} ${active === p.name ? "is-active" : ""}`}
+          <polygon points={outline} fill="none" stroke="#1f1f22" strokeWidth="1.2" opacity="0.9" />
+
+          {LAND_DOTS.map((d, i) => (
+            <circle key={`land-${i}`} cx={d.x} cy={d.y} r={compact ? 1.35 : 1.55} className="nx-map-land-dot" />
+          ))}
+
+          {points
+            .filter((p) => !p.live)
+            .map((p) => (
+              <a key={p.slug} href={`/cities/${p.slug}`} aria-label={`${p.name}, coming soon`}>
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={compact ? 2.4 : 2.8}
+                  className={`nx-map-district-dot ${active === p.name ? "is-active" : ""}`}
+                  onMouseEnter={() => setActive(p.name)}
+                  onMouseLeave={() => setActive(null)}
+                  onFocus={() => setActive(p.name)}
+                  onBlur={() => setActive(null)}
+                />
+              </a>
+            ))}
+
+          {livePoints.map((p) => (
+            <a key={`live-${p.slug}`} href={`/cities/${p.slug}`} aria-label={`${p.name}, live on Nexora, ${p.count} restaurants`}>
+              <g
+                filter={`url(#nx-live-glow-${glowId})`}
                 onMouseEnter={() => setActive(p.name)}
                 onMouseLeave={() => setActive(null)}
                 onFocus={() => setActive(p.name)}
                 onBlur={() => setActive(null)}
-              />
-              {p.live && !compact && (
-                <text x={p.x} y={p.y - 16} textAnchor="middle" className="nx-map-label">
+              >
+                <circle cx={p.x} cy={p.y} r={compact ? 7 : 9} fill="#ff5a3c" opacity="0.28" />
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={compact ? 3.8 : 4.6}
+                  fill={`url(#nx-live-core-${glowId})`}
+                  className={`nx-map-live-dot ${active === p.name ? "is-active" : ""}`}
+                />
+              </g>
+              {!compact && (
+                <text x={p.x} y={p.y - 14} textAnchor="middle" className="nx-map-label-dark">
                   {p.name}
                 </text>
               )}
@@ -77,29 +127,33 @@ export function RwandaCoverageMap({
           ))}
         </svg>
 
-        <div className="nx-map-tooltip" aria-live="polite">
+        <div className="nx-map-tooltip nx-map-tooltip-dark" aria-live="polite">
           {hovered ? (
             <>
               <strong>{hovered.name}</strong>
               <span>{hovered.region}</span>
-              <span>{hovered.live ? (hovered.count ? `${hovered.count} restaurants` : "Live on Nexora") : "Coming soon"}</span>
+              <span>
+                {hovered.live ? `${hovered.count} restaurant${hovered.count === 1 ? "" : "s"} live` : "Coming soon"}
+              </span>
             </>
           ) : (
             <>
-              <strong>Rwanda coverage</strong>
-              <span>{liveCount} districts live · hover a point</span>
+              <strong>Where Nexora is live</strong>
+              <span>
+                {liveCount} {liveCount === 1 ? "place" : "places"} glowing · updates with the catalog
+              </span>
             </>
           )}
         </div>
       </div>
 
-      <div className="nx-map-legend">
+      <div className="nx-map-legend nx-map-legend-dark">
         <span className="nx-map-legend-item">
-          <i className="nx-map-swatch is-live" />
-          Live on Nexora
+          <i className="nx-map-swatch is-live-glow" />
+          Live (has restaurants)
         </span>
         <span className="nx-map-legend-item">
-          <i className="nx-map-swatch" />
+          <i className="nx-map-swatch is-dim" />
           Coming soon
         </span>
       </div>

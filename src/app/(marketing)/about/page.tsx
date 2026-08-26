@@ -43,8 +43,8 @@ export default async function AboutPage() {
           <p className="eyebrow">Coverage</p>
           <h2 className="nx-section-title">Where Nexora works today</h2>
           <p>
-            Live districts are highlighted on the map. Start in Kigali, Musanze, Rubavu, or Huye - then expand into more
-            of Rwanda as restaurants join.
+            Glowing markers are districts with restaurants in the live catalog. When a venue is added or removed, the map
+            updates from the same cities API Cities uses.
           </p>
           <ul className="nx-about-live-list">
             {liveFeatured.map((city) => (

@@ -1,22 +1,3 @@
-/** Places where the live catalog currently has restaurants. */
-export const NEXORA_LIVE_CITIES = ["Kigali", "Musanze", "Rubavu", "Huye"] as const;
-
-export const NEXORA_LIVE_DISTRICTS = [
-  "Kigali",
-  "Gasabo",
-  "Kicukiro",
-  "Nyarugenge",
-  "Musanze",
-  "Rubavu",
-  "Huye",
-] as const;
-
-const LIVE = new Set(NEXORA_LIVE_DISTRICTS.map((d) => d.toLowerCase()));
-
-export function isNexoraLivePlace(name: string) {
-  return LIVE.has(name.trim().toLowerCase());
-}
-
 /** Approximate district centers for a stylized Rwanda map (SVG user space). */
 export const RWANDA_DISTRICT_POINTS: {
   name: string;
@@ -62,3 +43,61 @@ export const RWANDA_DISTRICT_POINTS: {
   { name: "Nyamasheke", slug: "nyamasheke", region: "Western Province", x: 108, y: 278 },
   { name: "Rusizi", slug: "rusizi", region: "Western Province", x: 88, y: 328 },
 ];
+
+/** Stylized Rwanda outline in the same SVG space as district points. */
+export const RWANDA_OUTLINE: [number, number][] = [
+  [118, 46],
+  [170, 36],
+  [230, 40],
+  [286, 52],
+  [330, 88],
+  [358, 140],
+  [366, 200],
+  [352, 260],
+  [320, 320],
+  [270, 372],
+  [210, 398],
+  [150, 390],
+  [100, 350],
+  [70, 290],
+  [58, 220],
+  [68, 150],
+  [90, 95],
+  [118, 46],
+];
+
+export function isPlaceLive(restaurantCount: number | undefined | null) {
+  return (restaurantCount ?? 0) > 0;
+}
+
+function pointInPolygon(x: number, y: number, poly: [number, number][]) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i];
+    const [xj, yj] = poly[j];
+    const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi + 0.00001) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+/** Dense dotted fill for the Rwanda landmass (reference: dotted continent maps). */
+export function buildRwandaLandDots(step = 7) {
+  const dots: { x: number; y: number }[] = [];
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (const [x, y] of RWANDA_OUTLINE) {
+    minX = Math.min(minX, x);
+    maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y);
+    maxY = Math.max(maxY, y);
+  }
+  for (let y = minY; y <= maxY; y += step) {
+    for (let x = minX; x <= maxX; x += step) {
+      if (pointInPolygon(x, y, RWANDA_OUTLINE)) dots.push({ x, y });
+    }
+  }
+  return dots;
+}
